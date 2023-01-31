@@ -12,6 +12,8 @@ A small group of slides, which can be reused in multiple decks
 ## Deck
 The set of slides to be displayed in a presentation. You can add single slides to a deck, or you can add Segments, which allows for reusing common slides (such as an intro sequence).
 
+# Version Targets
+
 ## v0.1.0
 - Slide Editor
 - Segment Editor
