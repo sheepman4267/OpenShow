@@ -1,0 +1,26 @@
+{% load static %}
+
+<head>
+    <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
+    <style>
+        {{ display.custom_css }}
+    </style>
+    <style id="slide-style">
+        {{ display.current_slide.segment.deck.custom_css }}
+        {{ display.current_slide.segment.custom_css }}
+        .slide + .slide {
+
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
+</head>
+<body hx-ext="sse" sse-connect="/events">
+    <div id="slide" hx-get="{% url 'display' display.pk %}" hx-trigger="sse:display-{{ display.pk }}" hx-select="#slide" hx-target="#slide" hx-swap="outerHTML">
+        {% for element in display.current_slide.get_elements %}
+            <div class="{{ element.css_class }}">
+                {{ element.body }}
+            </div>
+        {% endfor %}
+    </div>
+</body>

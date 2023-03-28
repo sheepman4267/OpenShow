@@ -1,0 +1,12 @@
+<form method="post" action="{% if action == 'edit' %}{% url 'edit-element' slideelement.pk %}{% else %}{% url 'new-element' %}{% endif %}">
+    {{ action }}
+    {% csrf_token %}
+    <input type="hidden" name="slide" _="on load set my @value to @data-slide-pk of #editor">
+    Name: {{ form.name }}
+    CSS Class: {{ form.css_class }}
+    Body: {{ form.body }}
+    Order: {{ form.order }}
+    <button hx-post="{% if action == 'edit' %}{% url 'edit-element' slideelement.pk %}{% else %}{% url 'new-element' %}{% endif %}"
+                         hx-select="#preview"
+            hx-target="#preview">Submit</button>
+</form>

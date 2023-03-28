@@ -1,0 +1,4 @@
+"transition" model holds css animation definition
+"transition.css" template, allowing for setting timing from slide
+include transition.css template in display.html, referencing transition and transition-time from current_slide
+

@@ -1,0 +1,48 @@
+.carousel-image img {
+    width: 100%;
+    height: auto;
+    /*border-radius: 10px;*/
+    grid-area: stack;
+}
+
+.carousel-image {
+    grid-area: stack;
+    display: grid;
+    grid-template-areas: "stack";
+}
+
+.carousel-image + .carousel-image {
+    width: 100%;
+    opacity: 100;
+    animation: 1s 1 normal fadein;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 100;
+    }
+}
+
+.carousel-container {
+    display: grid;
+    grid-template-areas: "stack";
+    background: #006b1b;
+    border-radius: 10px;
+}
+
+.carousel-header {
+    grid-area: stack;
+    background: #00000099;
+    height: 70px;
+    text-align: center;
+    color: white;
+    font-family: "League Spartan Variable";
+    font-variation-settings: "wght" 345;
+    font-size: min(30pt, 5vw);
+    line-height: 70px;
+    vertical-align: middle;
+    margin-top: 30px;
+}

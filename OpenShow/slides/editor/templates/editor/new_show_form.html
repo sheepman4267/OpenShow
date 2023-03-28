@@ -1,0 +1,8 @@
+<form method="post" action="{% url 'new-show' %}">
+    {% csrf_token %}
+    <fieldset>
+        {{ form.name }}
+        {{ form.errors }}
+        <input type="submit">
+    </fieldset>
+</form>

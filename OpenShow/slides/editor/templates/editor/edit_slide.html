@@ -1,0 +1,28 @@
+{% extends 'editor/base.html' %}
+{% block content %}
+    <div id="editor" data-slide-pk="{{ slide.pk }}">
+{#        <ul class="sidebar">#}
+{#            {% for slide in slide.segment.slides.all %}#}
+{#                <li>#}
+{#                    <a href="{% url 'edit-slide' pk=slide.pk %}">{{ slide.pk }}</a>#}
+{#                </li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+        <ul class="segment-list">
+            {% for element in slide.elements.all %}
+                <li>
+                    Element: {{ element.body }}
+                    <button hx-get="{% url 'edit-element' element.pk %}" hx-swap="outerHTML" hx-target="closest li">
+                        Edit Element
+                    </button>
+                </li>
+            {% endfor %}
+            <button hx-get="{% url 'new-element' %}" hx-swap="outerHTML">
+                New Element
+            </button>
+        </ul>
+    </div>
+    <div id="preview" hx-swap-oob="true">
+        {% include 'slides/slide.html' with slide=slide %}
+    </div>
+{% endblock %}

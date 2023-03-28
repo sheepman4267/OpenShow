@@ -1,0 +1,49 @@
+{% extends 'editor/base.html' %}
+
+{% block content %}
+    <div id="show-editor" class="show-editor" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
+        <navbar>
+            <h1>{{ show.name }}</h1>
+        </navbar>
+        <ul class="slides-sidebar">
+            {% for segment in show.segments.all %}
+                <li class="show-segment">
+                    <h2>{{ segment.name }}</h2>
+                    <ul>
+                        {% for slide in segment.slides.all %}
+                            <li class="slide-thumbnail"
+                                hx-get="{% url 'edit-slide' pk=slide.pk %}"
+                                hx-swap="outerHTML"
+                                hx-select="#editor"
+                                hx-target="#editor">
+                                {% include "slides/slide.html" with slide=slide %}
+                            </li>
+                        {% endfor %}
+                        <li>
+                            <form method="post" action="{% url 'new-slide' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="segment" value="{{ segment.pk }}">
+                                <input type="submit" value="New Slide">
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            {% endfor %}
+            <li>
+                <button hx-get="{% url 'new-segment' %}" hx-swap="outerHTML">
+                    New Segment
+                </button>
+            </li>
+        </ul>
+        <div class="slide-preview" id="preview">
+            <div id="slide" class="slide">
+                <div class="words">
+                    No Slide Loaded
+                </div>
+            </div>
+        </div>
+        <div class="slide-editor" id="editor">
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'editor/base.html' %}
+
+{% block content %}
+    <div id="show-editor" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
+    <h1>{{ show.name }}</h1>
+    <ul>
+        {% for segment in show.segments.all %}
+            <li>
+                <h2>{{ segment.name }}</h2>
+                <ul>
+                    {% for slide in segment.slides.all %}
+                        <li data-slide-pk="slide.pk">
+                            {% include 'slides/slide-thumbnail.html' %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

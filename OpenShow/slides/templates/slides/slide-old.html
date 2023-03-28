@@ -1,0 +1,10 @@
+<head>
+    <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
+</head>
+<body id="slide">
+  <div hx-ext="sse" sse-connect="/events" sse-swap="message" hx-select="div">
+      Contents of this box will be updated in real time
+      with every SSE message received from the chatroom.
+  </div>
+</body>

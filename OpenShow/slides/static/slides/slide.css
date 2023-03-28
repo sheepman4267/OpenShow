@@ -1,0 +1,33 @@
+/*#slide {*/
+/*    width: 1920px;*/
+/*    height: 1080px;*/
+/*    !*background: #006b1b;*!*/
+/*    text-shadow: 1px 1px 5px black;*/
+/*}*/
+
+/*#slide .words {*/
+/*    font-family: sans-serif;*/
+/*    font-size: 90pt;*/
+/*    text-align: center;*/
+/*    width: 100%;*/
+/*    color: white;*/
+/*}*/
+
+* {
+    box-sizing: border-box;
+}
+
+.slide {
+    display: flex;
+    flex-direction: column;
+    grid-area: stack;
+}
+
+/*.slide + .slide {*/
+/*    opacity: 0; !* Set opacity to 0 on new slides to avoid FOUC when changing slides *!*/
+/*}*/
+
+#slide-container {
+    display: grid;
+    grid-template-areas: "stack";
+}

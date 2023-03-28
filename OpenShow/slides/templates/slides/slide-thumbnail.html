@@ -1,0 +1,9 @@
+<div class="thumbnail">
+    {{ slide.pk }}
+    <form method="post" action="{% url 'show-slide' %}">
+        {% csrf_token%}
+        <input type="hidden" name="slide_pk" value="{{ slide.pk }}">
+        <input type="hidden" name="show_pk" value="{{ show.pk }}">
+        <button hx-post="{% url 'show-slide' %}" hx-swap="none">Display Slide {{ slide.pk }}</button>
+    </form>
+</div>

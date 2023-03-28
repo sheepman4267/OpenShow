@@ -1,0 +1,17 @@
+{% extends 'editor/base.html' %}
+{% block content %}
+    <ul>
+        {% for show in show_list %}
+            <li>
+                <a href="{% url 'edit-show' show.pk %}">
+                    {{ show.name }}
+                </a>
+            </li>
+        {% endfor %}
+        <li>
+            <button hx-get="{% url 'new-show' %}" hx-swap="outerHTML">
+                New Show
+            </button>
+        </li>
+    </ul>
+{% endblock %}
