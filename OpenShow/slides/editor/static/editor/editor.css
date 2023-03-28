@@ -14,6 +14,7 @@ body {
     gap: 0.5rem;
     padding: 0.5rem;
     min-height: 100vh;
+    max-height: 100dvh;
     background: #202020;
 }
 
@@ -35,7 +36,6 @@ navbar {
     flex-direction: column;
     list-style: none;
     overflow: scroll;
-    max-height: calc(100dvh - 3rem);
     border: 3px solid darkgray;
     border-radius: 1rem;
     padding: 0.5rem;
@@ -54,7 +54,9 @@ navbar {
     background: #606060;
     border: 3px solid darkgray;
     border-radius: 1rem;
-
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .slide {
