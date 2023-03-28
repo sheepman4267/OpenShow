@@ -9,7 +9,7 @@
 {#            {% endfor %}#}
 {#        </ul>#}
         <ul class="segment-list">
-            {% for element in slide.elements.all %}
+            {% for element in slide.get_elements %}
                 <li>
                     Element: {{ element.body }}
                     <button hx-get="{% url 'edit-element' element.pk %}" hx-swap="outerHTML" hx-target="closest li">
