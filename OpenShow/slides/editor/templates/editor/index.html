@@ -1,17 +1,54 @@
 {% extends 'editor/base.html' %}
+
+{% load static %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'editor/index.css' %}">
+{% endblock %}
+
 {% block content %}
-    <ul>
-        {% for show in show_list %}
+    <div class="shows">
+        <h2>Shows</h2>
+        <p>Shows are collections of slides which show up in the "presentation" view, and can be pushed to displays.</p>
+        <ul>
+            {% for show in show_list %}
+                <li>
+                    <a href="{% url 'edit-show' show.pk %}">
+                        {{ show.name }}
+                    </a>
+                </li>
+            {% endfor %}
             <li>
-                <a href="{% url 'edit-show' show.pk %}">
-                    {{ show.name }}
-                </a>
+                <button hx-get="{% url 'new-show' %}" hx-swap="outerHTML">
+                    New Show
+                </button>
             </li>
-        {% endfor %}
-        <li>
-            <button hx-get="{% url 'new-show' %}" hx-swap="outerHTML">
-                New Show
-            </button>
-        </li>
-    </ul>
+        </ul>
+    </div>
+    <div class="decks">
+        <h2>Decks</h2>
+        <p>Decks are small, reusable collections of slides, which can be linked to segments in Shows. </p>
+        <ul>
+            {% for deck in deck_list %}
+                <li>
+                    <a href="{% url 'edit-deck' deck.pk %}">
+                        {{ deck.name }}
+                    </a>
+                </li>
+            {% endfor %}
+            <li>
+                <button hx-get="{% url 'new-deck' %}" hx-swap="outerHTML">
+                    New Deck
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="themes">
+        <h2>Themes</h2>
+        <p>Themes are styles which can be applied for shows, decks, or individual slides.</p>
+    </div>
+    <div class="displays">
+        <h2>Displays</h2>
+        <p>Displays can be configured to have the correct resolution, and set custom CSS.</p>
+    </div>
 {% endblock %}

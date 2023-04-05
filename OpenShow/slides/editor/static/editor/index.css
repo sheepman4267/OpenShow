@@ -1,0 +1,51 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 1fr;
+    height: 100dvh;
+    background: #202020;
+    color: white;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+body > div {
+    border: 3px solid darkgray;
+    border-radius: 1rem;
+    background: #404040;
+    text-align: center;
+}
+
+body > div > ul {
+    list-style: none;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+li {
+    background: #808080;
+    height: 3rem;
+    font-size: 1.5rem;
+    border: 3px solid darkgray;
+    border-radius: 0.5rem;
+}
+
+.shows,
+.decks {
+    grid-row: span 2;
+}
+
+.themes,
+.shows,
+.decks {
+    height: 100%;
+}
+
+

@@ -1,12 +1,14 @@
-<form method="post" action="{% if action == 'edit' %}{% url 'edit-element' slideelement.pk %}{% else %}{% url 'new-element' %}{% endif %}">
-    {{ action }}
-    {% csrf_token %}
-    <input type="hidden" name="slide" _="on load set my @value to @data-slide-pk of #editor">
-    Name: {{ form.name }}
-    CSS Class: {{ form.css_class }}
-    Body: {{ form.body }}
-    Order: {{ form.order }}
-    <button hx-post="{% if action == 'edit' %}{% url 'edit-element' slideelement.pk %}{% else %}{% url 'new-element' %}{% endif %}"
-                         hx-select="#preview"
-            hx-target="#preview">Submit</button>
-</form>
+<li>
+    <form method="post" action="{% if action == 'edit' %}{% url 'edit-element' slideelement.pk %}{% else %}{% url 'new-element' %}{% endif %}">
+        {% csrf_token %}
+        <input type="hidden" name="slide" _="on load set my @value to @data-slide-pk of #editor">
+        {{ form.body }}
+        {{ form.css_class }}{{ form.order }}
+        <button hx-post="{% if action == 'edit' %}{% url 'edit-element' slideelement.pk %}{% else %}{% url 'new-element' %}{% endif %}"
+                             hx-select="#editor"
+                hx-target="#editor">Submit</button>
+    </form>
+    {% if action == 'edit' %}
+        <button hx-trigger="click" hx-get="{% url 'delete-element' slideelement.pk %}" hx-swap="outerHTML" hx-target="this">Delete</button>
+    {% endif %}
+</li>

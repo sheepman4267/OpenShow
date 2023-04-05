@@ -1,0 +1,44 @@
+{% extends 'editor/base.html' %}
+
+{% load static %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
+    <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div id="show-editor" class="show-editor" data-deck-pk="{{ deck.pk }}">
+        <navbar>
+            <h1>{{ deck.name }}</h1>
+        </navbar>
+        <ul class="slides-sidebar">
+            {% for slide in deck.slides.all %}
+                <li class="slide-thumbnail"
+                    hx-get="{% url 'edit-slide' pk=slide.pk %}"
+                    hx-swap="outerHTML"
+                    hx-select="#editor"
+                    hx-target="#editor">
+                    {% include "slides/slide.html" with slide=slide %}
+                </li>
+            {% endfor %}
+            <li>
+                <form method="post" action="{% url 'new-slide' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="deck" value="{{ deck.pk }}">
+                    <input type="submit" value="New Slide">
+                </form>
+            </li>
+        </ul>
+        <div class="slide-preview" id="preview">
+            <div id="slide" class="slide">
+                <div class="words">
+                    No Slide Loaded
+                </div>
+            </div>
+        </div>
+        <div class="slide-editor" id="editor">
+
+        </div>
+    </div>
+{% endblock %}

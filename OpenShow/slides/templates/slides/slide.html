@@ -1,13 +1,14 @@
 {#Custom CSS for the slide#}
 <style id="slide-style" hx-swap-oob="outerHTML:#slide-style">
-    {{ slide.segment.deck.custom_css }}
-    {{ slide.segment.custom_css }}
+    {{ slide.segment.show.theme.css }}
+    {{ slide.segment.deck.theme.css }}
+    {{ slide.theme.css }}
 </style>
 {# The slide itself #}
 <div id="slide" class="slide">
     {% for element in slide.get_elements %}
         <div class="{{ element.css_class }}">
-            {{ element.body }}
+            {{ element.body|safe }}
         </div>
             {{ slide.segment.deck.custom_css }}
     {% endfor %}

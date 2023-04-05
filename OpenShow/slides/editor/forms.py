@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import Form, ModelForm, IntegerField
 from ..models import Show
 
 
@@ -8,3 +8,7 @@ from ..models import Show
 #         fields = [
 #             'name'
 #         ]
+
+
+class DeleteSlideElementForm(Form):
+    slide_pk = IntegerField()

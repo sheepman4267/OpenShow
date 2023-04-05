@@ -1,0 +1,8 @@
+<form method="post" action="{% url 'new-deck' %}">
+    {% csrf_token %}
+    <fieldset>
+        {{ form.name }}
+        {{ form.errors }}
+        <input type="submit">
+    </fieldset>
+</form>

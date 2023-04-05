@@ -38,15 +38,6 @@ navbar {
     border-radius: 1rem;
 }
 
-#editor {
-    background: #606060;
-    border: 3px solid darkgray;
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
 .slide {
     width: 1920px;
     height: 1080px;
@@ -102,7 +93,7 @@ navbar {
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    overflow: scroll;
 }
 
 #editor ul {
@@ -118,4 +109,22 @@ navbar {
     border: 3px solid darkgray;
     border-radius: 0.5rem;
     min-height: 3rem;
+    transition: height 0.3s;
+    padding: 1rem;
+}
+
+#editor ul > li > form {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 0.5rem;
+}
+
+#editor ul > li > form > textarea {
+    grid-column: span 2;
+    font-size: 1.5rem;
+    height: 9rem;
+    background: #606060;
+    color: white;
+    border: 3px solid darkgray;
+    border-radius: 0.5rem;
 }

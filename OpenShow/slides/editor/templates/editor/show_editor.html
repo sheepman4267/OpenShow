@@ -1,5 +1,12 @@
 {% extends 'editor/base.html' %}
 
+{% load static %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
+    <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
+{% endblock %}
+
 {% block content %}
     <div id="show-editor" class="show-editor" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
         <navbar>

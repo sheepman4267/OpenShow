@@ -1,0 +1,6 @@
+<div>
+    <form method="post" action="{% url 'delete-element' object.pk %}">{% csrf_token %}
+        <input type="hidden" name="slide_pk" _="on load set my @value to @data-slide-pk of <#preview/>">
+        <button hx-post="{% url 'delete-element' object.pk %}" hx-swap="outerHTML" hx-target="#editor" hx-select="#editor">Confirm</button>
+    </form>
+</div>

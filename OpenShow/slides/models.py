@@ -23,13 +23,30 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
 
 class Deck(models.Model):  # A Reusable set of slides, which can be included in a Show Segment
     name = models.CharField(max_length=100)
-    custom_css = models.TextField(null=True, blank=True)
+    theme = models.ForeignKey(
+        to='Theme',
+        unique=False,
+        related_name='decks',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    def get_absolute_url(self):
+        return reverse('edit-deck', kwargs={'pk': self.pk})
 
 
 class Show(models.Model):  # The main driver of the "presentation interface". A collection of segments, which could either have their own slides or include them from a Deck
     name = models.CharField(max_length=200)
     displays = models.ManyToManyField(
         to=Display,
+        blank=True,
+    )
+    theme = models.ForeignKey(
+        to='Theme',
+        unique=False,
+        related_name='shows',
+        on_delete=models.SET_NULL,
+        null=True,
         blank=True,
     )
 
@@ -79,7 +96,6 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
 
 
 class SlideElement(models.Model):  # An individual piece of a slide (a block of text, a video, etc.). It's just HTML :)
-    name = models.CharField(max_length=100)
     css_class = models.CharField(max_length=100)
     body = models.TextField()
     order = models.IntegerField()
@@ -105,6 +121,22 @@ class Slide(models.Model):
         unique=False,
         related_name='slides',
         on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    deck = models.ForeignKey(
+        to=Deck,
+        unique=False,
+        related_name='slides',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    theme = models.ForeignKey(
+        to='Theme',
+        unique=False,
+        related_name='slides',
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
     )
@@ -135,3 +167,7 @@ class TransitionKeyframe(models.Model):
     marker = models.CharField(max_length=30, help_text="CSS Keyframe Marker (from, 2%, 50%, to, etc.)")
     css = models.TextField(help_text="CSS to apply at this keyframe marker")
 
+
+class Theme(models.Model):
+    name = models.CharField(max_length=50)
+    css = models.TextField()

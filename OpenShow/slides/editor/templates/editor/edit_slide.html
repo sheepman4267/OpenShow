@@ -10,19 +10,21 @@
 {#        </ul>#}
         <ul class="segment-list">
             {% for element in slide.get_elements %}
-                <li hx-get="{% url 'edit-element' element.pk %}" hx-swap="innerHTML" hx-target="this">
-                    Element: {{ element.body }}
+                <li hx-get="{% url 'edit-element' element.pk %}" hx-swap="outerHTML" hx-target="this">
+                    {{ element.body }}
 {#                    <button hx-get="{% url 'edit-element' element.pk %}" hx-swap="outerHTML" hx-target="closest li">#}
 {#                        Edit Element#}
 {#                    </button>#}
                 </li>
             {% endfor %}
-            <button hx-get="{% url 'new-element' %}" hx-swap="outerHTML">
-                New Element
-            </button>
+            <li>
+                <button hx-get="{% url 'new-element' %}" hx-swap="outerHTML">
+                    New Element
+                </button>
+            </li>
         </ul>
     </div>
-    <div id="preview" hx-swap-oob="true">
+    <div id="preview" hx-swap-oob="true" data-slide-pk="{{ slide.pk }}">
         {% include 'slides/slide.html' with slide=slide %}
     </div>
 {% endblock %}
