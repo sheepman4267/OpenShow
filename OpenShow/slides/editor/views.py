@@ -36,6 +36,12 @@ class SegmentCreateView(CreateView):
     template_name = 'editor/new_segment_form.html'
 
 
+class SegmentUpdateView(UpdateView):
+    model = Segment
+    fields = ['name', 'order', 'included_deck']
+    template_name = 'editor/edit_segment_form.html'
+
+
 class SlideCreateView(CreateView):
     model = Slide
     fields = ['segment', 'deck']

@@ -1,3 +1,8 @@
-<form>
-    {{ form }}
-</form>
+<div id="editor">
+    <form method="post" action="{% url 'edit-segment' segment.pk %}">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+    </form>
+</div>
+

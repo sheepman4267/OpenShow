@@ -15,7 +15,10 @@
         <ul class="slides-sidebar">
             {% for segment in show.segments.all %}
                 <li class="show-segment">
-                    <h2>{{ segment.name }}</h2>
+                    <h2>{{ segment.name }}<button hx-get="{% url 'edit-segment' segment.pk %}" hx-select="#editor" hx-target="#editor" hx-swap="outerHTML">Edit</button></h2>
+                    {% if segment.included_deck %}
+                        <h4>Deck: {{ segment.included_deck.name }}</h4>
+                    {% endif %}
                     <ul>
                         {% for slide in segment.slides.all %}
                             <li class="slide-thumbnail"
