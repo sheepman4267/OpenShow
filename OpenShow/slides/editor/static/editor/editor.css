@@ -62,31 +62,6 @@ navbar {
     padding: 0.5rem;
 }
 
-.slides-sidebar .slide {
-    width: 1920px;
-    height: 1080px;
-    transform: scale(10%);
-    margin-right: calc(-1920px / 10);
-    margin-bottom: calc(-1080px / 10);
-    margin-left: calc(calc(100% - calc(1920px / 10)) / 2);
-    transform-origin: left top;
-    background: black;
-    align-self: center;
-}
-
-.slides-sidebar .slide-thumbnail {
-    max-width: calc(1920px / 10);
-    max-height: calc(1080px / 10);
-    overflow: hidden;
-    margin: 0.5rem;
-    border: 3px solid darkgray;
-    border-radius: 0.5rem;
-}
-
-.slides-sidebar .slide-thumbnail:hover {
-    border: 3px solid #808080;
-}
-
 #editor {
     background: #606060;
     border: 3px solid darkgray;

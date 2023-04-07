@@ -107,6 +107,11 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         related_name='elements',
         on_delete=models.CASCADE,
     )
+    image = models.ImageField(
+        blank=True,
+        null=True,
+        upload_to='element_images/'
+    )
 
     def get_absolute_url(self):
         return reverse('edit-slide', kwargs={'pk': self.slide.pk})

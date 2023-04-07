@@ -9,9 +9,9 @@
     {% for element in slide.get_elements %}
         <div class="{{ element.css_class }}">
             {{ element.body|safe }}
+            {% if element.image %}
+                <img src="{{ element.image.url }}">
+            {% endif %}
         </div>
-            {{ slide.segment.deck.custom_css }}
     {% endfor %}
-    <span>{{ slide.segment.deck.custom_css }}
-    {{ slide.segment.custom_css }}</span>
 </div>

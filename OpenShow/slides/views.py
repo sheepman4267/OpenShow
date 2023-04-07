@@ -39,6 +39,9 @@ class DisplayView(DetailView):
 class ShowView(DetailView):
     model = Show
     template_name = "slides/show.html"
+    extra_context = {
+        'shows': Show.objects.all(),
+    }
 
 
 class ShowSlideView(FormView):

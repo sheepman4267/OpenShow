@@ -3,7 +3,7 @@
         {% csrf_token %}
         <input type="hidden" name="slide" _="on load set my @value to @data-slide-pk of #editor">
         {{ form.body }}
-        {{ form.css_class }}{{ form.order }}
+        {{ form.css_class }}{{ form.order }}<span>{{ form.image }}</span>
         <button hx-post="{% if action == 'edit' %}{% url 'edit-element' slideelement.pk %}{% else %}{% url 'new-element' %}{% endif %}"
                              hx-select="#editor"
                 hx-target="#editor">Submit</button>
