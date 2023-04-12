@@ -3,6 +3,10 @@ from django_eventstream import send_event
 from collections.abc import Iterable
 from django.shortcuts import reverse
 
+import tinycss2
+
+from tinycss2.ast import IdentToken, QualifiedRule
+
 
 class Display(models.Model):  # A set of characteristics used to modify slide appearance for different displays
     name = models.CharField(max_length=100)
@@ -119,6 +123,9 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
     class Meta:
         ordering = ["-order"]
 
+class QRCodeElement(SlideElement):
+    link = models.TextField()
+
 
 class Slide(models.Model):
     segment = models.ForeignKey(
@@ -176,3 +183,22 @@ class TransitionKeyframe(models.Model):
 class Theme(models.Model):
     name = models.CharField(max_length=50)
     css = models.TextField()
+
+    def get_absolute_url(self):
+        return reverse('edit-theme', kwargs={'pk': self.pk})
+
+    def parse(self):
+        return tinycss2.parse_stylesheet(self.css)
+
+    def get_css_classes(self):
+        classes = []
+        for css_class in tinycss2.parse_stylesheet(self.css):
+            if type(css_class) == QualifiedRule:
+                class_string = ''
+                for token in css_class.prelude:
+                    if type(token) == IdentToken:
+                        class_string += f'{token.value} '
+                classes.append(class_string)
+        return classes
+
+
