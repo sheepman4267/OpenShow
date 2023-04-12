@@ -1,0 +1,49 @@
+{% extends 'editor/base.html' %}
+
+{% load static %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
+    <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
+    <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
+    <style id="theme">{{ theme.css }}</style>
+{% endblock %}
+
+{% block content %}
+    <div id="show-editor" class="show-editor" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
+        <navbar>
+            <h1>{{ theme.name }}</h1>
+        </navbar>
+        <ul class="slides-sidebar">
+            {% for theme in theme_list %}
+                <a href="{% url 'edit-theme' theme.pk %}">
+                    <li class="theme-in-sidebar">
+                        <h3>{{ theme.name }}</h3>
+                    </li>
+                </a>
+            {% endfor %}
+            <li>
+                <button hx-get="{% url 'new-theme' %}" hx-swap="outerHTML">
+                    New Theme
+                </button>
+            </li>
+        </ul>
+        <div class="slide-preview" id="preview">
+            <div id="slide" class="slide">
+                {% for css_class in theme.get_css_classes %}
+                    <div class="{{ css_class }}">
+                        {% lorem 10 w %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="slide-editor" id="editor">
+            <form method="post" action="{% url "edit-theme" theme.pk %}">
+                {% csrf_token %}
+                {{ form.name }}
+                {{ form.css }}
+                <input type="submit">
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -4,3 +4,5 @@ django-eventstream==4.5.1
 channels==3.0.5
 django-colorfield==0.8.0
 htmlmin
+tinycss2
+python-lorem

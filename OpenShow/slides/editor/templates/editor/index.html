@@ -46,6 +46,18 @@
     <div class="themes">
         <h2>Themes</h2>
         <p>Themes are styles which can be applied for shows, decks, or individual slides.</p>
+        <ul>
+            {% for theme in theme_list %}
+                <li>
+                    <a href="{% url 'edit-theme' theme.pk %}">{{ theme.name }}</a>
+                </li>
+            {% endfor %}
+            <li>
+                <button hx-get="{% url 'new-theme' %}" hx-swap="outerHTML">
+                    New Theme
+                </button>
+            </li>
+        </ul>
     </div>
     <div class="displays">
         <h2>Displays</h2>

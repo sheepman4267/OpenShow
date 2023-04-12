@@ -5,6 +5,8 @@ from ..models import Show, Segment, Slide, SlideElement, Display, Deck, Theme
 
 from .forms import DeleteSlideElementForm
 
+import lorem
+
 # Create your views here.
 
 
@@ -12,9 +14,9 @@ class IndexView(ListView):
     queryset = Show.objects.all()
     template_name = 'editor/index.html'
     extra_context = {
-        'deck_list': Deck.objects.all(),
-        'theme_list': Theme.objects.all(),
-        'display_list': Display.objects.all(),
+        'deck_list': Deck.objects.all,
+        'theme_list': Theme.objects.all,
+        'display_list': Display.objects.all,
     }
 
 
@@ -82,8 +84,9 @@ class SlideEditView(DetailView):
 
 class DeckCreateView(CreateView):
     model = Deck
-    template_name = 'editor/new_deck_form.html'
+    template_name = 'editor/simple_create_form.html'
     fields = ['name']
+    extra_context = {'action': 'new-deck'}
 
 
 class DeckUpdateView(UpdateView):
@@ -96,3 +99,27 @@ class DeckEditorView(DetailView):
     queryset = Deck.objects.all()
     template_name = 'editor/deck_editor.html'
     extra_context = {'display': Display.objects.all().first()}
+
+
+class ThemeCreateView(CreateView):
+    model = Theme
+    template_name = 'editor/simple_create_form.html'
+    fields = ['name']
+    extra_context = {'action': 'new-theme'}
+
+
+class ThemeUpdateView(UpdateView):
+    model = Theme
+    template_name = 'editor/edit_theme.html'
+    fields = ['name', 'css']
+    extra_context = {
+        'theme_list': Theme.objects.all
+    }
+
+
+def generate_lorem(request, css_class:str, words:int):
+    return render(request, 'editor/lorem.html',
+                  context={
+                      'css_class': css_class,
+                      'lorem': lorem.get_word(count=words)
+                  })

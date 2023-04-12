@@ -2,6 +2,7 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    font-family: sans-serif;
 }
 
 body {
@@ -60,6 +61,26 @@ navbar {
     border: 3px solid darkgray;
     border-radius: 1rem;
     padding: 0.5rem;
+    gap: 0.5rem;
+}
+
+.show-segment > ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.theme-in-sidebar {
+    background: #404040;
+    border: 3px solid darkgray;
+    border-radius: 0.5rem;
+    min-height: 3rem;
+    padding: 0.5rem;
+}
+
+ul > a {
+    color: white;
+    text-decoration: none;
 }
 
 #editor {
