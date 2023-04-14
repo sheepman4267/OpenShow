@@ -1,0 +1,16 @@
+{% if missing %}
+    <div>
+        This theme is missing support for:
+        <ul>
+            {% for css_class in missing %}
+                <li>
+                    {{ css_class }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% else %}
+    <div>This theme is fully compatible!</div>
+{% endif %}
+<input type="submit">

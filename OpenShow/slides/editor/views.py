@@ -1,9 +1,9 @@
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, get_object_or_404
 from django.views.generic import DetailView, CreateView, ListView, UpdateView, FormView, DeleteView
 
 from ..models import Show, Segment, Slide, SlideElement, Display, Deck, Theme
 
-from .forms import DeleteSlideElementForm
+from .forms import DeleteSlideElementForm, SetThemeForm
 
 import lorem
 
@@ -117,9 +117,43 @@ class ThemeUpdateView(UpdateView):
     }
 
 
+class SetThemeView(UpdateView):
+    model = Show
+    # fields = ['theme']
+    form_class = SetThemeForm
+    template_name = 'editor/set_theme.html'
+
+
+# class CheckThemeCompatibilityView(FormView):
+#     form_class = SetThemeForm
+#     template_name = 'editor/show_compatibility_snippet.html'
+#
+#     def form_valid(self, form):
+#         show = Show.objects.get(form.cleaned_data['show_pk'])
+#         missing = show.check_compatibility(form.cleaned_data['theme'])
+#         if len(missing) <= 0:
+#             missing = None
+#         return render(self.request, 'editor/show_compatibility_snippet.html', {
+#             'missing': missing
+#         })
+
+
 def generate_lorem(request, css_class:str, words:int):
     return render(request, 'editor/lorem.html',
                   context={
                       'css_class': css_class,
                       'lorem': lorem.get_word(count=words)
                   })
+
+
+def check_theme_compatibility(request):
+    form = SetThemeForm(request.POST)
+    if form.is_valid():
+        show = Show.objects.get(pk=form.cleaned_data['show_pk'])
+        theme = form.cleaned_data['theme']
+        missing = show.check_compatibility(theme)
+        if len(missing) == 0:
+            missing = None
+        return render(request, 'editor/show_compatibility_snippet.html', {
+            'missing': missing,
+        })

@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="slide-editor" id="editor">
-
+            <button hx-get="{% url 'set-theme' show.pk %}" hx-swap="outerHTML">Set Theme</button>
         </div>
     </div>
 {% endblock %}

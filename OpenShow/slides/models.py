@@ -60,6 +60,31 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
     def next_segment_order(self):
         return max([0, ] + [segment.order for segment in self.segments.all()]) + 1
 
+    def get_css_classes(self):
+        css_classes = []
+        for segment in self.segments.all():
+            for slide in segment.slides.all():
+                for element in slide.elements.all():
+                    if element.css_class not in css_classes:
+                        css_classes.append(element.css_class)
+            if segment.included_deck:
+                for slide in segment.included_deck.slides.all():
+                    for element in slide.elements.all():
+                        if element.css_class not in css_classes:
+                            css_classes.append(element.css_class)
+        return css_classes
+
+    def check_compatibility(self, theme):
+        missing = []
+        show_classes = self.get_css_classes()
+        print(show_classes)
+        theme_classes = theme.get_css_classes()
+        print(theme_classes)
+        for css_class in show_classes:
+            if css_class not in theme_classes:
+                missing.append(css_class)
+        return missing
+
 
 class Segment(models.Model):  # A collection of slides which will be part of a Show
     name = models.CharField(max_length=100)
@@ -194,10 +219,12 @@ class Theme(models.Model):
         classes = []
         for css_class in tinycss2.parse_stylesheet(self.css):
             if type(css_class) == QualifiedRule:
-                class_string = ''
+                class_list = []
                 for token in css_class.prelude:
                     if type(token) == IdentToken:
-                        class_string += f'{token.value} '
+                        class_list.append(token.value)
+                class_string = ' '.join(class_list)
+                print(class_string)
                 classes.append(class_string)
         return classes
 

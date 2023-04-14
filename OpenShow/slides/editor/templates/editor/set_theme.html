@@ -1,0 +1,5 @@
+<form method="post" action="{% url 'set-theme' show.pk %}">
+    {% csrf_token %}
+    {{ form.theme }}
+    <input type="hidden" name="show_pk" _="on load set my @value to @data-show-pk of closest #show-editor">
+</form>

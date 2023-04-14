@@ -31,7 +31,7 @@
         <div class="slide-preview" id="preview">
             <div id="slide" class="slide">
                 {% for css_class in theme.get_css_classes %}
-                    <div class="{{ css_class }}">
+                    <div id="class{{ forloop.counter }}" class="{{ css_class }}">
                         {% lorem 10 w %}
                     </div>
                 {% endfor %}
@@ -44,6 +44,15 @@
                 {{ form.css }}
                 <input type="submit">
             </form>
+            <ul class="class-list">
+                {% for css_class in theme.get_css_classes %}
+                    <li>
+                        <button _="on click toggle @hidden on <#class{{ forloop.counter }}/>">
+                            Toggle {{ css_class }}
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}
