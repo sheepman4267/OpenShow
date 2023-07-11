@@ -1,24 +1,40 @@
 {% load static %}
 
-<head>
+<head id="head">
     <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
     <style id="slide-style">
+        .slide {
+            --transition-time: 1s;
+        }
+        {% if display.current_slide.transition %}
+            {% include 'slides/transition.css' with transition=display.current_slide.transition %}
+        {% endif %}
         {{ display.current_slide.segment.show.theme.css }}
         {{ display.current_slide.segment.deck.theme.css }}
         {{ display.current_slide.theme.css }}
         .slide + .slide {
-
+            animation: var(--transition-time) 1 normal {{ display.current_slide.transition.name }};
         }
         {{ display.custom_css }}
     </style>
     <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
 </head>
+
+
+<span id="slide-grabber" hx-get="{% url 'display' display.pk %}" hx-trigger="sse:display-{{ display.pk }}" hx-select="#slide" hx-target="body" hx-swap="beforeend"></span>
+
 <body hx-ext="sse" sse-connect="/events">
-    <div id="slide" hx-get="{% url 'display' display.pk %}" hx-trigger="sse:display-{{ display.pk }}" hx-select="#slide" hx-target="#slide" hx-swap="outerHTML">
+    <div class="slide" id="slide" _="on load wait 0.8s then remove <.slide:not(:last-child)/>">
+{#        <span class="hidden" hx-get="{% url 'display' display.pk %}" hx-trigger="load" hx-select="#swap-style" hx-target="#slide-style" hx-swap="beforeend"></span>#}
+        <span _="on load wait 2s then fetch {% url 'display-style' display.pk %} then put it into <#slide-style/>'s innerHTML"></span>
         {% for element in display.current_slide.get_elements %}
             <div class="{{ element.css_class }}">
-                {{ element.body }}
+                {{ element.body|safe }}
+                {% if element.image %}
+                    <img src="{{ element.image.url }}">
+                {% endif %}
             </div>
         {% endfor %}
     </div>

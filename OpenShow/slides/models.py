@@ -126,7 +126,7 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
 
 class SlideElement(models.Model):  # An individual piece of a slide (a block of text, a video, etc.). It's just HTML :)
     css_class = models.CharField(max_length=100)
-    body = models.TextField()
+    body = models.TextField(null=True, blank=True)
     order = models.IntegerField()
     slide = models.ForeignKey(
         to='Slide',
@@ -177,6 +177,22 @@ class Slide(models.Model):
         null=True,
         blank=True,
     )
+    transition = models.ForeignKey(
+        to='Transition',
+        unique=False,
+        related_name='slides',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+
+    def get_absolute_url(self):
+        if self.segment:
+            return reverse('edit-show', kwargs={'pk': self.segment.pk})
+        elif self.deck:
+            return reverse('edit-deck', kwargs={'pk': self.deck.pk})
+        else:
+            raise RuntimeError('A slide must be part of something... something has gone very wrong.')
 
     def send_to_display(self, displays:Iterable) -> None:
         """
@@ -196,13 +212,26 @@ class Slide(models.Model):
 
 class Transition(models.Model):
     name = models.CharField(max_length=30)
-    default_time = models.FloatField(help_text="Default total time for transition, in seconds")
-    keyframes = models.ManyToManyField("TransitionKeyframe")
+    default_time = models.FloatField(help_text="Default total time for transition, in seconds", default=1)
+
+    def get_absolute_url(self):
+        return reverse('edit-transition', kwargs={'pk': self.pk})
 
 
 class TransitionKeyframe(models.Model):
+    transition = models.ForeignKey(
+        to=Transition,
+        unique=False,
+        null=True,
+        blank=False,
+        related_name='keyframes',
+        on_delete=models.CASCADE,
+    )
     marker = models.CharField(max_length=30, help_text="CSS Keyframe Marker (from, 2%, 50%, to, etc.)")
     css = models.TextField(help_text="CSS to apply at this keyframe marker")
+
+    def get_absolute_url(self):
+        return reverse('edit-transition', kwargs={'pk': self.transition.pk})
 
 
 class Theme(models.Model):
@@ -227,5 +256,8 @@ class Theme(models.Model):
                 print(class_string)
                 classes.append(class_string)
         return classes
+
+    def __str__(self):
+        return self.name
 
 

@@ -53,7 +53,7 @@ body {
 
 #show.presentation > ul > li > ul {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fill, 13rem);
     list-style: none;
 }
 

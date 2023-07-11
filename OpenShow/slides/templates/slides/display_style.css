@@ -1,0 +1,19 @@
+.slide {
+    --transition-time: 1s;
+}
+
+{% if display.current_slide.transition %}
+    {% include 'slides/transition.css' with transition=display.current_slide.transition %}
+{% endif %}
+
+{{ display.current_slide.segment.show.theme.css }}
+{{ display.current_slide.segment.deck.theme.css }}
+{{ display.current_slide.theme.css }}
+.slide + .slide {
+    animation: var(--transition-time) 1 normal {{ display.current_slide.transition.name }};
+}
+
+.slide:not(:last-child) {
+    animation: var(--transition-time) 1 reverse {{ display.current_slide.transition.name }};
+}}
+{{ display.custom_css }}

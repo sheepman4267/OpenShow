@@ -10,9 +10,9 @@
 
 {% block content %}
     <div id="show-editor" class="show-editor" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
-        <navbar>
+        <span class="navbar">
             <h1>{{ show.name }}</h1>
-        </navbar>
+        </span>
         <ul class="slides-sidebar">
             {% for segment in show.segments.all %}
                 <li class="show-segment">

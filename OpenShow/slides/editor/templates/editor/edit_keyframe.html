@@ -1,0 +1,10 @@
+<form method="post" action="{% url action %}">
+    {% csrf_token %}
+    <fieldset>
+        <input type="hidden" name="transition" _="on load set my @value to @data-transition-pk of #transition-editor">
+        {{ form.marker }}
+        {{ form.css }}
+        {{ form.errors }}
+        <input type="submit">
+    </fieldset>
+</form>

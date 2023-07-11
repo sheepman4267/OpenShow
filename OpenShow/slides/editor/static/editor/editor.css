@@ -19,11 +19,11 @@ body {
     background: #202020;
 }
 
-.show-editor > navbar {
+.show-editor > .navbar {
     grid-column: span 2;
 }
 
-navbar {
+.navbar {
     height: 3rem;
     background: #606060;
     border: 3px solid darkgray;

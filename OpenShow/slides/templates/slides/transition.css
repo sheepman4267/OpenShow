@@ -1,0 +1,7 @@
+@keyframes {{ transition.name }} {
+  {% for keyframe in transition.keyframes.all %}
+    {{ keyframe.marker }} {
+      {{ keyframe.css }}
+    }
+  {% endfor %}
+}

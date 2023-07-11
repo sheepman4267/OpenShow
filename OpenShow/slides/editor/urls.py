@@ -18,5 +18,9 @@ urlpatterns = [
     path('theme/<int:pk>', ThemeUpdateView.as_view(), name='edit-theme'),
     path('lorem/<int:words>/<str:css_class>', generate_lorem, name='lorem'),
     path('show/<int:pk>/set-theme/', SetThemeView.as_view(), name='set-theme'),
-    path('show/check-theme-compatibility', check_theme_compatibility, name='check-theme-compatibility')
+    path('show/check-theme-compatibility', check_theme_compatibility, name='check-theme-compatibility'),
+    path('transition', TransitionEditorIndexView.as_view(), name='transition-editor'),
+    path('transition/<int:pk>', TransitionEditorView.as_view(), name='edit-transition'),
+    path('transition/new', TransitionCreateView.as_view(), name='new-transition'),
+    path('transition/keyframe/new', TransitionKeyframeCreateView.as_view(), name='new-keyframe'),
 ]

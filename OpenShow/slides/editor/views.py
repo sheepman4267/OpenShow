@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse, get_object_or_404
 from django.views.generic import DetailView, CreateView, ListView, UpdateView, FormView, DeleteView
 
-from ..models import Show, Segment, Slide, SlideElement, Display, Deck, Theme
+from ..models import Show, Segment, Slide, SlideElement, Display, Deck, Theme, Transition, TransitionKeyframe
 
 from .forms import DeleteSlideElementForm, SetThemeForm
 
@@ -23,7 +23,7 @@ class IndexView(ListView):
 class ShowEditorView(DetailView):
     queryset = Show.objects.all()
     template_name = 'editor/show_editor.html'
-    extra_context = {'display': Display.objects.all().first()}
+    # extra_context = {'display': Display.objects.all().first()}
 
 
 class ShowCreateView(CreateView):
@@ -77,8 +77,9 @@ class SlideElementDeleteView(DeleteView):
         return super().form_valid(form)
 
 
-class SlideEditView(DetailView):
+class SlideEditView(UpdateView):
     model = Slide
+    fields = ['transition']
     template_name = 'editor/edit_slide.html'
 
 
@@ -98,7 +99,7 @@ class DeckUpdateView(UpdateView):
 class DeckEditorView(DetailView):
     queryset = Deck.objects.all()
     template_name = 'editor/deck_editor.html'
-    extra_context = {'display': Display.objects.all().first()}
+    # extra_context = {'display': Display.objects.all().first()}
 
 
 class ThemeCreateView(CreateView):
@@ -157,3 +158,37 @@ def check_theme_compatibility(request):
         return render(request, 'editor/show_compatibility_snippet.html', {
             'missing': missing,
         })
+
+
+class TransitionEditorIndexView(ListView):
+    queryset = Transition.objects.all()
+    template_name = 'editor/transition_editor.html'
+    extra_context = {
+        'transition_list': Transition.objects.all()
+    }
+
+
+class TransitionEditorView(DetailView):
+    model = Transition
+    template_name = 'editor/transition_editor.html'
+    extra_context = {
+        'transition_list': Transition.objects.all
+    }
+
+
+class TransitionCreateView(CreateView):
+    model = Transition
+    fields = ["name"]
+    template_name = "editor/simple_create_form.html"
+    extra_context = {
+        'action': 'new-transition',
+    }
+
+
+class TransitionKeyframeCreateView(CreateView):
+    model = TransitionKeyframe
+    fields = ["transition", "marker", "css"]
+    template_name = "editor/edit_keyframe.html"
+    extra_context = {
+        'action': 'new-keyframe',
+    }

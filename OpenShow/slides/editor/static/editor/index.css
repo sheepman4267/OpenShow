@@ -7,11 +7,16 @@
 body {
     display: grid;
     grid-template-columns: 1.5fr 1.5fr 1fr;
+    grid-template-rows: 3rem 1fr 1fr;
     height: 100dvh;
     background: #202020;
     color: white;
     gap: 0.5rem;
     padding: 0.5rem;
+}
+
+body > .navbar {
+    grid-column: span 3;
 }
 
 body > div {

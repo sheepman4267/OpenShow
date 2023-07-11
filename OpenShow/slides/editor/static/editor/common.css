@@ -1,0 +1,40 @@
+.navbar {
+    height: 3rem;
+    background: #606060;
+    border: 3px solid darkgray;
+    border-radius: 1rem;
+    display: flex;
+}
+
+.navbar .buttons-right {
+    margin-left: auto;
+    margin-right: 1rem;
+    position: relative;
+    margin-block: auto;
+}
+
+.navbar .buttons-right button {
+    font-size: 1.25rem;
+    padding: 0.25rem;
+    border-radius: 1rem;
+    padding-inline: 0.5rem;
+}
+
+.navbar .buttons-right .menu {
+    position: absolute;
+    left: calc(-25rem + 100%);
+    width: 25rem;
+    padding: 1rem;
+    background: #606060;
+    border: 3px solid darkgray;
+    border-radius: 1rem;
+}
+
+.navbar .buttons-right .menu ul {
+    list-style: none;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}

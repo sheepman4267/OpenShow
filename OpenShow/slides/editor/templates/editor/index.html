@@ -4,9 +4,25 @@
 
 {% block additional_css %}
     <link rel="stylesheet" href="{% static 'editor/index.css' %}">
+    <link rel="stylesheet" href="{% static 'editor/common.css' %}">
 {% endblock %}
 
 {% block content %}
+    <span class="navbar">
+        <h1>OpenShow Editor</h1>
+        <span class="buttons-right">
+            <button _="on click toggle .hidden on #settings-menu">
+                Settings
+            </button>
+            <div id="settings-menu" class="menu hidden">
+                <ul>
+                    <li>
+                        <a href="{% url 'transition-editor' %}">Transition Editor</a>
+                    </li>
+                </ul>
+            </div>
+        </span>
+    </span>
     <div class="shows">
         <h2>Shows</h2>
         <p>Shows are collections of slides which show up in the "presentation" view, and can be pushed to displays.</p>

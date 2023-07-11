@@ -1,0 +1,49 @@
+{% extends 'editor/base.html' %}
+
+{% load static %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div id="transition-editor" class="show-editor" data-transition-pk="{{ transition.pk }}">
+        <span class="navbar">
+            <h1>{{ transition.name }}</h1>
+        </span>
+        <ul class="slides-sidebar">
+            {% for transition in transition_list %}
+                <a href="{% url 'edit-transition' transition.pk %}">
+                    <li class="theme-in-sidebar">
+                        <h3>
+                            {{ transition.name }}
+                        </h3>
+                    </li>
+                </a>
+            {% endfor %}
+            <li>
+                <button hx-get="{% url 'new-transition' %}" hx-swap="outerHTML">
+                    New Transition
+                </button>
+            </li>
+        </ul>
+        <div id="preview">
+            Not Yet Implemented
+        </div>
+        <div id="editor" class="editor">
+            <ul>
+                {% for keyframe in transition.keyframes.all %}
+                    <li>
+                        <span>{{ keyframe.marker }}</span>
+                        <pre>
+                            {{ keyframe.css }}
+                        </pre>
+                    </li>
+                {% endfor %}
+                <li>
+                    <button hx-get="{% url 'new-keyframe' %}" hx-swap="outerHTML">New Keyframe</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
