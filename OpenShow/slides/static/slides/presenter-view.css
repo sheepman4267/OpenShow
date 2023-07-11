@@ -53,7 +53,8 @@ body {
 
 #show.presentation > ul > li > ul {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 13rem);
+    grid-template-columns: repeat(auto-fill, 12rem);
+    gap: 1rem;
     list-style: none;
 }
 
@@ -61,22 +62,22 @@ body {
 
 /* Temporary slide thumbnails- eventually, these need to display an accurate representation of the slide. For now, we'll make it the right size and just throw the text in. */
 
-.slide-thumbnail .slide {
-    width: calc(1920px / 10);
-    height: calc(1080px / 10);
-    background: black;
-    color: white;
-    font-family: sans-serif;
-}
+/*.slide-thumbnail .slide {*/
+/*    width: calc(1920px / 10);*/
+/*    height: calc(1080px / 10);*/
+/*    background: black;*/
+/*    color: white;*/
+/*    font-family: sans-serif;*/
+/*}*/
 
-.slide-thumbnail {
-    max-width: calc(1920px / 10);
-    max-height: calc(1080px / 10);
-    overflow: hidden;
-    margin: 0.5rem;
-    border: 3px solid darkgray;
-    border-radius: 0.5rem;
-}
+/*.slide-thumbnail {*/
+/*    max-width: calc(1920px / 10);*/
+/*    max-height: calc(1080px / 10);*/
+/*    overflow: hidden;*/
+/*    margin: 0.5rem;*/
+/*    border: 3px solid darkgray;*/
+/*    border-radius: 0.5rem;*/
+/*}*/
 
 .slide-thumbnail:hover {
     border: 3px solid #808080;
