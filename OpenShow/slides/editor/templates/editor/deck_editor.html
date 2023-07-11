@@ -9,7 +9,7 @@
 
 {% block content %}
     <div id="show-editor" class="show-editor" data-deck-pk="{{ deck.pk }}">
-        <navbar>
+        <navbar class="navbar">
             <h1>{{ deck.name }}</h1>
         </navbar>
         <ul class="slides-sidebar">
@@ -38,7 +38,13 @@
             </div>
         </div>
         <div class="slide-editor" id="editor">
-
+            <form method="post" action="{% url 'edit-deck' deck.pk %}">
+                {% csrf_token %}
+                {{ form.name }}
+                {{ form.theme }}
+                {{ form.errors }}
+                <input type="submit">
+            </form>
         </div>
     </div>
 {% endblock %}

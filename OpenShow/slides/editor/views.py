@@ -96,8 +96,10 @@ class DeckUpdateView(UpdateView):
     fields = ['name', 'theme']
 
 
-class DeckEditorView(DetailView):
+class DeckEditorView(UpdateView):
     queryset = Deck.objects.all()
+    model = Deck
+    fields = ['name', 'theme']
     template_name = 'editor/deck_editor.html'
     # extra_context = {'display': Display.objects.all().first()}
 

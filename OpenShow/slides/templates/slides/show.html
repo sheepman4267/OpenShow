@@ -25,9 +25,19 @@
             {% for segment in show.segments.all %}
                 <li>
                     <h2>{{ segment.name }}</h2>
+                    {% if segment.included_deck %}
+                        <h3>{{ segment.included_deck.name }}</h3>
+                        <ul>
+                            {% for slide in segment.included_deck.slides.all %}
+                                <li data-slide-pk="{{ slide.pk }}">
+                                    {% include 'slides/slide-thumbnail.html' %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <ul>
                         {% for slide in segment.slides.all %}
-                            <li data-slide-pk="slide.pk">
+                            <li data-slide-pk="{{ slide.pk }}">
                                 {% include 'slides/slide-thumbnail.html' %}
                             </li>
                         {% endfor %}

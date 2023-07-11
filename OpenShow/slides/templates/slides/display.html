@@ -12,7 +12,7 @@
             {% include 'slides/transition.css' with transition=display.current_slide.transition %}
         {% endif %}
         {{ display.current_slide.segment.show.theme.css }}
-        {{ display.current_slide.segment.deck.theme.css }}
+        {{ display.current_slide.deck.theme.css }}
         {{ display.current_slide.theme.css }}
         .slide + .slide {
             animation: var(--transition-time) 1 normal {{ display.current_slide.transition.name }};
