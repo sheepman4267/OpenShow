@@ -141,6 +141,11 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         null=True,
         upload_to='element_images/'
     )
+    video = models.FileField(
+        blank=True,
+        null=True,
+        upload_to='element_videos/'
+    )
 
     def get_absolute_url(self):
         return reverse('edit-slide', kwargs={'pk': self.slide.pk})

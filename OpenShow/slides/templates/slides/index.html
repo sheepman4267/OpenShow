@@ -1,0 +1,25 @@
+{% extends 'slides/base.html' %}
+
+{% block content %}
+    <header><h1>OpenShow</h1><a href="{% url 'editor_index' %}">Show Editor</a></header>
+    <div>
+        <h2>Shows</h2>
+        <ul>
+            {% for show in show_list %}
+                <li>
+                    <a href="{% url 'show' show.pk %}">{{ show.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        <h2>Decks</h2>
+        <ul>
+            {% for deck in deck_list %}
+                <li>
+                    <a href="{% url 'deck' deck.pk %}">{{ deck.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

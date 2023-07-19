@@ -1,12 +1,12 @@
 <li>
-    <form method="post" action="{% if action == 'edit' %}{% url 'edit-element' slideelement.pk %}{% else %}{% url 'new-element' %}{% endif %}">
+    <form method="post" enctype="multipart/form-data" action="{% if action == 'edit' %}{% url 'edit-element' slideelement.pk %}{% else %}{% url 'new-element' %}{% endif %}">
         {% csrf_token %}
         <input type="hidden" name="slide" _="on load set my @value to @data-slide-pk of #editor">
         {{ form.body }}
-        {{ form.css_class }}{{ form.order }}<span>{{ form.image }}</span>
+        {{ form.css_class }}{{ form.order }}<span>image: {{ form.image }}</span><span>video: {{ form.video }}</span>
         <button hx-post="{% if action == 'edit' %}{% url 'edit-element' slideelement.pk %}{% else %}{% url 'new-element' %}{% endif %}"
                              hx-select="#editor"
-                hx-target="#editor">Submit</button>
+                hx-target="#editor" hx-encoding="multipart/form-data">Submit</button>
     </form>
     {% if action == 'edit' %}
         <button hx-trigger="click" hx-get="{% url 'delete-element' slideelement.pk %}" hx-swap="outerHTML" hx-target="this">Delete</button>

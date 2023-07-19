@@ -1,6 +1,7 @@
 {% load static %}
 
 <head id="head">
+    <title>OpenShow Display {{ display.pk }}</title>
     <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
     <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
@@ -34,6 +35,11 @@
                 {{ element.body|safe }}
                 {% if element.image %}
                     <img src="{{ element.image.url }}">
+                {% endif %}
+                {% if element.video %}
+                    <video autoplay name="media" _="on load js(me, me) me.play() end">
+                        <source src="{{ element.video.url }}">
+                    </video>
                 {% endif %}
             </div>
         {% endfor %}

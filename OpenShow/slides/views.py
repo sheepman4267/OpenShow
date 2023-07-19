@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse
-from django.views.generic import DetailView, FormView
+from django.views.generic import DetailView, FormView, ListView
 from django.template import loader
-from .models import Slide, Display, Show
+from .models import Slide, Display, Show, Deck
 
 from .forms import SlideDisplayForm
 
@@ -22,13 +22,17 @@ from django.shortcuts import HttpResponse
 #     send_event('test', f'display-{display}', rendered_slide)
 
 
+class IndexView(ListView):
+    model = Show
+    template_name = 'slides/index.html'
+    extra_context = {
+        'deck_list': Deck.objects.all()
+    }
+
+
 class SlideView(DetailView):
     model = Slide
     template_name = 'slides/slide.html'
-
-
-class DeckView(DetailView):
-    pass
 
 
 class DisplayView(DetailView):
@@ -41,6 +45,14 @@ class ShowView(DetailView):
     template_name = "slides/show.html"
     extra_context = {
         'shows': Show.objects.all(),
+    }
+
+
+class DeckView(DetailView):
+    model = Deck
+    template_name = "slides/deck.html"
+    extra_context = {
+        'decks': Deck.objects.all
     }
 
 

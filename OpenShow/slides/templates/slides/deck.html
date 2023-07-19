@@ -1,0 +1,36 @@
+{% extends 'editor/base.html' %}
+
+{% load static %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'slides/presenter-view.css' %}">
+    <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
+    <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div id="shows-sidebar">
+        <ul>
+            {% for deck in deck_list %}
+                <a href="{% url 'deck' deck.pk %}">
+                    <li>
+                        <h2>{{ deck.name }}</h2>
+                    </li>
+                </a>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="show" class="presentation" data-deck-pk="{{ deck.pk }}">
+        <h1>{{ deck.name }}</h1>
+        <ul>
+            {% for slide in deck.slides.all %}
+                <li data-slide-pk="{{ slide.pk }}">
+                    {% include 'slides/slide-thumbnail.html' %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="show-controls">
+        Not Yet Implemented
+    </div>
+{% endblock %}

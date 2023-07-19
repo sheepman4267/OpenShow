@@ -55,14 +55,14 @@ class SlideCreateView(CreateView):
 
 class SlideElementCreateView(CreateView):
     model = SlideElement
-    fields = ['css_class', 'body', 'order', 'image', 'slide']
+    fields = ['css_class', 'body', 'order', 'image', 'video', 'slide']
     template_name = 'editor/edit_element.html'
     extra_context = {'action': 'new'}
 
 
 class SlideElementUpdateView(UpdateView):
     model = SlideElement
-    fields = ['css_class', 'body', 'order', 'image', 'slide']
+    fields = ['css_class', 'body', 'order', 'image','video', 'slide']
     template_name = 'editor/edit_element.html'
     extra_context = {'action': 'edit'}
 
