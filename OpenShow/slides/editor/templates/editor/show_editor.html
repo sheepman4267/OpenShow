@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
     <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
     <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
+    <style>
+        {{ show.theme.css }}
+    </style>
 {% endblock %}
 
 {% block content %}
