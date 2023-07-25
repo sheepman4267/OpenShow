@@ -24,6 +24,9 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
         blank=True,
     )
 
+    def __str__(self):
+        return self.name
+
 
 class Deck(models.Model):  # A Reusable set of slides, which can be included in a Show Segment
     name = models.CharField(max_length=100)
@@ -37,6 +40,9 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
     )
     def get_absolute_url(self):
         return reverse('edit-deck', kwargs={'pk': self.pk})
+
+    def __str__(self):
+        return self.name
 
 
 class Show(models.Model):  # The main driver of the "presentation interface". A collection of segments, which could either have their own slides or include them from a Deck
@@ -85,6 +91,9 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
                 missing.append(css_class)
         return missing
 
+    def __str__(self):
+        return self.name
+
 
 class Segment(models.Model):  # A collection of slides which will be part of a Show
     name = models.CharField(max_length=100)
@@ -116,6 +125,9 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
 
     class Meta:
         ordering = ["order"]
+
+    def __str__(self):
+        return self.name
 
     # def slides(self):
     #     if self.included_deck:
@@ -149,6 +161,14 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
 
     def get_absolute_url(self):
         return reverse('edit-slide', kwargs={'pk': self.slide.pk})
+
+    def __str__(self):
+        if self.slide.segment:
+            return f'Show "{self.slide.segment.show.name}"/Segment "{self.slide.segment.name}"/Slide ID {self.slide.pk}/Segment ID {self.pk}'
+        elif self.slide.deck:
+            return f'Deck "{self.slide.deck.name}"/Slide ID {self.slide.pk}/Segment ID {self.pk}'
+        else:
+            raise RuntimeError('A slide must be part of something... something has gone very wrong.')
 
     class Meta:
         ordering = ["-order"]
@@ -214,6 +234,13 @@ class Slide(models.Model):
     def get_elements(self):
         return self.elements.all().order_by('order')
 
+    def __str__(self):
+        if self.segment:
+            return f'Show "{self.segment.show.name}"/Segment "{self.segment.name}"/Slide ID {self.pk}'
+        elif self.deck:
+            return f'Deck "{self.deck.name}"/Slide ID {self.pk}'
+        else:
+            raise RuntimeError('A slide must be part of something... something has gone very wrong.')
 
 class Transition(models.Model):
     name = models.CharField(max_length=30)
