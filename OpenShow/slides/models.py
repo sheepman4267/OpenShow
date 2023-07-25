@@ -115,7 +115,7 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
         return reverse('edit-show', kwargs={'pk': self.show.pk})
 
     class Meta:
-        ordering = ["-order"]
+        ordering = ["order"]
 
     # def slides(self):
     #     if self.included_deck:
