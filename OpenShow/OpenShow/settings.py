@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'slides.editor',
     'channels',
     'django_eventstream',
+    'uubloomington_api_connector',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,16 @@
+{% extends 'slides/base.html' %}
+
+{% load static %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'uubloomington_api_connector/apiconnector.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>uubloomington.org API connector functions</h1>
+    <ul>
+        <li>
+            <a href="{% url 'create-show-from-oos' %}">Create Show from Order of Service</a>
+        </li>
+    </ul>
+{% endblock %}

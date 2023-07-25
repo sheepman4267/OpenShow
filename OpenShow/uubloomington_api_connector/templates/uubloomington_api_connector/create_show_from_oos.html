@@ -1,0 +1,16 @@
+{% extends 'slides/base.html' %}
+
+{% load static %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'uubloomington_api_connector/apiconnector.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Create Show from Order of Service</h1>
+    <form action="{% url 'create-show-from-oos' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+    </form>
+{% endblock %}
