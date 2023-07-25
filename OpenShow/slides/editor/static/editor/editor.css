@@ -56,7 +56,6 @@ body {
     background: #606060;
     display: flex;
     flex-direction: column;
-    list-style: none;
     overflow: scroll;
     border: 3px solid darkgray;
     border-radius: 1rem;
@@ -64,10 +63,66 @@ body {
     gap: 0.5rem;
 }
 
+.show-segment {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: 1fr 30px;
+    background: #808080;
+    border: 3px solid darkgray;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    list-style: none;
+}
+
+.slides-sidebar button,
+.show-segment input[type=submit],
+.show-segment button {
+    margin-top: 0;
+    margin-bottom: auto;
+    text-align: center;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    transition: background 0.1s;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+}
+
+.slides-sidebar button:hover,
+.show-segment input[type=submit]:hover,
+.show-segment button:hover {
+    transition: background 0.1s;
+    background: #ffffff77;
+}
+
+.slides-sidebar .add-button,
+.show-segment input[type=submit] {
+    font-size: 2rem;
+    padding: 0;
+    padding-inline: 0.5rem;
+    font-weight: bold;
+    color: white;
+}
+
 .show-segment > ul {
+    grid-column: span 2;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    list-style: none;
+}
+
+.slides-sidebar > li:last-child,
+.show-segment > ul > li:last-child,
+.show-segment > ul form {
+    display: inline;
+    margin: auto;
+}
+
+.segment-title {
+    color: white;
+    font-size: 1.2rem;
+    word-wrap: anywhere;
 }
 
 .theme-in-sidebar {

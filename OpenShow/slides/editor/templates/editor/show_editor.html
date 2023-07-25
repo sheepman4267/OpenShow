@@ -19,7 +19,8 @@
         <ul class="slides-sidebar">
             {% for segment in show.segments.all %}
                 <li class="show-segment">
-                    <h2>{{ segment.name }}<button hx-get="{% url 'edit-segment' segment.pk %}" hx-select="#editor" hx-target="#editor" hx-swap="outerHTML">Edit</button></h2>
+                    <span class="segment-title">{{ segment.name }}</span>
+                    <button hx-get="{% url 'edit-segment' segment.pk %}" hx-select="#editor" hx-target="#editor" hx-swap="outerHTML">✏</button>
                     {% if segment.included_deck %}
                         <h4>Deck: {{ segment.included_deck.name }}</h4>
                     {% endif %}
@@ -37,15 +38,15 @@
                             <form method="post" action="{% url 'new-slide' %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="segment" value="{{ segment.pk }}">
-                                <input type="submit" value="New Slide">
+                                <input type="submit" value="+">
                             </form>
                         </li>
                     </ul>
                 </li>
             {% endfor %}
             <li>
-                <button hx-get="{% url 'new-segment' %}" hx-swap="outerHTML">
-                    New Segment
+                <button class='add-button' hx-get="{% url 'new-segment' %}" hx-swap="outerHTML">
+                    +
                 </button>
             </li>
         </ul>
