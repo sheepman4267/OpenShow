@@ -71,6 +71,10 @@ body {
     gap: 0.5rem;
 }
 
+.slide-thumbnail {
+    height: 1080px;
+}
+
 .show-segment {
     display: grid;
     gap: 0.5rem;
