@@ -1,6 +1,7 @@
 {% extends 'editor/base.html' %}
 
 {% load static %}
+{% load icon %}
 
 {% block additional_css %}
     <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
@@ -14,13 +15,24 @@
 {% block content %}
     <div id="show-editor" class="show-editor" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
         <span class="navbar">
+            <a href="{% url 'editor_index' %}"><button>{% icon 'arrow-left' %}</button></a>
             <h1>{{ show.name }}</h1>
+{#            <span class="menu">#}
+{#                <button _="on click set menu to <#show-menu/> then js(menu) console.log(menu); menu.show(); end">Menu</button>#}
+{#                <dialog id="show-menu">#}
+{#                    <ul>#}
+{#                        <li>#}
+{#                            <button></button>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                </dialog>#}
+{#            </span>#}
         </span>
         <ul class="slides-sidebar">
             {% for segment in show.segments.all %}
                 <li class="show-segment">
                     <span class="segment-title">{{ segment.name }}</span>
-                    <button hx-get="{% url 'edit-segment' segment.pk %}" hx-select="#editor" hx-target="#editor" hx-swap="outerHTML">✏</button>
+                    <button hx-get="{% url 'edit-segment' segment.pk %}" hx-select="#editor" hx-target="#editor" hx-swap="outerHTML">{% icon 'edit-3' %}</button>
                     {% if segment.included_deck %}
                         <h4>Deck: {{ segment.included_deck.name }}</h4>
                     {% endif %}

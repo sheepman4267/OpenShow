@@ -21,6 +21,13 @@ body {
 
 .show-editor > .navbar {
     grid-column: span 2;
+    display: grid;
+}
+
+.navbar h1 {
+    color: white;
+    margin-inline: auto;
+    margin-block: 0.25rem;
 }
 
 .navbar {
@@ -28,6 +35,8 @@ body {
     background: #606060;
     border: 3px solid darkgray;
     border-radius: 1rem;
+    display: grid;
+    grid-template-columns: 3rem 1fr 3rem;
 }
 
 #preview {
@@ -74,9 +83,11 @@ body {
     list-style: none;
 }
 
+.navbar button,
 .slides-sidebar button,
 .show-segment input[type=submit],
 .show-segment button {
+    color: white;
     margin-top: 0;
     margin-bottom: auto;
     text-align: center;
@@ -88,6 +99,7 @@ body {
     border-radius: 0.25rem;
 }
 
+.navbar button:hover,
 .slides-sidebar button:hover,
 .show-segment input[type=submit]:hover,
 .show-segment button:hover {
@@ -95,6 +107,7 @@ body {
     background: #ffffff77;
 }
 
+.navbar button,
 .slides-sidebar .add-button,
 .show-segment input[type=submit] {
     font-size: 2rem;
@@ -102,6 +115,14 @@ body {
     padding-inline: 0.5rem;
     font-weight: bold;
     color: white;
+}
+
+.navbar button {
+    margin-top: auto;
+}
+
+.navbar a {
+    margin: auto;
 }
 
 .show-segment > ul {

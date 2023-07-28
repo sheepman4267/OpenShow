@@ -6,3 +6,4 @@ django-colorfield==0.8.0
 htmlmin
 tinycss2
 python-lorem
+django-feather

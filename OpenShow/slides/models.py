@@ -249,6 +249,9 @@ class Transition(models.Model):
     def get_absolute_url(self):
         return reverse('edit-transition', kwargs={'pk': self.pk})
 
+    def __str__(self):
+        return self.name
+
 
 class TransitionKeyframe(models.Model):
     transition = models.ForeignKey(

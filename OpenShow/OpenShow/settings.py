@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'channels',
     'django_eventstream',
     'uubloomington_api_connector',
+    'django_feather',
 ]
 
 MIDDLEWARE = [
