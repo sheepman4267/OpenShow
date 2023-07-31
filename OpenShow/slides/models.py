@@ -213,7 +213,7 @@ class Slide(models.Model):
 
     def get_absolute_url(self):
         if self.segment:
-            return reverse('edit-show', kwargs={'pk': self.segment.pk})
+            return reverse('edit-show', kwargs={'pk': self.segment.show.pk})
         elif self.deck:
             return reverse('edit-deck', kwargs={'pk': self.deck.pk})
         else:
