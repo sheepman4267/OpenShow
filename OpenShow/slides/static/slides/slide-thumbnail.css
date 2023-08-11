@@ -15,12 +15,12 @@
     max-height: calc(1080px / 10);
     overflow: hidden;
     /*margin: 0.5rem;*/
-    border: 3px solid darkgray;
+    outline: 3px solid darkgray;
     border-radius: 0.5rem;
 }
 
 .slide-thumbnail:hover {
-    border: 3px solid #808080;
+    outline: 3px solid #808080;
 }
 
 .slide-thumbnail form {
