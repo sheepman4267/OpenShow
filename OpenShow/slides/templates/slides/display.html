@@ -4,32 +4,44 @@
     <title>OpenShow Display {{ display.pk }}</title>
     <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
-    <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
-    <style id="slide-style">
+    <script src="https://unpkg.com/hyperscript.org@0.9.11/dist/_hyperscript.js"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.11/dist/eventsource.js"></script>
+    <style id="slide-style" _="on 'grab-theme' fetch {% url 'display-style' display.pk %} then put it into me">
         .slide {
             --transition-time: 1s;
         }
         {% if display.current_slide.transition %}
             {% include 'slides/transition.css' with transition=display.current_slide.transition %}
         {% endif %}
-        {{ display.current_slide.segment.show.theme.css }}
-        {{ display.current_slide.deck.theme.css }}
-        {{ display.current_slide.theme.css }}
+        {{ display.current_theme.css }}
         .slide + .slide {
             animation: var(--transition-time) 1 normal {{ display.current_slide.transition.name }};
         }
         {{ display.custom_css }}
     </style>
     <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
+
+    <script type="text/hyperscript">
+        eventsource DisplayEvents from /events
+            on display-{{ display.pk }}-slide
+                send "grab-slide" to #slide-grabber
+            end
+            on display-{{ display.pk }}-theme
+                make a <div.slide/>
+                put it at end of body
+                wait 0.8s then remove <.slide:not(:last-child)/>
+                send "grab-theme" to #slide-style
+                send "grab-slide" to #slide-grabber
+            end
+        end
+    </script>
 </head>
 
 
-<span id="slide-grabber" hx-get="{% url 'display' display.pk %}" hx-trigger="sse:display-{{ display.pk }}" hx-select="#slide" hx-target="body" hx-swap="beforeend"></span>
+<span id="slide-grabber" hx-get="{% url 'display' display.pk %}" hx-trigger="grab-slide" hx-select="#slide" hx-target="body" hx-swap="beforeend"></span>
 
 <body hx-ext="sse" sse-connect="/events">
     <div class="slide" id="slide" _="on load wait 0.8s then remove <.slide:not(:last-child)/>">
-{#        <span class="hidden" hx-get="{% url 'display' display.pk %}" hx-trigger="load" hx-select="#swap-style" hx-target="#slide-style" hx-swap="beforeend"></span>#}
-        <span _="on load wait 2s then fetch {% url 'display-style' display.pk %} then put it into <#slide-style/>'s innerHTML"></span>
         {% for element in display.current_slide.get_elements %}
             <div class="{{ element.css_class }}">
                 {{ element.body|safe }}

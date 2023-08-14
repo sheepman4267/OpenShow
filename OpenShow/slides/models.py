@@ -19,6 +19,12 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
         blank=True,
         on_delete=models.CASCADE
     )
+    current_theme = models.ForeignKey(
+        to='Theme',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
     segments = models.ManyToManyField(
         to='Segment',
         blank=True,
@@ -234,9 +240,35 @@ class Slide(models.Model):
         This method always returns None.
         """
         for display in displays:
+            slide_theme = self.get_theme()
             display.current_slide = self
-            display.save()
-            send_event('test', f'display-{display.pk}', f'sending slide {self.pk} to display {display.pk}')
+            if display.current_theme != slide_theme:
+                display.current_theme = slide_theme
+                display.save()
+                send_event('test', f'display-{display.pk}-theme', f'sending theme {slide_theme.pk} to display {display.pk}')
+            else:
+                display.save()
+                send_event('test', f'display-{display.pk}-slide', f'sending slide {self.pk} to display {display.pk}')
+
+    def get_theme(self):
+        """
+        :return:
+        Returns the correct Theme object to use when displaying this slide.
+        This can be either the deck/show theme (whichever exists in context), or the slide's theme selection.
+        The slide theme will override the show/deck theme, if it is set.
+        """
+        theme = None
+        if self.deck:
+            if self.deck.theme:
+                theme = self.deck.theme
+        elif self.segment:
+            if self.segment.show.theme:
+                theme = self.segment.show.theme
+        else:
+            theme = self.theme
+        return theme
+
+
 
     def get_elements(self):
         return self.elements.all().order_by('order')
