@@ -179,6 +179,7 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
     class Meta:
         ordering = ["-order"]
 
+
 class QRCodeElement(SlideElement):
     link = models.TextField()
 
@@ -247,6 +248,7 @@ class Slide(models.Model):
             return f'Deck "{self.deck.name}"/Slide ID {self.pk}'
         else:
             raise RuntimeError('A slide must be part of something... something has gone very wrong.')
+
 
 class Transition(models.Model):
     name = models.CharField(max_length=30)
