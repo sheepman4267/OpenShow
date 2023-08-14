@@ -44,6 +44,9 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ('name',)
+
 
 class Show(models.Model):  # The main driver of the "presentation interface". A collection of segments, which could either have their own slides or include them from a Deck
     name = models.CharField(max_length=200)
@@ -93,6 +96,9 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ('name',)
 
 
 class Segment(models.Model):  # A collection of slides which will be part of a Show
