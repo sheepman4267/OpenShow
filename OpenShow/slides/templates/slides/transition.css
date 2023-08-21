@@ -1,7 +1,42 @@
-@keyframes {{ transition.name }} {
-  {% for keyframe in transition.keyframes.all %}
+@keyframes {{ display.current_slide.transition.name }} {
+  {% for keyframe in display.current_slide.transition.get_keyframes_in %}
     {{ keyframe.marker }} {
       {{ keyframe.css }}
     }
   {% endfor %}
 }
+
+{% if display.current_slide.transition.get_keyframes_out %}
+    @keyframes {{ display.current_slide.transition.name }}_out {
+        {% for keyframe in display.current_slide.transition.get_keyframes_out %}
+            {{ keyframe.marker }} {
+              {{ keyframe.css }}
+            }
+        {% endfor %}
+    }
+{% endif %}
+
+.slide {
+    --transition-time: 1s;
+    animation-fill-mode: forwards;
+}
+
+.slide + .slide {
+    animation-name: {{ display.current_slide.transition.name }};
+    animation-duration: var(--transition-time);
+    animation-fill-mode: forwards;
+}
+
+.slide:not(:last-child) {
+    animation-name: {{ display.current_slide.transition.name }};
+    animation-duration: var(--transition-time);
+    animation-fill-mode: forwards;
+    animation-direction: reverse;
+}
+
+{% if display.current_slide.transition.get_keyframes_out %}
+    .slide:not(:last-child) {
+        animation-name: {{ display.current_slide.transition.name }}_out;
+        animation-direction: normal;
+    }
+{% endif %}

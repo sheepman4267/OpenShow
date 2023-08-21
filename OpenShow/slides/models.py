@@ -286,6 +286,12 @@ class Transition(models.Model):
     name = models.CharField(max_length=30)
     default_time = models.FloatField(help_text="Default total time for transition, in seconds", default=1)
 
+    def get_keyframes_in(self):
+        return self.keyframes.filter(out=False)
+
+    def get_keyframes_out(self):
+        return self.keyframes.filter(out=True)
+
     def get_absolute_url(self):
         return reverse('edit-transition', kwargs={'pk': self.pk})
 
@@ -304,6 +310,7 @@ class TransitionKeyframe(models.Model):
     )
     marker = models.CharField(max_length=30, help_text="CSS Keyframe Marker (from, 2%, 50%, to, etc.)")
     css = models.TextField(help_text="CSS to apply at this keyframe marker")
+    out = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('edit-transition', kwargs={'pk': self.transition.pk})

@@ -7,33 +7,34 @@
     <script src="https://unpkg.com/hyperscript.org@0.9.11/dist/_hyperscript.js"></script>
     <script src="https://unpkg.com/hyperscript.org@0.9.11/dist/eventsource.js"></script>
     <style id="slide-style" _="on 'grab-theme' fetch {% url 'display-style' display.pk %} then put it into me">
-        .slide {
-            --transition-time: 1s;
-        }
-        {% if display.current_slide.transition %}
-            {% include 'slides/transition.css' with transition=display.current_slide.transition %}
-        {% endif %}
         {{ display.current_theme.css }}
-        .slide + .slide {
-            animation: var(--transition-time) 1 normal {{ display.current_slide.transition.name }};
-        }
         {{ display.custom_css }}
+    </style>
+    <style id="transition">
+
     </style>
     <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
 
     <script type="text/hyperscript">
+        def getTransition
+            fetch {% url 'display-transition' display.pk %}
+            put it into #transition
+        end
         eventsource DisplayEvents from /events
             on display-{{ display.pk }}-slide
+                getTransition()
                 send "grab-slide" to #slide-grabber
             end
             on display-{{ display.pk }}-theme
+                getTransition()
                 make a <div.slide/>
                 put it at end of body
-                wait 0.8s then remove <.slide:not(:last-child)/>
+                wait for unlatch from body
                 send "grab-theme" to #slide-style
                 send "grab-slide" to #slide-grabber
             end
         end
+        on animationend remove <.slide:not(:last-child)/> then send unlatch
     </script>
 </head>
 
@@ -41,7 +42,7 @@
 <span id="slide-grabber" hx-get="{% url 'display' display.pk %}" hx-trigger="grab-slide" hx-select="#slide" hx-target="body" hx-swap="beforeend"></span>
 
 <body hx-ext="sse" sse-connect="/events">
-    <div class="slide" id="slide" _="on load wait 0.8s then remove <.slide:not(:last-child)/>">
+    <div class="slide" id="slide">
         {% for element in display.current_slide.get_elements %}
             <div class="{{ element.css_class }}">
                 {{ element.body|safe }}

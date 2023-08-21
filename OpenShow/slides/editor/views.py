@@ -189,7 +189,7 @@ class TransitionCreateView(CreateView):
 
 class TransitionKeyframeCreateView(CreateView):
     model = TransitionKeyframe
-    fields = ["transition", "marker", "css"]
+    fields = ["transition", "marker", "css", "out"]
     template_name = "editor/edit_keyframe.html"
     extra_context = {
         'action': 'new-keyframe',
