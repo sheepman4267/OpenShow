@@ -34,12 +34,17 @@ body > div > ul {
     gap: 0.5rem;
 }
 
+fieldset,
 li {
     background: #808080;
-    height: 3rem;
+    min-height: 3rem;
     font-size: 1.5rem;
     border: 3px solid darkgray;
     border-radius: 0.5rem;
+}
+
+fieldset {
+    padding: 0.5rem;
 }
 
 .shows,

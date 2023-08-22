@@ -29,7 +29,10 @@ class ShowEditorView(DetailView):
 class ShowCreateView(CreateView):
     model = Show
     fields = ['name']
-    template_name = 'editor/new_show_form.html'
+    template_name = 'editor/simple_create_form.html'
+    extra_context = {
+        'action': 'new-show',
+    }
 
 
 class SegmentCreateView(CreateView):

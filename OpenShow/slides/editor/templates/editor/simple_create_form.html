@@ -1,8 +1,11 @@
-<form method="post" action="{% url action %}">
+{% load icon %}
+<form method="post" action="{% block action %}{% url action %}{% endblock %}">
     {% csrf_token %}
     <fieldset>
+        {% block extra_fields %}
+        {% endblock %}
         {{ form.name }}
         {{ form.errors }}
-        <input type="submit">
+        <button type="submit" class="icon-button center">{% icon 'check-square' %}</button>
     </fieldset>
 </form>

@@ -23,11 +23,9 @@
                     </li>
                 </a>
             {% endfor %}
-            <li>
-                <button hx-get="{% url 'new-transition' %}" hx-swap="outerHTML">
-                    New Transition
-                </button>
-            </li>
+            <button class="icon-button" hx-get="{% url 'new-transition' %}" hx-swap="outerHTML">
+                {% icon 'plus' %}
+            </button>
         </ul>
         <div id="preview">
             Not Yet Implemented

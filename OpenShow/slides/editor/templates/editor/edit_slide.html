@@ -1,4 +1,5 @@
 {% extends 'editor/base.html' %}
+{% load icon %}
 {% block content %}
     <div id="editor" data-slide-pk="{{ slide.pk }}">
 {#        <ul class="sidebar">#}
@@ -15,18 +16,16 @@
         </form>
         <ul class="segment-list">
             {% for element in slide.get_elements %}
-                <li hx-get="{% url 'edit-element' element.pk %}" hx-swap="outerHTML" hx-target="this">
+                <li class="element" data-element-order="{{ element.order }}" hx-get="{% url 'edit-element' element.pk %}" hx-swap="outerHTML" hx-target="this">
                     {{ element.body }}
 {#                    <button hx-get="{% url 'edit-element' element.pk %}" hx-swap="outerHTML" hx-target="closest li">#}
 {#                        Edit Element#}
 {#                    </button>#}
                 </li>
             {% endfor %}
-            <li>
-                <button hx-get="{% url 'new-element' %}" hx-swap="outerHTML">
-                    New Element
-                </button>
-            </li>
+            <button class="icon-button center" hx-get="{% url 'new-element' %}" hx-swap="outerHTML">
+                {% icon "plus" %}
+            </button>
         </ul>
     </div>
     <div id="preview" hx-swap-oob="true" data-slide-pk="{{ slide.pk }}">

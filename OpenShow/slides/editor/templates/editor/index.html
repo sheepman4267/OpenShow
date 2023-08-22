@@ -1,8 +1,10 @@
 {% extends 'editor/base.html' %}
+{% load icon %}
 
 {% load static %}
 
 {% block additional_css %}
+    <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
     <link rel="stylesheet" href="{% static 'editor/index.css' %}">
     <link rel="stylesheet" href="{% static 'editor/common.css' %}">
 {% endblock %}
@@ -34,11 +36,9 @@
                     </a>
                 </li>
             {% endfor %}
-            <li>
-                <button hx-get="{% url 'new-show' %}" hx-swap="outerHTML">
-                    New Show
-                </button>
-            </li>
+            <button class="icon-button" hx-get="{% url 'new-show' %}" hx-swap="outerHTML">
+                {% icon "plus" %}
+            </button>
         </ul>
     </div>
     <div class="decks">
@@ -52,11 +52,9 @@
                     </a>
                 </li>
             {% endfor %}
-            <li>
-                <button hx-get="{% url 'new-deck' %}" hx-swap="outerHTML">
-                    New Deck
-                </button>
-            </li>
+            <button class="icon-button" hx-get="{% url 'new-deck' %}" hx-swap="outerHTML">
+                {% icon "plus" %}
+            </button>
         </ul>
     </div>
     <div class="themes">
@@ -68,11 +66,9 @@
                     <a href="{% url 'edit-theme' theme.pk %}">{{ theme.name }}</a>
                 </li>
             {% endfor %}
-            <li>
-                <button hx-get="{% url 'new-theme' %}" hx-swap="outerHTML">
-                    New Theme
-                </button>
-            </li>
+            <button class="icon-button" hx-get="{% url 'new-theme' %}" hx-swap="outerHTML">
+                {% icon "plus" %}
+            </button>
         </ul>
     </div>
     <div class="displays">

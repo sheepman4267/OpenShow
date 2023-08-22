@@ -1,10 +1,8 @@
-<form method="post" action="{% url 'new-segment' %}">
-    {% csrf_token %}
-    <fieldset>
-        <input type="hidden" name="show" _="on load set my @value to @data-show-pk of #show-editor">
-        <input type="hidden" name="order" _="on load set my @value to @data-next-segment-order of #show-editor">
-        {{ form.name }}
-        {{ form.errors }}
-        <input type="submit">
-    </fieldset>
-</form>
+{% extends 'editor/simple_create_form.html' %}
+{% block action %}
+    {% url 'new-segment' %}
+{% endblock %}
+{% block extra_fields %}
+    <input type="hidden" name="show" _="on load set my @value to @data-show-pk of #show-editor">
+    <input type="hidden" name="order" _="on load set my @value to @data-next-segment-order of #show-editor">
+{% endblock %}
