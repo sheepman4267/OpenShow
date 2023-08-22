@@ -32,19 +32,45 @@
         <div id="preview">
             Not Yet Implemented
         </div>
-        <div id="editor" class="editor">
-            <ul>
-                {% for keyframe in transition.keyframes.all %}
+        <div id="editor" class="editor keyframes">
+            <ul data-keyframe-out="">
+                <h2>Keyframes (Incoming Slide)</h2>
+                {% for keyframe in transition.get_keyframes_in %}
                     <li>
-                        <span>{{ keyframe.marker }}</span>
-                        <pre>
+                        <span>
+                            {{ keyframe.marker }}
+                            <button class="icon-button right" hx-swap="outerHTML" hx-get="{% url 'edit-keyframe' keyframe.pk %}" hx-target="closest li">
+                                {% icon "edit" %}
+                            </button>
+                        </span>
+                        <span class="code">
                             {{ keyframe.css }}
-                        </pre>
+                        </span>
                     </li>
                 {% endfor %}
-                <li>
-                    <button hx-get="{% url 'new-keyframe' %}" hx-swap="outerHTML">New Keyframe</button>
-                </li>
+                <button class="icon-button" hx-get="{% url 'new-keyframe' %}" hx-swap="outerHTML">{% icon 'plus' %}</button>
+            </ul>
+            <ul data-keyframe-out="true">
+                <h2>Keyframes (Outgoing Slide)</h2>
+                {% if not transition.get_keyframes_out %}
+                    <span>
+                        If omitted, the outgoing slide will be animated with the reverse of the incoming slide's keyframes.
+                    </span>
+                {% endif %}
+                {% for keyframe in transition.get_keyframes_out %}
+                    <li>
+                        <span>
+                            {{ keyframe.marker }}
+                            <button class="icon-button right" hx-swap="outerHTML" hx-get="{% url 'edit-keyframe' keyframe.pk %}" hx-target="closest li">
+                                {% icon "edit" %}
+                            </button>
+                        </span>
+                        <span class="code">
+                            {{ keyframe.css }}
+                        </span>
+                    </li>
+                {% endfor %}
+                <button class="icon-button" hx-get="{% url 'new-keyframe' %}" hx-swap="outerHTML">{% icon 'plus' %}</button>
             </ul>
         </div>
     </div>

@@ -6,8 +6,14 @@
 }
 
 body {
-
+    color: white;
 }
+
+.right {
+    margin-right: 0;
+    margin-left: auto;
+}
+
 .show-editor {
     display: grid;
     grid-template-columns: 1fr 4fr;
@@ -24,10 +30,17 @@ body {
     display: grid;
 }
 
-.navbar h1 {
+h1 {
     color: white;
     margin-inline: auto;
     margin-block: 0.25rem;
+}
+
+h2 {
+    color: white;
+    margin-inline: auto;
+    margin-block: 0.25rem;
+    text-align: center;
 }
 
 .navbar {
@@ -86,6 +99,7 @@ body {
     list-style: none;
 }
 
+.icon-button,
 .navbar button,
 .slides-sidebar button,
 .show-segment input[type=submit],
@@ -102,6 +116,7 @@ body {
     border-radius: 0.25rem;
 }
 
+.icon-button:hover,
 .navbar button:hover,
 .slides-sidebar button:hover,
 .show-segment input[type=submit]:hover,
@@ -110,6 +125,7 @@ body {
     background: #ffffff77;
 }
 
+.icon-button,
 .navbar button,
 .slides-sidebar .add-button,
 .show-segment input[type=submit] {
@@ -194,7 +210,15 @@ ul > a {
     gap: 0.5rem;
 }
 
-#editor ul > li > form > textarea {
+input::placeholder,
+textarea::placeholder {
+    color: white;
+    opacity: 70%;
+    font-size: 1rem;
+}
+
+textarea,
+input[type=text]{
     grid-column: span 2;
     font-size: 1.5rem;
     height: 9rem;
@@ -202,4 +226,30 @@ ul > a {
     color: white;
     border: 3px solid darkgray;
     border-radius: 0.5rem;
+}
+
+input[type=text] {
+    height: 2rem;
+}
+
+#editor.keyframes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#editor.keyframes ul {
+    text-align: center;
+}
+
+#editor.keyframes ul li {
+    text-align: left;
+}
+
+#editor.keyframes ul li > span {
+    display: flex;
+}
+
+.code {
+    font-family: monospace;
+    font-size: 1.2rem;
 }

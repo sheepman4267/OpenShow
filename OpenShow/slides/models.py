@@ -292,6 +292,13 @@ class Transition(models.Model):
     def get_keyframes_out(self):
         return self.keyframes.filter(out=True)
 
+    def get_safe_name(self):
+        """
+        :return:
+        Returns the name of the transition, with all whitespace removed. This makes it safe for CSS.
+        """
+        return "".join(self.name.split())
+
     def get_absolute_url(self):
         return reverse('edit-transition', kwargs={'pk': self.pk})
 
@@ -311,6 +318,9 @@ class TransitionKeyframe(models.Model):
     marker = models.CharField(max_length=30, help_text="CSS Keyframe Marker (from, 2%, 50%, to, etc.)")
     css = models.TextField(help_text="CSS to apply at this keyframe marker")
     out = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ('marker',)
 
     def get_absolute_url(self):
         return reverse('edit-transition', kwargs={'pk': self.transition.pk})

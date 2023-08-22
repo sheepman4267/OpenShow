@@ -23,4 +23,5 @@ urlpatterns = [
     path('transition/<int:pk>', TransitionEditorView.as_view(), name='edit-transition'),
     path('transition/new', TransitionCreateView.as_view(), name='new-transition'),
     path('transition/keyframe/new', TransitionKeyframeCreateView.as_view(), name='new-keyframe'),
+    path('transition/keyframe/<int:pk>', TransitionKeyframeUpdateView.as_view(), name='edit-keyframe'),
 ]
