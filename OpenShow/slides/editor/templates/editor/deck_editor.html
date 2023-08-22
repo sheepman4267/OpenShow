@@ -1,6 +1,7 @@
 {% extends 'editor/base.html' %}
 
 {% load static %}
+{% load icon %}
 
 {% block additional_css %}
     <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
@@ -14,6 +15,7 @@
 {% block content %}
     <div id="show-editor" class="show-editor" data-deck-pk="{{ deck.pk }}">
         <navbar class="navbar">
+            <a href="{% url 'editor_index' %}"><button>{% icon 'arrow-left' %}</button></a>
             <h1>{{ deck.name }}</h1>
         </navbar>
         <ul class="slides-sidebar">

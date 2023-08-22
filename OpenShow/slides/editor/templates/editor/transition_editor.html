@@ -1,6 +1,7 @@
 {% extends 'editor/base.html' %}
 
 {% load static %}
+{% load icon %}
 
 {% block additional_css %}
     <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
@@ -9,6 +10,7 @@
 {% block content %}
     <div id="transition-editor" class="show-editor" data-transition-pk="{{ transition.pk }}">
         <span class="navbar">
+            <a href="{% url 'editor_index' %}"><button>{% icon 'arrow-left' %}</button></a>
             <h1>{{ transition.name }}</h1>
         </span>
         <ul class="slides-sidebar">
