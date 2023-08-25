@@ -12,6 +12,7 @@
         <form method="post" action="{% url 'edit-slide' slide.pk %}">
             {% csrf_token %}
             {{ form.transition }}
+            {{ form.transition_duration }}
             <input type="submit">
         </form>
         <ul class="segment-list">

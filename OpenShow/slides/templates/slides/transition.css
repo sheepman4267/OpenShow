@@ -17,7 +17,7 @@
 {% endif %}
 
 .slide {
-    --transition-time: 1s;
+    --transition-time: {{ display.current_slide.transition_duration }}s;
     animation-fill-mode: forwards;
 }
 

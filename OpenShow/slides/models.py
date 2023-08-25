@@ -191,6 +191,7 @@ class QRCodeElement(SlideElement):
 
 
 class Slide(models.Model):
+    transition_duration = models.FloatField(default=1)
     segment = models.ForeignKey(
         to=Segment,
         unique=False,

@@ -82,7 +82,7 @@ class SlideElementDeleteView(DeleteView):
 
 class SlideEditView(UpdateView):
     model = Slide
-    fields = ['transition']
+    fields = ['transition', 'transition_duration']
     template_name = 'editor/edit_slide.html'
 
 
