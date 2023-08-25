@@ -60,7 +60,11 @@ class ShowSlideView(FormView):
     form_class = SlideDisplayForm
 
     def form_valid(self, form):
-        slide = Slide.objects.get(pk=form.cleaned_data['slide_pk'])
         show = Show.objects.get(pk=form.cleaned_data['show_pk'])
+        if form.cleaned_data['direction']:
+            display = show.displays.all().first()
+            slide = display.current_slide.next(form.cleaned_data['direction'])
+        else:
+            slide = Slide.objects.get(pk=form.cleaned_data['slide_pk'])
         slide.send_to_display(show.displays.all())
         return HttpResponseRedirect(reverse('show', kwargs={'pk':show.pk}))

@@ -9,6 +9,11 @@
     <style>
         {{ show.theme.css }}
     </style>
+    <style>
+        #slide-{{ show.displays.all.first.current_slide.pk }} {
+            outline: 2px solid #4ac1f7;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -33,7 +38,7 @@
                         <h3>{{ segment.included_deck.name }}</h3>
                         <ul>
                             {% for slide in segment.included_deck.slides.all %}
-                                <li data-slide-pk="{{ slide.pk }}">
+                                <li id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
                                     {% include 'slides/slide-thumbnail.html' %}
                                 </li>
                             {% endfor %}
@@ -41,7 +46,7 @@
                     {% endif %}
                     <ul>
                         {% for slide in segment.slides.all %}
-                            <li data-slide-pk="{{ slide.pk }}">
+                            <li id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
                                 {% include 'slides/slide-thumbnail.html' %}
                             </li>
                         {% endfor %}
@@ -51,6 +56,18 @@
         </ul>
     </div>
     <div id="show-controls">
+        <form action="{% url 'show-slide' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="show_pk" value="{{ show.pk }}">
+            <input type="hidden" name="direction" value="forward">
+            <button type="submit">Next Slide</button>
+        </form>
+        <form action="{% url 'show-slide' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="show_pk" value="{{ show.pk }}">
+            <input type="hidden" name="direction" value="reverse">
+            <button type="submit">Previous Slide</button>
+        </form>
         Not Yet Implemented
     </div>
 {% endblock %}

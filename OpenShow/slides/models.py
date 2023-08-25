@@ -269,8 +269,6 @@ class Slide(models.Model):
             theme = self.theme
         return theme
 
-
-
     def get_elements(self):
         return self.elements.all().order_by('order')
 
@@ -281,6 +279,24 @@ class Slide(models.Model):
             return f'Deck "{self.deck.name}"/Slide ID {self.pk}'
         else:
             raise RuntimeError('A slide must be part of something... something has gone very wrong.')
+
+    def next(self, direction):
+        if self.deck:
+            siblings = list(self.deck.slides.all())
+        elif self.segment:
+            siblings = list(self.segment.slides.all())
+        else:
+            raise RuntimeError('A slide must be part of something... something has gone very wrong.')
+        if direction == 'reverse':
+            siblings.reverse()
+        for idx, slide in enumerate(siblings):
+            if slide == self:
+                try:
+                    return siblings[idx + 1]
+                except IndexError:
+                    return self
+        # or, if there are no more (say, we're at the beginning/end...)
+        return self  # TODO: Make this mess better - add a toggle for "continue past end of deck" on the show control sidebar
 
 
 class Transition(models.Model):
