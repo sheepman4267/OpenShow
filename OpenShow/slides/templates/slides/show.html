@@ -1,6 +1,7 @@
 {% extends 'editor/base.html' %}
 
 {% load static %}
+{% load icon %}
 
 {% block additional_css %}
     <link rel="stylesheet" href="{% static 'slides/presenter-view.css' %}">
@@ -56,18 +57,29 @@
         </ul>
     </div>
     <div id="show-controls">
-        <form action="{% url 'show-slide' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="show_pk" value="{{ show.pk }}">
-            <input type="hidden" name="direction" value="forward">
-            <button type="submit">Next Slide</button>
-        </form>
-        <form action="{% url 'show-slide' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="show_pk" value="{{ show.pk }}">
-            <input type="hidden" name="direction" value="reverse">
-            <button type="submit">Previous Slide</button>
-        </form>
-        Not Yet Implemented
+        <div id="forward-reverse">
+            <form action="{% url 'show-slide' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="show_pk" value="{{ show.pk }}">
+                <input type="hidden" name="direction" value="reverse">
+                <button class="icon-button" type="submit">{% icon 'chevron-left' %}</button>
+            </form>
+            <form action="{% url 'show-slide' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="show_pk" value="{{ show.pk }}">
+                <input type="hidden" name="direction" value="forward">
+                <button class="icon-button" type="submit">{% icon 'chevron-right' %}</button>
+            </form>
+        </div>
+        <button class="icon-button" id="settings-toggle" _="on click toggle .expand on next <.settings/>">{% icon 'settings' %}</button>
+        <div class="settings">
+            <form action="{% url 'advance-mode' show.pk %}">
+                {% csrf_token %}
+                <div class="checkbox-row">
+                    <input type="checkbox" name="advance_between_segments" hx-post="{% url 'advance-mode' show.pk %}" hx-swap="none" hx-trigger="change" {% if show.advance_between_segments %}checked{% endif %}>
+                    <label>Advance between decks</label>
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock %}

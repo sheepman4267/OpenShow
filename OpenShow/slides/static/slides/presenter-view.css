@@ -58,7 +58,40 @@ body {
     list-style: none;
 }
 
-#show.presentation
+#show.presentation {}
+
+#show-controls {
+    background: #303030;
+    color: white;
+    padding: 0.5rem;
+}
+
+#show-controls .settings {
+    display: none;
+}
+
+#show-controls .settings.expand {
+    display: flex;
+    background: #606060;
+    border: 3px solid lightgray;
+    border-radius: 1rem;
+    padding: 1rem;
+    font-size: 1.2rem;
+}
+
+#forward-reverse {
+    display: flex;
+}
+
+#forward-reverse > * {
+    flex-grow: 1;
+    text-align: center;
+}
+
+#forward-reverse .icon-button {
+    height: 4rem;
+    width: 100%;
+}
 
 /* Temporary slide thumbnails- eventually, these need to display an accurate representation of the slide. For now, we'll make it the right size and just throw the text in. */
 

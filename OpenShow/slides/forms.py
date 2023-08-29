@@ -1,5 +1,6 @@
-from django.forms import Form
+from django.forms import Form, ModelForm
 from django.forms.fields import IntegerField, CharField
+from .models import Show
 
 
 class SlideDisplayForm(Form):

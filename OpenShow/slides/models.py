@@ -68,6 +68,7 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
         null=True,
         blank=True,
     )
+    advance_between_segments = models.BooleanField(default=False, null=False)
 
     def get_absolute_url(self):
         return reverse('edit-show', kwargs={'pk': self.pk})
@@ -140,6 +141,37 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
 
     def __str__(self):
         return self.name
+
+    def next_with_slides(self, direction):
+        siblings = self.show.segments.all()
+        if direction == 'reverse':
+            siblings = siblings.reverse()
+        for idx, segment in enumerate(siblings):
+            if segment == self:
+                try:
+                    next_segment =  siblings[idx + 1]
+                except IndexError:
+                    return None
+                if next_segment.slides.first() or next_segment.included_deck:
+                    return next_segment
+                else:
+                    pass
+
+    def get_first_slide(self):
+        if self.included_deck:
+            return self.included_deck.slides.first()
+        elif self.slides.first():
+            return self.slides.first()
+        else:
+            return None
+
+    def get_last_slide(self):
+        if self.slides.last():
+            return self.slides.last()
+        elif self.included_deck:
+            return self.included_deck.slides.last()
+        else:
+            return None
 
     # def slides(self):
     #     if self.included_deck:
@@ -294,7 +326,7 @@ class Slide(models.Model):
                 try:
                     return siblings[idx + 1]
                 except IndexError:
-                    return self
+                    return None
         # or, if there are no more (say, we're at the beginning/end...)
         return self  # TODO: Make this mess better - add a toggle for "continue past end of deck" on the show control sidebar
 

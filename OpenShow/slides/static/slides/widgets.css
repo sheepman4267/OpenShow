@@ -1,0 +1,81 @@
+input::placeholder,
+textarea::placeholder {
+    color: white;
+    opacity: 70%;
+    font-size: 1rem;
+}
+
+textarea,
+input[type=text]{
+    grid-column: span 2;
+    font-size: 1.5rem;
+    height: 9rem;
+    background: #606060;
+    color: white;
+    border: 3px solid darkgray;
+    border-radius: 0.5rem;
+    width: 100%;
+}
+
+input[type=text] {
+    height: 2rem;
+}
+
+.icon-button,
+.navbar button,
+.slides-sidebar button,
+.show-segment input[type=submit],
+.show-segment button {
+    color: white;
+    margin-top: 0;
+    margin-bottom: auto;
+    text-align: center;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    transition: background 0.1s;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+}
+
+.icon-button:hover,
+.navbar button:hover,
+.slides-sidebar button:hover,
+.show-segment input[type=submit]:hover,
+.show-segment button:hover {
+    transition: background 0.1s;
+    background: #ffffff77;
+}
+
+.icon-button,
+.navbar button,
+.slides-sidebar .add-button,
+.show-segment input[type=submit] {
+    font-size: 2rem;
+    padding: 0;
+    padding-inline: 0.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.navbar button {
+    margin-top: auto;
+}
+
+.navbar a {
+    margin: auto;
+}
+
+input[type=checkbox] {
+    width: 2rem;
+    height: 2rem;
+}
+
+.checkbox-row {
+    display: flex;
+}
+
+.checkbox-row label {
+    margin-block: auto;
+    margin-inline: 0.5rem;
+}

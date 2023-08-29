@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse
-from django.views.generic import DetailView, FormView, ListView
+from django.views.generic import DetailView, FormView, ListView, UpdateView
 from django.template import loader
 from .models import Slide, Display, Show, Deck
 
@@ -63,8 +63,38 @@ class ShowSlideView(FormView):
         show = Show.objects.get(pk=form.cleaned_data['show_pk'])
         if form.cleaned_data['direction']:
             display = show.displays.all().first()
-            slide = display.current_slide.next(form.cleaned_data['direction'])
+            current_slide = display.current_slide
+            slide = current_slide.next(form.cleaned_data['direction'])
+            next_segment = None
+            if not slide:
+                if show.advance_between_segments:
+                    try:  # TODO: review this horrible try/except block
+                        if current_slide.deck:
+                            current_segment = show.segments.filter(included_deck=current_slide.deck).first()
+                            if current_segment.slides.first() and form.cleaned_data['direction'] == 'forward':
+                                slide = current_segment.slides.first()
+                            elif form.cleaned_data['direction'] == 'reverse':
+                                slide = current_segment.next_with_slides(form.cleaned_data['direction']).get_last_slide()
+                            elif form.cleaned_data['direction'] == 'forward':
+                                slide = current_segment.next_with_slides(form.cleaned_data['direction']).get_first_slide()
+                        else:  # ..if current_slide.segment
+                            current_segment = current_slide.segment
+                            if form.cleaned_data['direction'] == 'reverse' and current_segment.included_deck:
+                                slide = current_segment.included_deck.slides.last()
+                            elif form.cleaned_data['direction'] == 'reverse':
+                                slide = current_segment.next_with_slides(form.cleaned_data['direction']).get_last_slide()
+                            elif form.cleaned_data['direction'] == 'forward':
+                                slide = current_segment.next_with_slides(form.cleaned_data['direction']).get_first_slide()
+                    except AttributeError:
+                        slide = current_slide
+                else:
+                    slide = current_slide
         else:
             slide = Slide.objects.get(pk=form.cleaned_data['slide_pk'])
         slide.send_to_display(show.displays.all())
         return HttpResponseRedirect(reverse('show', kwargs={'pk':show.pk}))
+
+
+class AdvanceModeView(UpdateView):
+    model = Show
+    fields = ['advance_between_segments']
