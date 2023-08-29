@@ -38,9 +38,13 @@ body {
     text-decoration: none;
 }
 
+#show-container {
+    overflow: scroll;
+    height: 100dvh;
+}
+
 #show.presentation {
     background: #303030;
-    overflow: scroll;
     color: white;
     padding: 0.5rem;
 }
