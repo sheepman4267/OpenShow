@@ -10,8 +10,8 @@
     <style>
         {{ show.theme.css }}
     </style>
-    <style>
-        #slide-{{ show.displays.all.first.current_slide.pk }} {
+    <style id="slide-selection-indicator">
+        .selected {
             outline: 2px solid #4ac1f7;
         }
     </style>
@@ -39,7 +39,7 @@
                         <h3>{{ segment.included_deck.name }}</h3>
                         <ul>
                             {% for slide in segment.included_deck.slides.all %}
-                                <li id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
+                                <li {% if slide == show.displays.first.current_slide %}class="selected"{% endif %} id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
                                     {% include 'slides/slide-thumbnail.html' %}
                                 </li>
                             {% endfor %}
@@ -47,7 +47,7 @@
                     {% endif %}
                     <ul>
                         {% for slide in segment.slides.all %}
-                            <li id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
+                            <li {% if slide == show.displays.first.current_slide %}class="selected"{% endif %} id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
                                 {% include 'slides/slide-thumbnail.html' %}
                             </li>
                         {% endfor %}
@@ -62,13 +62,13 @@
                 {% csrf_token %}
                 <input type="hidden" name="show_pk" value="{{ show.pk }}">
                 <input type="hidden" name="direction" value="reverse">
-                <button class="icon-button" type="submit">{% icon 'chevron-left' %}</button>
+                <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="outerHTML" hx-target="#show" hx-select="#show">{% icon 'chevron-left' %}</button>
             </form>
             <form action="{% url 'show-slide' %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="show_pk" value="{{ show.pk }}">
                 <input type="hidden" name="direction" value="forward">
-                <button class="icon-button" type="submit">{% icon 'chevron-right' %}</button>
+                <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="outerHTML" hx-target="#show" hx-select="#show">{% icon 'chevron-right' %}</button>
             </form>
         </div>
         <button class="icon-button" id="settings-toggle" _="on click toggle .expand on next <.settings/>">{% icon 'settings' %}</button>
