@@ -41,7 +41,7 @@
 
 <span id="slide-grabber" hx-get="{% url 'display' display.pk %}" hx-trigger="grab-slide" hx-select="#slide" hx-target="body" hx-swap="beforeend"></span>
 
-<body hx-ext="sse" sse-connect="/events">
+<body hx-ext="sse" sse-connect="/events" class="slide-body">
     <div class="slide" id="slide">
         {% for element in display.current_slide.get_elements %}
             <div class="{{ element.css_class }}">
