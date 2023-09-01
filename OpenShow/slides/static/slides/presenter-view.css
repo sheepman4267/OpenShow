@@ -86,6 +86,7 @@ body {
 
 #forward-reverse {
     display: flex;
+    gap: 0.5rem;
 }
 
 #forward-reverse > * {
@@ -96,10 +97,89 @@ body {
 #forward-reverse .icon-button {
     height: 4rem;
     width: 100%;
+    border: 3px solid darkgray;
+    background: #505050;
+}
+
+#forward-reverse .icon-button:hover {
+    background: #404040;
+    border: 3px solid #808080;
+}
+
+#forward-reverse .icon-button.htmx-request {
+    opacity: 30%;
+}
+
+#forward-reverse .icon-button:not(.htmx-request) {
+    opacity: 100%;
+    transition: opacity 0.3s;
 }
 
 .selected {
     box-shadow: 0px 0px 15px 1px #51ffcf;;
+}
+
+.mobile-tab-controls {
+    display: none;
+}
+
+@media screen and (max-width: 50rem) {
+    body {
+        grid-template-columns: 1fr;
+    }
+
+    .mobile-tab-controls {
+        display: flex;
+        height: 5rem;
+        width: 100%;
+        background: #303030;
+        border-top: 3px solid darkgray;
+    }
+
+    .mobile-tab-controls > * {
+        flex-grow: 1;
+        height: 100%;
+    }
+
+    #shows-sidebar,
+    #show-container,
+    #show-controls {
+        height: calc(100dvh - 5rem);
+    }
+
+    #show-controls:not(.mobile-hidden){
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    #forward-reverse .icon-button:hover,
+    #forward-reverse .icon-button {
+        height: 8rem;
+        background: #505050;
+        border: 3px solid darkgray;
+    }
+
+    .mobile-hidden {
+        display: none;
+    }
+
+    .mobile-tab-controls .icon-button:not(.mobile-hidden) {
+        background: darkgray;
+        border-radius: 0;
+    }
+
+    .mobile-tab-controls .icon-button.mobile-hidden {
+        display: initial;
+    }
+
+    body {
+        max-height: 100dvh;
+        height: 100dvh;
+    }
+
+    .icon-button:hover {
+        background: transparent;
+    }
 }
 
 /* Temporary slide thumbnails- eventually, these need to display an accurate representation of the slide. For now, we'll make it the right size and just throw the text in. */
