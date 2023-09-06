@@ -58,6 +58,11 @@ input[type=text] {
     color: white;
 }
 
+.icon-button.tall {
+    display: flex;
+    flex-direction: column;
+}
+
 .navbar button {
     margin-top: auto;
 }

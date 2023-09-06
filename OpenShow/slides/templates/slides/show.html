@@ -81,16 +81,23 @@
                     <label>Advance between decks</label>
                 </div>
             </form>
+            <div class="horizontal-buttons">
+                {% if show.displays.all.first %}
+                    {% for display in show.displays.all %}
+                        <button class="icon-button tall" _="on click set @src of #controls-preview to '{% url 'display' display.pk %}'">{% icon "eye" %}{{ display.pk }}</button>
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
         <div class="slide-thumbnail">
             {% if show.displays %}
-                <iframe class="slide" src="{% url 'display' show.displays.all.first.pk %}"></iframe>
+                <iframe class="slide" id="controls-preview" src="{% url 'display' show.displays.all.first.pk %}"></iframe>
             {% endif %}
         </div>
     </div>
     <div class="mobile-tab-controls">
-        <button class="icon-button mobile-hidden" id="shows-sidebar-button" _="on click add .mobile-hidden to <body > :not(.mobile-tab-controls), .mobile-tab-controls > */> then remove .mobile-hidden from <#shows-sidebar, #shows-sidebar-button/>">{% icon 'menu' %}</button>
-        <button class="icon-button" id="show-button" _="on click add .mobile-hidden to <body > :not(.mobile-tab-controls), .mobile-tab-controls > */> then remove .mobile-hidden from <#show-container, #show-button/>">{% icon 'monitor' %}</button>
-        <button class="icon-button mobile-hidden" id="show-controls-button" _="on click add .mobile-hidden to <body > :not(.mobile-tab-controls), .mobile-tab-controls > */> then remove .mobile-hidden from <#show-controls, #show-controls-button/>">{% icon 'play' %}</button>
+        <button class="icon-button mobile-hidden" id="shows-sidebar-button" _="on click add .mobile-hidden to <body > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#shows-sidebar, #shows-sidebar-button/>">{% icon 'menu' %}</button>
+        <button class="icon-button" id="show-button" _="on click add .mobile-hidden to <body > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#show-container, #show-button/>">{% icon 'monitor' %}</button>
+        <button class="icon-button mobile-hidden" id="show-controls-button" _="on click add .mobile-hidden to <body > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#show-controls, #show-controls-button/>">{% icon 'play' %}</button>
     </div>
 {% endblock %}
