@@ -90,7 +90,7 @@
             </div>
         </div>
         <div class="slide-thumbnail">
-            {% if show.displays %}
+            {% if show.displays.all.first %}
                 <iframe class="slide" id="controls-preview" src="{% url 'display' show.displays.all.first.pk %}"></iframe>
             {% endif %}
         </div>
