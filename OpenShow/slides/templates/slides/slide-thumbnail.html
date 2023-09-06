@@ -5,6 +5,7 @@
         <input type="hidden" name="show_pk" value="{{ show.pk }}">
 {#        <button hx-post="{% url 'show-slide' %}" hx-swap="none">Display Slide {{ slide.pk }}</button>#}
         <div hx-post="{% url 'show-slide' %}" hx-swap="innerHTML" hx-target="#show-container" hx-select="#show">
+{#            <iframe class="slide" srcdoc="{% autoescape on %}{% include 'slides/display.html' with slide=slide display=show.displays.all.first %}{% endautoescape %}"></iframe>#}
             {% include 'slides/slide.html' with slide=slide %}
         </div>
     </form>

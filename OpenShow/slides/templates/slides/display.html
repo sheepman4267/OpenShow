@@ -14,28 +14,29 @@
 
     </style>
     <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
-
-    <script type="text/hyperscript">
-        def getTransition
-            fetch {% url 'display-transition' display.pk %}
-            put it into #transition
-        end
-        eventsource DisplayEvents from /events
-            on display-{{ display.pk }}-slide
-                getTransition()
-                send "grab-slide" to #slide-grabber
+    {% if not thumbnail %}
+        <script type="text/hyperscript">
+            def getTransition
+                fetch {% url 'display-transition' display.pk %}
+                put it into #transition
             end
-            on display-{{ display.pk }}-theme
-                getTransition()
-                make a <div.slide/>
-                put it at end of body
-                wait for unlatch from body
-                send "grab-theme" to #slide-style
-                send "grab-slide" to #slide-grabber
+            eventsource DisplayEvents from /events
+                on display-{{ display.pk }}-slide
+                    getTransition()
+                    send "grab-slide" to #slide-grabber
+                end
+                on display-{{ display.pk }}-theme
+                    getTransition()
+                    make a <div.slide/>
+                    put it at end of body
+                    wait for unlatch from body
+                    send "grab-theme" to #slide-style
+                    send "grab-slide" to #slide-grabber
+                end
             end
-        end
-        on animationend remove <.slide:not(:last-child)/> then send unlatch
-    </script>
+            on animationend remove <.slide:not(:last-child)/> then send unlatch
+        </script>
+    {% endif %}
 </head>
 
 

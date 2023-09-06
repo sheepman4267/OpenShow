@@ -8,6 +8,7 @@
     transform-origin: left top;
     background: black;
     align-self: center;
+    pointer-events: none;
 }
 
 .slide-thumbnail {
