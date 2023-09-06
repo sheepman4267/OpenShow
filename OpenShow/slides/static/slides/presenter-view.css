@@ -99,6 +99,10 @@ navbar {
     font-size: 1.2rem;
 }
 
+#show-controls .slide-thumbnail {
+    margin-inline: auto;
+}
+
 #forward-reverse {
     display: flex;
     gap: 0.5rem;
@@ -165,10 +169,6 @@ navbar {
     #show-controls:not(.mobile-hidden){
         display: flex;
         flex-direction: column-reverse;
-    }
-
-    #show-controls .slide-thumbnail {
-        margin-inline: auto;
     }
 
     #forward-reverse .icon-button:hover,
