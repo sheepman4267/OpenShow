@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse
 from django.views.generic import DetailView, FormView, ListView, UpdateView
+from django.utils.decorators import method_decorator
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.template import loader
 from .models import Slide, Display, Show, Deck
 
@@ -35,6 +37,7 @@ class SlideView(DetailView):
     template_name = 'slides/slide.html'
 
 
+@method_decorator(xframe_options_sameorigin, "get")
 class DisplayView(DetailView):
     model = Display
     template_name = "slides/display.html"

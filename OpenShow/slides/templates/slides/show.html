@@ -8,8 +8,8 @@
         {{ show.theme.css }}
     </style>
     <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
-    <link rel="stylesheet" href="{% static 'slides/presenter-view.css' %}">
     <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
+    <link rel="stylesheet" href="{% static 'slides/presenter-view.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -77,6 +77,11 @@
                     <label>Advance between decks</label>
                 </div>
             </form>
+        </div>
+        <div class="slide-thumbnail">
+            {% if show.displays %}
+                <iframe class="slide" src="{% url 'display' show.displays.all.first.pk %}"></iframe>
+            {% endif %}
         </div>
     </div>
     <div class="mobile-tab-controls">

@@ -70,6 +70,7 @@ body {
     background: #303030;
     color: white;
     padding: 0.5rem;
+    container: show-controls / inline-size;
 }
 
 #show-controls .settings {
@@ -153,6 +154,10 @@ body {
         flex-direction: column-reverse;
     }
 
+    #show-controls .slide-thumbnail {
+        margin-inline: auto;
+    }
+
     #forward-reverse .icon-button:hover,
     #forward-reverse .icon-button {
         height: 8rem;
@@ -182,6 +187,46 @@ body {
         background: transparent;
     }
 }
+
+@container show-controls (min-width: calc(calc(1920px / 8) + 2rem)) {
+    .slide-thumbnail {
+        max-width: calc(1920px / 8);
+        max-height: calc(1080px / 8);
+    }
+
+    .slide-thumbnail .slide {
+        transform: scale(0.125);
+        margin-right: calc(-1920px / 8);
+        margin-bottom: calc(-1080px / 8);
+        margin-left: calc(calc(100% - calc(1920px / 8)) / 2);
+    }
+}
+
+@container show-controls (min-width: calc(calc(1920px / 6) + 2rem)) {
+    .slide-thumbnail {
+        max-width: calc(1920px / 6);
+        max-height: calc(1080px / 6);
+    }
+
+    .slide-thumbnail .slide {
+        transform: scale(0.167);
+        margin-right: calc(-1920px / 6);
+        margin-bottom: calc(-1080px / 6);
+        margin-left: calc(calc(100% - calc(1920px / 6)) / 2);
+    }
+}
+
+/*.display-preview {*/
+/*    width: 1920px;*/
+/*    height: 1080px;*/
+/*    transform: scale(10%);*/
+/*    margin-right: calc(-1920px / 10);*/
+/*    margin-bottom: calc(-1080px / 10);*/
+/*    margin-left: calc(calc(100% - calc(1920px / 10)) / 2);*/
+/*    overflow: hidden;*/
+/*    outline: 3px solid darkgray;*/
+/*    border-radius: 0.5rem;*/
+/*}*/
 
 /* Temporary slide thumbnails- eventually, these need to display an accurate representation of the slide. For now, we'll make it the right size and just throw the text in. */
 
