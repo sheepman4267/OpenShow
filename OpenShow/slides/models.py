@@ -41,7 +41,7 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
     )
     default_transition = models.ForeignKey(
         to='Transition',
-        unique='False',
+        unique=False,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
