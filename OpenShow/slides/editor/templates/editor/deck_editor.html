@@ -48,6 +48,8 @@
                 {% csrf_token %}
                 {{ form.name }}
                 {{ form.theme }}
+                {{ form.default_transition }}
+                {{ form.default_transition_duration }}
                 {{ form.errors }}
                 <input type="submit">
             </form>

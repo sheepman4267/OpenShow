@@ -93,16 +93,16 @@ class DeckCreateView(CreateView):
     extra_context = {'action': 'new-deck'}
 
 
-class DeckUpdateView(UpdateView):
-    model = Deck
-    template_name = 'editor/edit_deck.html'
-    fields = ['name', 'theme']
+# class DeckUpdateView(UpdateView):
+#     model = Deck
+#     template_name = 'editor/edit_deck.html'
+#     fields = ['name', 'theme']
 
 
 class DeckEditorView(UpdateView):
     queryset = Deck.objects.all()
     model = Deck
-    fields = ['name', 'theme']
+    fields = ['name', 'theme', 'default_transition', 'default_transition_duration']
     template_name = 'editor/deck_editor.html'
     # extra_context = {'display': Display.objects.all().first()}
 

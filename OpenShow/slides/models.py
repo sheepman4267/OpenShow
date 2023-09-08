@@ -36,6 +36,16 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
 
 class Deck(models.Model):  # A Reusable set of slides, which can be included in a Show Segment
     name = models.CharField(max_length=100)
+    default_transition_duration = models.IntegerField(
+        default=1,
+    )
+    default_transition = models.ForeignKey(
+        to='Transition',
+        unique='False',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
     theme = models.ForeignKey(
         to='Theme',
         unique=False,
@@ -329,6 +339,15 @@ class Slide(models.Model):
                     return None
         # or, if there are no more (say, we're at the beginning/end...)
         return self  # TODO: Make this mess better - add a toggle for "continue past end of deck" on the show control sidebar
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if self.deck:
+                if self.deck.default_transition:
+                    self.transition = self.deck.default_transition
+                if self.deck.default_transition_duration:
+                    self.transition_duration = self.deck.default_transition_duration
+        super(Slide, self).save(*args, **kwargs)
 
 
 class Transition(models.Model):
