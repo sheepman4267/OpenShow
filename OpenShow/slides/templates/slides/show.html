@@ -85,7 +85,7 @@
             <div class="horizontal-buttons">
                 {% if show.displays.all.first %}
                     {% for display in show.displays.all %}
-                        <button class="icon-button tall" _="on click set @src of #controls-preview to '{% url 'display' display.pk %}'">{% icon "eye" %}{{ display.pk }}</button>
+                        <button title="{{ display.name }}" class="icon-button tall" _="on click set @src of #controls-preview to '{% url 'display' display.pk %}'">{% icon "eye" %}{{ display.pk }}</button>
                     {% endfor %}
                 {% endif %}
             </div>
