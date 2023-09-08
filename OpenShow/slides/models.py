@@ -36,7 +36,7 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
 
 class Deck(models.Model):  # A Reusable set of slides, which can be included in a Show Segment
     name = models.CharField(max_length=100)
-    default_transition_duration = models.IntegerField(
+    default_transition_duration = models.FloatField(
         default=1,
     )
     default_transition = models.ForeignKey(
