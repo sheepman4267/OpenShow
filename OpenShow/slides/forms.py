@@ -14,3 +14,9 @@ class SlideDisplayForm(Form):
             'slide_pk',
             'direction',
         ]
+
+
+class ShowDisplaySelectorForm(ModelForm):
+    class Meta:
+        model = Show
+        fields = ['displays',]

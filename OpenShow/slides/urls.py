@@ -16,6 +16,7 @@ urlpatterns = [
     path('displays/<int:pk>/transition', views.DisplayView.as_view(template_name='slides/transition.css'), name='display-transition'),
     path('show/<int:pk>', views.ShowView.as_view(), name='show'),
     path('show/<int:pk>/advance_mode', views.AdvanceModeView.as_view(), name='advance-mode'),
+    path('show/<int:pk>/select_displays', views.ShowDisplaySelectorView.as_view(), name='select-displays'),
     path('deck/<int:pk>', views.DeckView.as_view(), name='deck'),
     path('show_slide', views.ShowSlideView.as_view(), name='show-slide'),
     # path('send_slide/<int:slide_pk>/<int:display_pk>', views.send_slide_to_display),

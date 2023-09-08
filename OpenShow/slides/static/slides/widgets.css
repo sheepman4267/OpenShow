@@ -84,3 +84,23 @@ input[type=checkbox] {
     margin-block: auto;
     margin-inline: 0.5rem;
 }
+
+select {
+    margin-block: 0.5rem;
+    background: #606060;
+    border: 3px solid lightgray;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    max-width: 100%;
+    color: white;
+    outline: none;
+}
+
+select option {
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    max-width: 100%;
+    white-space: pre-wrap;
+}

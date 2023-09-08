@@ -5,7 +5,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.template import loader
 from .models import Slide, Display, Show, Deck
 
-from .forms import SlideDisplayForm
+from .forms import SlideDisplayForm, ShowDisplaySelectorForm
 
 # import htmlmin # Was for the old send slide to display stuff
 
@@ -49,6 +49,16 @@ class ShowView(DetailView):
     extra_context = {
         'shows': Show.objects.all(),
     }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['display_selector_form'] = ShowDisplaySelectorForm(instance=context['show'])
+        return context
+
+
+class ShowDisplaySelectorView(UpdateView):
+    model = Show
+    form_class = ShowDisplaySelectorForm
 
 
 class DeckView(DetailView):
