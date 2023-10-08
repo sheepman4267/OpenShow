@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda Hat</title>
+{#    <link rel="stylesheet" href="{% static 'hat/hat.css' %}"#}
+    <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
+    <script src="https://unpkg.com/htmx.org@1.9.1"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
+</head>
+<body>
+    <header>
+        <h1>PJLink Integration</h1>
+    </header>
+    <main{% block main_attrs %}{% endblock %}>
+        {% block content %}
+        {% endblock content %}
+    </main>
+</body>
+</html>

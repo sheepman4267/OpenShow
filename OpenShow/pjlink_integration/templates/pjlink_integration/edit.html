@@ -1,0 +1,12 @@
+<form>
+    {% csrf_token %}
+    <p>
+        <label>Name</label>
+        {{ form.name }}
+    </p>
+    <p>
+        <label>IP Address</label>
+        {{ form.address }}
+    </p>
+    <button hx-post="{% block action %}{% url 'edit-projector' pk=form.object.pk %}{% endblock action %}" hx-swap="outerHTML" hx-target="closest <main/>" hx-select="<main/>">Submit</button>
+</form>

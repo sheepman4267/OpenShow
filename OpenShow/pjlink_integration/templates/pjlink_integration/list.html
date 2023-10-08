@@ -1,0 +1,19 @@
+{% extends 'pjlink_integration/base.html' %}
+{% block content %}
+    <ul>
+        {% for item in projector_list %}
+            <li class="box">
+                <strong class="block titlebar">{{ item.name }}</strong>
+                <pre>{{ item.address }}</pre>
+                <section class="tool-bar">
+                    <button hx-get="{% url 'power-on' pk=item.pk %}" hx-swap="none">Power On</button>
+                    <button hx-get="{% url 'power-off' pk=item.pk %}" hx-swap="none">Power Off</button>
+                    <button hx-get="{% url 'edit-projector' pk=item.pk %}">Edit</button>
+                </section>
+            </li>
+        {% endfor %}
+        <li>
+            <button hx-get="{% url 'new-projector' %}" hx-swap="outerHTML">New Projector</button>
+        </li>
+    </ul>
+{% endblock %}

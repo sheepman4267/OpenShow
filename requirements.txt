@@ -7,3 +7,4 @@ htmlmin
 tinycss2
 python-lorem
 django-feather
+pypjlink
