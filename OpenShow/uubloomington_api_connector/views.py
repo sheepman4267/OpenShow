@@ -17,7 +17,7 @@ class CreateShowFromOOSView(FormView):
 
     def form_valid(self, form):
         oos = json.loads(
-            urlopen(form.cleaned_data['order_of_service_url']).read()
+            urlopen(f"https://uubloomington.org/api/v2/pages/{form.cleaned_data['order_of_service_id']}/?type=services.OrderOfService").read()
         )
         new_show = Show(name=f"Sunday/{oos['date']}")
         new_show.save()
