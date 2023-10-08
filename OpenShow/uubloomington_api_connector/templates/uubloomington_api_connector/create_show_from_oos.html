@@ -1,16 +1,16 @@
-{% extends 'slides/base.html' %}
+{% extends 'core/base.html' %}
 
-{% load static %}
-
-{% block additional_css %}
-    <link rel="stylesheet" href="{% static 'uubloomington_api_connector/apiconnector.css' %}">
+{% block header %}
+    <h1>OpenShow UUCB API Connector</h1>
 {% endblock %}
 
 {% block content %}
-    <h1>Create Show from Order of Service</h1>
-    <form action="{% url 'create-show-from-oos' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit">
-    </form>
+    <div class="box">
+        <strong class="titlebar block">Create Show from Order of Service</strong>
+        <form action="{% url 'create-show-from-oos' %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit">
+        </form>
+    </div>
 {% endblock %}
