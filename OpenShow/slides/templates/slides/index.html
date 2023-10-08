@@ -1,5 +1,6 @@
 {% extends 'slides/base.html' %}
 {% load static %}
+{% load icon %}
 
 {% block additional_css %}
     <link rel="stylesheet" href="{% static 'editor/index.css' %}">
@@ -8,11 +9,12 @@
 
 {% block content %}
     <header>
+        <a href="{% url 'index' %}"><button class="icon-button">{% icon 'arrow-left' %}</button></a>
         <h1>OpenShow Slides</h1>
         <div class="buttons-right">
             <a href="{% url 'editor_index' %}">
-                <button>
-                    Show Editor
+                <button class="icon-button">
+                    {% icon 'edit' %}
                 </button>
             </a>
         </div>
