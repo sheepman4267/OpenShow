@@ -13,7 +13,14 @@ import json
 class CreateShowFromOOSView(FormView):
     form_class = CreateShowFromOOSForm
     template_name = 'uubloomington_api_connector/create_show_from_oos.html'
-    success_url = reverse_lazy('create-show-from-oos')
+    # success_url = reverse_lazy('edit-show', pk=object.pk)
+
+    def __init__(self):
+        self.new_show = None
+        super().__init__()
+
+    def get_success_url(self):
+        return reverse_lazy('edit-show', kwargs={'pk': self.new_show.pk})
 
     def form_valid(self, form):
         oos = json.loads(
@@ -21,6 +28,7 @@ class CreateShowFromOOSView(FormView):
         )
         new_show = Show(name=f"Sunday/{oos['date']}")
         new_show.save()
+        self.new_show = new_show
         for idx, element in enumerate(oos['program']):
             if element['type'] != 'element':
                 continue
