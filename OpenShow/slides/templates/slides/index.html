@@ -1,7 +1,22 @@
 {% extends 'slides/base.html' %}
+{% load static %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="{% static 'editor/index.css' %}">
+    <link rel="stylesheet" href="{% static 'editor/common.css' %}">
+{% endblock %}
 
 {% block content %}
-    <header><h1>OpenShow</h1><a href="{% url 'editor_index' %}">Show Editor</a></header>
+    <header>
+        <h1>OpenShow Slides</h1>
+        <div class="buttons-right">
+            <a href="{% url 'editor_index' %}">
+                <button>
+                    Show Editor
+                </button>
+            </a>
+        </div>
+    </header>
     <div>
         <h2>Shows</h2>
         <ul>

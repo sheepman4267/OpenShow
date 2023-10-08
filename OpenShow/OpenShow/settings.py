@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-5r97wkt$n1_mh3=0=3yv6v=%2g2yes#$&)x8@7--%-(dxl_b08
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.11', 'localhost']
+ALLOWED_HOSTS = ['192.168.0.11', 'localhost', '192.168.0.35', '192.168.1.124']
 
 MEDIA_ROOT = f'{BASE_DIR}/media/'
 MEDIA_URL = '/media/'
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_eventstream',
     'uubloomington_api_connector',
     'django_feather',
+    'pjlink_integration',
 ]
 
 MIDDLEWARE = [

@@ -1,3 +1,4 @@
+header,
 .navbar {
     height: 3rem;
     background: #606060;
@@ -6,6 +7,7 @@
     display: flex;
 }
 
+header .buttons-right,
 .navbar .buttons-right {
     margin-left: auto;
     margin-right: 1rem;
@@ -13,6 +15,7 @@
     margin-block: auto;
 }
 
+header .buttons-right button,
 .navbar .buttons-right button {
     font-size: 1.25rem;
     padding: 0.25rem;
@@ -20,6 +23,7 @@
     padding-inline: 0.5rem;
 }
 
+header .buttons-right .menu,
 .navbar .buttons-right .menu {
     position: absolute;
     left: calc(-25rem + 100%);
@@ -30,6 +34,7 @@
     border-radius: 1rem;
 }
 
+header .buttons-right .menu ul,
 .navbar .buttons-right .menu ul {
     list-style: none;
     text-align: center;

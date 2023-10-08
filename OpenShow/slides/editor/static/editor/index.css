@@ -15,6 +15,7 @@ body {
     padding: 0.5rem;
 }
 
+header,
 body > .navbar {
     grid-column: span 3;
 }
