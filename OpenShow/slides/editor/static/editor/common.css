@@ -4,7 +4,8 @@ header,
     background: #606060;
     border: 3px solid darkgray;
     border-radius: 1rem;
-    display: flex;
+    display: grid;
+    grid-template-columns: 3rem 1fr 3rem;
 }
 
 header .buttons-right,
@@ -12,7 +13,7 @@ header .buttons-right,
     margin-left: auto;
     margin-right: 1rem;
     position: relative;
-    margin-block: auto;
+    /*margin-block: auto;*/
 }
 
 header .buttons-right button,
