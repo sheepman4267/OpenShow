@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Agenda Hat</title>
+    <title>{% block title %}OpenShow{% endblock %}</title>
 {#    <link rel="stylesheet" href="{% static 'hat/hat.css' %}"#}
     <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
     <script src="https://unpkg.com/htmx.org@1.9.1"></script>
@@ -11,7 +11,9 @@
 </head>
 <body>
     <header>
-        <h1>PJLink Integration</h1>
+        {% block header %}
+            <h1>OpenShow</h1>
+        {% endblock %}
     </header>
     <main{% block main_attrs %}{% endblock %}>
         {% block content %}

@@ -1,4 +1,13 @@
-{% extends 'pjlink_integration/base.html' %}
+{% extends 'core/base.html' %}
+
+{% block title %}
+    PJLink Integration - OpenShow
+{% endblock %}
+
+{% block header %}
+    <h1>PJLink Integration</h1>
+{% endblock %}
+
 {% block content %}
     <ul>
         {% for item in projector_list %}

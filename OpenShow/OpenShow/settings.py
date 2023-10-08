@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'uubloomington_api_connector',
     'django_feather',
     'pjlink_integration',
+    'core',
 ]
 
 MIDDLEWARE = [
