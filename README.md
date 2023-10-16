@@ -43,4 +43,4 @@ Currently, OpenShow is best tested using the django development server. This is 
 Once you have this running, you can navigate to localhost:8000 in your web browser and start messing with OpenShow. 
 
 A quickstart guide for actually using OpenShow will be written soon. However, for now:
-The one thing you won't be able to find by poking around the UI is the URL to actually 
+The one thing you won't be able to find by poking around the UI is the URL to actually see a display. That is `/slides/displays/<pk>`, so the first display you add will be `localhost:8000/slides/displays/1`. 
