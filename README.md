@@ -30,3 +30,17 @@ Transitions are CSS animations. The editor allows you to specify your keyframes 
 
 ### Display
 Displays are where slides get shown. This is a separate page to be opened in another broswer window, or used (for example) in an OBS Browser Source.
+
+## Quickstart
+Currently, OpenShow is best tested using the django development server. This is a standard Django application, and a development copy can be set up (on Linux) by:
+
+1. Clone this repository
+2. Create a python virtual environment: `python3 -m venv venv`
+3. Activate the virtual environment: `source venv/bin/activate`
+4. Install requirements as usual: `pip install -r requirements.txt`
+5. Run the server: `python manage.py runserver`
+
+Once you have this running, you can navigate to localhost:8000 in your web browser and start messing with OpenShow. 
+
+A quickstart guide for actually using OpenShow will be written soon. However, for now:
+The one thing you won't be able to find by poking around the UI is the URL to actually 
