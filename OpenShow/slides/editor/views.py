@@ -82,7 +82,7 @@ class SlideElementDeleteView(DeleteView):
 
 class SlideEditView(UpdateView):
     model = Slide
-    fields = ['transition', 'transition_duration']
+    fields = ['transition', 'transition_duration', 'auto_advance', 'auto_advance_duration']
     template_name = 'editor/edit_slide.html'
 
 
@@ -102,7 +102,14 @@ class DeckCreateView(CreateView):
 class DeckEditorView(UpdateView):
     queryset = Deck.objects.all()
     model = Deck
-    fields = ['name', 'theme', 'default_transition', 'default_transition_duration']
+    fields = [
+        'name',
+        'theme',
+        'default_transition',
+        'default_transition_duration',
+        'default_auto_advance',
+        'default_auto_advance_duration',
+    ]
     template_name = 'editor/deck_editor.html'
     # extra_context = {'display': Display.objects.all().first()}
 

@@ -50,6 +50,12 @@
                 {{ form.theme }}
                 {{ form.default_transition }}
                 {{ form.default_transition_duration }}
+                <fieldset>
+                    <label>Auto Advance</label>
+                    {{ form.default_auto_advance }}
+                    <label>Auto Advance Duration</label>
+                    {{ form.default_auto_advance_duration }}
+                </fieldset>
                 {{ form.errors }}
                 <input type="submit">
             </form>

@@ -13,6 +13,12 @@
             {% csrf_token %}
             {{ form.transition }}
             {{ form.transition_duration }}
+            <fieldset>
+                <label>Auto Advance</label>
+                {{ form.auto_advance }}
+                <label>Auto Advance Duration</label>
+                {{ form.auto_advance_duration }}
+            </fieldset>
             <input type="submit">
         </form>
         <ul class="segment-list">

@@ -115,7 +115,7 @@ class ShowSlideView(FormView):
                     slide = current_slide
         else:
             slide = Slide.objects.get(pk=form.cleaned_data['slide_pk'])
-        slide.send_to_display(show.displays.all())
+        slide.send_to_display(show.displays.all(), show=show)
         return HttpResponseRedirect(reverse('show', kwargs={'pk':show.pk}))
 
 

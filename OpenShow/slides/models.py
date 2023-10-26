@@ -13,6 +13,12 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
     pixel_width = models.IntegerField(default=1920)
     pixel_height = models.IntegerField(default=1080)
     custom_css = models.TextField(null=True, blank=True)
+    current_show = models.ForeignKey(
+        to='Show',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
     current_slide = models.ForeignKey(
         to='Slide',
         null=True,
@@ -32,6 +38,10 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
 
     def __str__(self):
         return self.name
+    # TODO: Make it possible to pause auto-advance on displays, configurable in the show view.
+    # TODO: Make auto-advance pausing triggerable per segment
+    # TODO: The Display should probably know the current segment, as well as the current show.
+    # auto_advance_paused = models.BooleanField(default=False, null=False)
 
 
 class Deck(models.Model):  # A Reusable set of slides, which can be included in a Show Segment
@@ -54,6 +64,9 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
         null=True,
         blank=True,
     )
+    default_auto_advance = models.BooleanField(default=False, null=False)
+    default_auto_advance_duration = models.FloatField(default=10)
+
     def get_absolute_url(self):
         return reverse('edit-deck', kwargs={'pk': self.pk})
 
@@ -234,6 +247,8 @@ class QRCodeElement(SlideElement):
 
 
 class Slide(models.Model):
+    auto_advance = models.BooleanField(default=False, null=False)
+    auto_advance_duration = models.FloatField(default=10)
     transition_duration = models.FloatField(default=1)
     segment = models.ForeignKey(
         to=Segment,
@@ -276,16 +291,19 @@ class Slide(models.Model):
         else:
             raise RuntimeError('A slide must be part of something... something has gone very wrong.')
 
-    def send_to_display(self, displays:Iterable) -> None:
+    def send_to_display(self, displays:Iterable, show) -> None:
         """
         :param displays:
         An iterable (probably a QuerySet) of Display objects to display the slide on
+        :param show:
+        The Show object which this slide is being displayed from currently
         :return:
         This method always returns None.
         """
         for display in displays:
             slide_theme = self.get_theme()
             display.current_slide = self
+            display.current_show = show
             if display.current_theme != slide_theme:
                 display.current_theme = slide_theme
                 display.save()
@@ -348,6 +366,10 @@ class Slide(models.Model):
                     self.transition = self.deck.default_transition
                 if self.deck.default_transition_duration:
                     self.transition_duration = self.deck.default_transition_duration
+                if self.deck.default_auto_advance:
+                    self.auto_advance = self.deck.default_auto_advance
+                if self.deck.default_auto_advance_duration:
+                    self.auto_advance_duration = self.deck.default_auto_advance_duration
         super(Slide, self).save(*args, **kwargs)
 
 
