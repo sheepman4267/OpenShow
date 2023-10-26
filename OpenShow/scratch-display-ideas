@@ -1,0 +1,8 @@
+right click on a slide should have the option "force to display > select a display"
+should be able to select what display to preview in the show controls - this would allow one to make a "preview" display separate from the main display, to test transitions etc (DONE)
+use an iframe for the preview (DONE)
+maybe use an iframe for the *whole* preview, even in slide editor- would fix the damn CSS conflicts
+add displays to show controls sidebar (DONE)
+somewhere we need an editable settings system, with default displays
+decks need default transitions, times - settable (DONE)
+decks need "create slides from images" (customizable element class!!!)

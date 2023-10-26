@@ -79,6 +79,7 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
         blank=True,
     )
     advance_between_segments = models.BooleanField(default=False, null=False)
+    advance_loop = models.BooleanField(default=False, null=False)
 
     def get_absolute_url(self):
         return reverse('edit-show', kwargs={'pk': self.pk})

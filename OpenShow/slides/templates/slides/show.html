@@ -80,6 +80,10 @@
                     <input type="checkbox" name="advance_between_segments" hx-post="{% url 'advance-mode' show.pk %}" hx-swap="none" hx-trigger="change" {% if show.advance_between_segments %}checked{% endif %}>
                     <label>Advance between decks</label>
                 </div>
+                <div class="checkbox-row">
+                    <input type="checkbox" name="advance_loop" hx-post="{% url 'advance-loop' show.pk %}" hx-swap="none" hx-trigger="change" {% if show.advance_loop %}checked{% endif %}>
+                    <label>Advance in a loop</label>
+                </div>
             </form>
             <hr>
             <div class="horizontal-buttons">

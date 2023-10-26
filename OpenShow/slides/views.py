@@ -100,6 +100,17 @@ class ShowSlideView(FormView):
                                 slide = current_segment.next_with_slides(form.cleaned_data['direction']).get_first_slide()
                     except AttributeError:
                         slide = current_slide
+                elif show.advance_loop:
+                    if form.cleaned_data['direction'] == 'reverse':
+                        if current_slide.deck:
+                            slide = current_slide.deck.slides.last()
+                        else:
+                            slide = current_slide.segment.slides.last()
+                    elif form.cleaned_data['direction'] == 'forward':
+                        if current_slide.deck:
+                            slide = current_slide.deck.slides.first()
+                        else:
+                            slide = current_slide.segment.slides.first()
                 else:
                     slide = current_slide
         else:
@@ -111,3 +122,8 @@ class ShowSlideView(FormView):
 class AdvanceModeView(UpdateView):
     model = Show
     fields = ['advance_between_segments']
+
+
+class AdvanceLoopView(UpdateView):  # TODO: Combine this and the above view, make this all one proper Django form
+    model = Show
+    fields = ['advance_loop']
