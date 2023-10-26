@@ -28,7 +28,7 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
     segments = models.ManyToManyField(
         to='Segment',
         blank=True,
-    )
+    )  # TODO: What the heck is this for?
 
     def __str__(self):
         return self.name
