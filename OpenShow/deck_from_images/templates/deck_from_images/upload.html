@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <div class="box">
+        <strong class="titlebar block">Create Deck from Many Images</strong>
+        <form action="{% url 'deck-from-images' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit">
+        </form>
+    </div>
+{% endblock %}
