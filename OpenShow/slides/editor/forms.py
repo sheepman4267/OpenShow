@@ -32,3 +32,9 @@ class SetThemeForm(ModelForm):
                     }
                 ),
         }
+
+
+class ChangeSlideOrderForm(Form):
+    deck_or_segment_pk = IntegerField()
+    moved_slide_pk = IntegerField()
+    next_slide_pk = IntegerField(required=False)

@@ -73,6 +73,10 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
     def __str__(self):
         return self.name
 
+    def recompute_order(self):
+        # TODO: recompute slide order occasionally
+        pass
+
     class Meta:
         ordering = ('name',)
 
@@ -250,6 +254,7 @@ class Slide(models.Model):
     auto_advance = models.BooleanField(default=False, null=False)
     auto_advance_duration = models.FloatField(default=10)
     transition_duration = models.FloatField(default=1)
+    order = models.FloatField(default=1)
     segment = models.ForeignKey(
         to=Segment,
         unique=False,
@@ -282,6 +287,9 @@ class Slide(models.Model):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        ordering=['order', 'pk']
 
     def get_absolute_url(self):
         if self.segment:
@@ -333,6 +341,12 @@ class Slide(models.Model):
     def get_elements(self):
         return self.elements.all().order_by('order')
 
+    def deck_or_segment(self):
+        if self.deck:
+            return self.deck
+        else:
+            return self.segment
+
     def __str__(self):
         if self.segment:
             return f'Show "{self.segment.show.name}"/Segment "{self.segment.name}"/Slide ID {self.pk}'
@@ -370,6 +384,11 @@ class Slide(models.Model):
                     self.auto_advance = self.deck.default_auto_advance
                 if self.deck.default_auto_advance_duration:
                     self.auto_advance_duration = self.deck.default_auto_advance_duration
+                if self.deck.slides.last():
+                    self.order = self.deck.slides.last().order + 10
+            else:  # as in, if self.segment:
+                if self.segment.slides.last():
+                    self.order = self.segment.slides.last().order + 10
         super(Slide, self).save(*args, **kwargs)
 
 

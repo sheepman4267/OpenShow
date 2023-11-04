@@ -202,3 +202,16 @@ ul > a {
     font-family: monospace;
     font-size: 1.2rem;
 }
+
+.dragbox {
+    height: 1rem;
+    background-color: unset;
+    margin-block: 0;
+    transition: height, background-color 500ms;
+}
+
+.dragover {
+    height: 3rem;
+    background-color: #3A7734;
+    transition: height, background-color 500ms;
+}
