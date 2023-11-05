@@ -15,6 +15,7 @@ urlpatterns = [
     path('slide/reorder', ChangeSlideOrderView.as_view(), name='reorder-slide'),
     path('deck/new', DeckCreateView.as_view(), name='new-deck'),
     path('deck/<int:pk>', DeckEditorView.as_view(), name='edit-deck'),
+    path('deck/<int:pk>/push-cues', push_deck_cues, name='push-deck-cues'),
     path('theme/new', ThemeCreateView.as_view(), name='new-theme'),
     path('theme/<int:pk>', ThemeUpdateView.as_view(), name='edit-theme'),
     path('lorem/<int:words>/<str:css_class>', generate_lorem, name='lorem'),

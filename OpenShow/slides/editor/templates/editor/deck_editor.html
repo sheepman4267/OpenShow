@@ -94,9 +94,16 @@
                     <label>Auto Advance Duration</label>
                     {{ form.default_auto_advance_duration }}
                 </fieldset>
+                <fieldset>
+                    <label>Script</label>
+                    {{ form.script }}
+                </fieldset>
                 {{ form.errors }}
                 <input type="submit">
             </form>
+            <a href="{% url 'push-deck-cues' deck.pk %}">
+                Push Cues
+            </a>
         </div>
     </div>
 {% endblock %}

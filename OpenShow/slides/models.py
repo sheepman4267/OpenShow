@@ -8,6 +8,10 @@ import tinycss2
 from tinycss2.ast import IdentToken, QualifiedRule
 
 
+class InvalidArgumentException(Exception):
+    pass
+
+
 class Display(models.Model):  # A set of characteristics used to modify slide appearance for different displays
     name = models.CharField(max_length=100)
     pixel_width = models.IntegerField(default=1920)
@@ -66,6 +70,7 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
     )
     default_auto_advance = models.BooleanField(default=False, null=False)
     default_auto_advance_duration = models.FloatField(default=10)
+    script = models.TextField(null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('edit-deck', kwargs={'pk': self.pk})
@@ -76,6 +81,15 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
     def recompute_order(self):
         # TODO: recompute slide order occasionally
         pass
+
+    def push_cues(self):
+        slides = list(self.slides.all())
+        cues = self.script.split('~~')
+        if len(slides) != len(cues):
+            raise InvalidArgumentException('You have a mismatched number of cues and slides')
+        for slide, cue in zip(slides, cues):
+            slide.cue = cue
+            slide.save()
 
     class Meta:
         ordering = ('name',)
@@ -255,6 +269,7 @@ class Slide(models.Model):
     auto_advance_duration = models.FloatField(default=10)
     transition_duration = models.FloatField(default=1)
     order = models.FloatField(default=1)
+    cue = models.TextField(null=True, blank=True)
     segment = models.ForeignKey(
         to=Segment,
         unique=False,

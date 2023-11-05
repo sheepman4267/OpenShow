@@ -5,6 +5,8 @@ from ..models import Show, Segment, Slide, SlideElement, Display, Deck, Theme, T
 
 from .forms import DeleteSlideElementForm, SetThemeForm, ChangeSlideOrderForm
 
+from django.urls import reverse_lazy
+
 import lorem
 
 # Create your views here.
@@ -109,6 +111,7 @@ class DeckEditorView(UpdateView):
         'default_transition_duration',
         'default_auto_advance',
         'default_auto_advance_duration',
+        'script',
     ]
     template_name = 'editor/deck_editor.html'
     # extra_context = {'display': Display.objects.all().first()}
@@ -244,5 +247,11 @@ class ChangeSlideOrderView(FormView):
 
     def get_success_url(self):
         return self.moved_slide.get_absolute_url()
+
+
+def push_deck_cues(request, pk):
+    deck = get_object_or_404(Deck, pk=pk)
+    deck.push_cues()
+    return deck.get_absolute_url()
 
 

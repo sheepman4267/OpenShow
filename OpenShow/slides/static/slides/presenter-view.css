@@ -251,6 +251,24 @@ navbar {
     }
 }
 
+.deck-slide .slide-thumbnail {
+    border-radius: 0;
+}
+
+.deck-slide {
+    outline: 3px solid darkgray;
+    border-radius: 0.5rem;
+    overflow: clip;
+}
+
+.deck-slide:hover {
+    outline: 3px solid #808080;
+}
+
+.deck-slide p {
+    margin: 0.5rem;
+}
+
 /*.display-preview {*/
 /*    width: 1920px;*/
 /*    height: 1080px;*/

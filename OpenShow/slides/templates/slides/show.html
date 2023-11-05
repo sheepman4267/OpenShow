@@ -37,9 +37,18 @@
                     <h2>{{ segment.name }}</h2>
                     {% if segment.included_deck %}
                         <h3>{{ segment.included_deck.name }}</h3>
-                        <ul>
+                        <ul
+                            {% if segment.included_deck.script %}
+                                class="with-cues"
+                            {% endif %}
+                        >
                             {% for slide in segment.included_deck.slides.all %}
-                                <li {% if slide == show.displays.first.current_slide %}class="selected"{% endif %} id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
+                                <li class="deck-slide {% if slide == show.displays.first.current_slide %}selected{% endif %}" id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
+                                    {% if slide.cue %}
+                                        <p>
+                                            {{ slide.cue }}
+                                        </p>
+                                    {% endif %}
                                     {% include 'slides/slide-thumbnail.html' %}
                                 </li>
                             {% endfor %}
