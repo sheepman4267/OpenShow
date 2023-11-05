@@ -32,7 +32,7 @@ navbar {
     display: flex;
     flex-direction: column;
     border-right: 3px solid darkgray;
-    height: 100%;
+    height: calc(100dvh - 4rem);
     overflow: scroll;
     list-style: none;
     gap: 0.5rem;
