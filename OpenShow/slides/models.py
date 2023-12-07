@@ -12,6 +12,9 @@ class InvalidArgumentException(Exception):
     pass
 
 
+class NotSupportedException(Exception):
+    pass
+
 class Display(models.Model):  # A set of characteristics used to modify slide appearance for different displays
     name = models.CharField(max_length=100)
     pixel_width = models.IntegerField(default=1920)
@@ -71,6 +74,7 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
     default_auto_advance = models.BooleanField(default=False, null=False)
     default_auto_advance_duration = models.FloatField(default=10)
     script = models.TextField(null=True, blank=True)
+    slide_text_markup = models.TextField(null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('edit-deck', kwargs={'pk': self.pk})
@@ -90,6 +94,7 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
         for slide, cue in zip(slides, cues):
             slide.cue = cue
             slide.save()
+
 
     class Meta:
         ordering = ('name',)
@@ -258,6 +263,14 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
 
     class Meta:
         ordering = ["-order"]
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if self.slide.elements.last():
+                self.order = self.slide.elements.last().order + 10
+            else:
+                self.order = 1
+        super(SlideElement, self).save(*args, **kwargs)
 
 
 class QRCodeElement(SlideElement):

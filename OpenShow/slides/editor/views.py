@@ -1,15 +1,23 @@
-from django.shortcuts import render, reverse, get_object_or_404
+from django.shortcuts import render, reverse, get_object_or_404, HttpResponseRedirect
 from django.views.generic import DetailView, CreateView, ListView, UpdateView, FormView, DeleteView
+from django.db import transaction
 
 from ..models import Show, Segment, Slide, SlideElement, Display, Deck, Theme, Transition, TransitionKeyframe
 
 from .forms import DeleteSlideElementForm, SetThemeForm, ChangeSlideOrderForm
+
+import slides.aoml_parser as aoml
 
 from django.urls import reverse_lazy
 
 import lorem
 
 # Create your views here.
+
+
+class NotSupportedException(Exception):
+    pass
+
 
 
 class IndexView(ListView):
@@ -112,6 +120,7 @@ class DeckEditorView(UpdateView):
         'default_auto_advance',
         'default_auto_advance_duration',
         'script',
+        'slide_text_markup',
     ]
     template_name = 'editor/deck_editor.html'
     # extra_context = {'display': Display.objects.all().first()}
@@ -255,3 +264,16 @@ def push_deck_cues(request, pk):
     return deck.get_absolute_url()
 
 
+@transaction.atomic()
+def push_deck_slide_text(request, pk):
+    deck = get_object_or_404(Deck, pk=pk)
+    existing_slides = list(deck.slides.all())
+    # if len(existing_slides) > 0:
+    #     raise NotSupportedException('OpenShow does not support pushing slide text to decks which are not empty')
+    for slide_markup in aoml.parse_markup(deck.slide_text_markup):
+        slide = Slide(deck=deck)
+        slide.save()
+        for element in aoml.parse_slide(slide_markup):
+            element.slide = slide
+            element.save()
+    return HttpResponseRedirect(deck.get_absolute_url())

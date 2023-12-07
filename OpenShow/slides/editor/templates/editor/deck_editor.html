@@ -98,11 +98,18 @@
                     <label>Script</label>
                     {{ form.script }}
                 </fieldset>
+                <fieldset>
+                    <label>AOML Slide Text</label>
+                    {{ form.slide_text_markup }}
+                </fieldset>
                 {{ form.errors }}
                 <input type="submit">
             </form>
             <a href="{% url 'push-deck-cues' deck.pk %}">
                 Push Cues
+            </a>
+            <a href="{% url 'push-deck-text' deck.pk %}">
+                Push Slide Text
             </a>
         </div>
     </div>
