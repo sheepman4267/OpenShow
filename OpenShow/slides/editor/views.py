@@ -268,8 +268,9 @@ def push_deck_cues(request, pk):
 def push_deck_slide_text(request, pk):
     deck = get_object_or_404(Deck, pk=pk)
     existing_slides = list(deck.slides.all())
-    # if len(existing_slides) > 0:
-    #     raise NotSupportedException('OpenShow does not support pushing slide text to decks which are not empty')
+    if len(existing_slides) > 0:
+        for slide in existing_slides:  # TODO: Add some options here...
+            slide.delete()
     for slide_markup in aoml.parse_markup(deck.slide_text_markup):
         slide = Slide(deck=deck)
         slide.save()
