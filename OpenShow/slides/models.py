@@ -30,7 +30,7 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
         to='Slide',
         null=True,
         blank=True,
-        on_delete=models.CASCADE
+        on_delete=models.SET_NULL,
     )
     current_theme = models.ForeignKey(
         to='Theme',
