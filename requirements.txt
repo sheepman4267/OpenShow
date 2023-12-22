@@ -8,3 +8,6 @@ tinycss2
 python-lorem
 django-feather
 pypjlink
+gunicorn
+uvicorn
+django-environ
