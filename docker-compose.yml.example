@@ -1,0 +1,41 @@
+services:
+  traefik:
+    restart: unless-stopped
+    image: "traefik:v2.9"
+    container_name: "traefik"
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--providers.docker.useBindPortIP=true"
+    ports:
+      - "80:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  openshow-dynamic:
+    image: sheepman4267/openshow:0.1.0
+    volumes:
+      - "./openshow/static-root:/static-root"
+      - "./openshow/media-root:/media-root"
+      - "./openshow/db:/db"
+    environment:
+      - OPENSHOW_SECRET_KEY=set-a-secret-key-please
+      - OPENSHOW_ALLOWED_HOSTS=localhost
+      - OPENSHOW_SQLITE3_PATH=/db/db.sqlite3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.openshow-dynamic.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.openshow-dynamic.entrypoints=web"
+
+  openshow-static:
+    restart: unless-stopped
+    image: docker.io/nginx
+    volumes:
+      - './openshow/static-root:/usr/share/nginx/html/static:ro'
+      - './openshow/media-root:/usr/share/nginx/html/media:ro'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.openshow-static.rule=PathPrefix(`/static/`) || PathPrefix(`/media/`)"
+      - "traefik.http.routers.openshow-static.entrypoints=web"
+
