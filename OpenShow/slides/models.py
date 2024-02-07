@@ -320,12 +320,13 @@ class Slide(models.Model):
         ordering=['order', 'pk']
 
     def get_absolute_url(self):
-        if self.segment:
-            return reverse('edit-show', kwargs={'pk': self.segment.show.pk})
-        elif self.deck:
-            return reverse('edit-deck', kwargs={'pk': self.deck.pk})
-        else:
-            raise RuntimeError('A slide must be part of something... something has gone very wrong.')
+        # if self.segment:
+        #     return reverse('edit-show', kwargs={'pk': self.segment.show.pk})
+        # elif self.deck:
+        #     return reverse('edit-deck', kwargs={'pk': self.deck.pk})
+        # else:
+        #     raise RuntimeError('A slide must be part of something... something has gone very wrong.')
+        return reverse('edit-slide', kwargs={'pk': self.pk})
 
     def send_to_display(self, displays:Iterable, show) -> None:
         """
