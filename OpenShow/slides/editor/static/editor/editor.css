@@ -215,3 +215,13 @@ ul > a {
     background-color: #3A7734;
     transition: height, background-color 500ms;
 }
+
+.htmx-swapping:not(#dummy) {
+    background-color: #539c68;
+    opacity: 0;
+    transition: background-color 0.1s, opacity 0.1s;
+}
+
+:not(.htmx-swapping) {
+    transition: background-color 0.1s, opacity 0.1s;
+}

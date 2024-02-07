@@ -32,7 +32,7 @@
             {% for segment in show.segments.all %}
                 <li class="show-segment">
                     <span class="segment-title">{{ segment.name }}</span>
-                    <button hx-get="{% url 'edit-segment' segment.pk %}" hx-select="#editor" hx-target="#editor" hx-swap="outerHTML">{% icon 'edit-3' %}</button>
+                    <button hx-get="{% url 'edit-segment' segment.pk %}" hx-select="#editor" hx-target="#editor" hx-swap="outerHTML swap:0.1s">{% icon 'edit-3' %}</button>
                     {% if segment.included_deck %}
                         <h4>Deck: {{ segment.included_deck.name }}</h4>
                     {% endif %}
@@ -40,7 +40,7 @@
                         {% for slide in segment.slides.all %}
                             <li class="slide-thumbnail"
                                 hx-get="{% url 'edit-slide' pk=slide.pk %}"
-                                hx-swap="outerHTML"
+                                hx-swap="outerHTML swap:0.1s"
                                 hx-select="#editor"
                                 hx-target="#editor">
                                 {% include "slides/slide.html" with slide=slide %}
@@ -51,7 +51,7 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="segment" value="{{ segment.pk }}">
 {#                                <input type="submit" value="+">#}
-                                <button hx-post="{% url 'new-slide' %}" hx-select="#slides-sidebar > *" hx-target="#slides-sidebar" hx-swap="innerHTML">+</button>
+                                <button hx-post="{% url 'new-slide' %}" hx-select="#slides-sidebar > *" hx-target="#slides-sidebar" hx-swap="innerHTML swap:0.1s">+</button>
                             </form>
                         </li>
                     </ul>

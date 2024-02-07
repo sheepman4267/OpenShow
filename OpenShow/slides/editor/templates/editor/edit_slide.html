@@ -24,7 +24,7 @@
                 {{ form.order }}
             </fieldset>
 {#            <input type="submit">#}
-            <button hx-select="#editor" hx-target="#editor" hx-swap="outerHTML" hx-post="{% url 'edit-slide' slide.pk %}">Submit</button>
+            <button hx-select="#editor" hx-target="#editor" hx-swap="outerHTML swap:0.1s" hx-post="{% url 'edit-slide' slide.pk %}">Submit</button>
         </form>
         <ul class="segment-list">
             {% for element in slide.get_elements %}
