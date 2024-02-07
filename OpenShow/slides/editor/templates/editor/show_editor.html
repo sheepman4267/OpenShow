@@ -28,7 +28,7 @@
 {#                </dialog>#}
 {#            </span>#}
         </span>
-        <ul class="slides-sidebar">
+        <ul class="slides-sidebar" id="slides-sidebar">
             {% for segment in show.segments.all %}
                 <li class="show-segment">
                     <span class="segment-title">{{ segment.name }}</span>
@@ -50,7 +50,8 @@
                             <form method="post" action="{% url 'new-slide' %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="segment" value="{{ segment.pk }}">
-                                <input type="submit" value="+">
+{#                                <input type="submit" value="+">#}
+                                <button hx-post="{% url 'new-slide' %}" hx-select="#slides-sidebar > *" hx-target="#slides-sidebar" hx-swap="innerHTML">+</button>
                             </form>
                         </li>
                     </ul>
