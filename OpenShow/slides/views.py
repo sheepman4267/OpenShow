@@ -46,13 +46,11 @@ class DisplayView(DetailView):
 class ShowView(DetailView):
     model = Show
     template_name = "slides/show.html"
-    extra_context = {
-        'shows': Show.objects.all(),
-    }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['display_selector_form'] = ShowDisplaySelectorForm(instance=context['show'])
+        context['shows'] = Show.objects.all()
         return context
 
 
