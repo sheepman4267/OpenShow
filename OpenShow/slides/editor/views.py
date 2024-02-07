@@ -261,7 +261,7 @@ class ChangeSlideOrderView(FormView):
 def push_deck_cues(request, pk):
     deck = get_object_or_404(Deck, pk=pk)
     deck.push_cues()
-    return deck.get_absolute_url()
+    return HttpResponseRedirect(deck.get_absolute_url())
 
 
 @transaction.atomic()
