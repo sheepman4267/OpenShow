@@ -104,3 +104,6 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
+
+# Remove restriction on number of files uploaded for "deck from images" functionality
+DATA_UPLOAD_MAX_NUMBER_FILES = None
