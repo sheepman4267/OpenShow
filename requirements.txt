@@ -11,3 +11,4 @@ pypjlink
 gunicorn
 uvicorn
 django-environ
+django-ninja
