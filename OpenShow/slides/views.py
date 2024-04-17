@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse
+from django.utils import timezone
 from django.views.generic import DetailView, FormView, ListView, UpdateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_sameorigin
@@ -12,6 +15,7 @@ from .forms import SlideDisplayForm, ShowDisplaySelectorForm
 # Create your views here.
 from django_eventstream import send_event
 from django.shortcuts import HttpResponse
+
 
 # This approach doesn't work well due to many extra characters being inserted into the HTML/CSS.
 # def send_slide_to_display(request, slide, display):
@@ -74,6 +78,14 @@ class ShowSlideView(FormView):
         show = Show.objects.get(pk=form.cleaned_data['show_pk'])
         if form.cleaned_data['direction']:
             display = show.displays.all().first()
+            if display.previous_slide and display.current_slide.auto_advance:
+                if timezone.now() - \
+                        display.slide_changed_at < \
+                        timedelta(seconds=display.previous_slide.auto_advance_duration):
+                    # Abort and continue silently if we're getting a "next slide" directive and
+                    # the previous slide's auto_advance_duration has not passed
+                    # Manually selecting a different slide will override this.
+                    return HttpResponseRedirect(reverse('show', kwargs={'pk': show.pk}))
             current_slide = display.current_slide
             slide = current_slide.next(form.cleaned_data['direction'])
             next_segment = None
@@ -85,17 +97,21 @@ class ShowSlideView(FormView):
                             if current_segment.slides.first() and form.cleaned_data['direction'] == 'forward':
                                 slide = current_segment.slides.first()
                             elif form.cleaned_data['direction'] == 'reverse':
-                                slide = current_segment.next_with_slides(form.cleaned_data['direction']).get_last_slide()
+                                slide = current_segment.next_with_slides(
+                                    form.cleaned_data['direction']).get_last_slide()
                             elif form.cleaned_data['direction'] == 'forward':
-                                slide = current_segment.next_with_slides(form.cleaned_data['direction']).get_first_slide()
+                                slide = current_segment.next_with_slides(
+                                    form.cleaned_data['direction']).get_first_slide()
                         else:  # ..if current_slide.segment
                             current_segment = current_slide.segment
                             if form.cleaned_data['direction'] == 'reverse' and current_segment.included_deck:
                                 slide = current_segment.included_deck.slides.last()
                             elif form.cleaned_data['direction'] == 'reverse':
-                                slide = current_segment.next_with_slides(form.cleaned_data['direction']).get_last_slide()
+                                slide = current_segment.next_with_slides(
+                                    form.cleaned_data['direction']).get_last_slide()
                             elif form.cleaned_data['direction'] == 'forward':
-                                slide = current_segment.next_with_slides(form.cleaned_data['direction']).get_first_slide()
+                                slide = current_segment.next_with_slides(
+                                    form.cleaned_data['direction']).get_first_slide()
                     except AttributeError:
                         slide = current_slide
                 elif show.advance_loop:
@@ -114,7 +130,7 @@ class ShowSlideView(FormView):
         else:
             slide = Slide.objects.get(pk=form.cleaned_data['slide_pk'])
         slide.send_to_display(show.displays.all(), show=show)
-        return HttpResponseRedirect(reverse('show', kwargs={'pk':show.pk}))
+        return HttpResponseRedirect(reverse('show', kwargs={'pk': show.pk}))
 
 
 class AdvanceModeView(UpdateView):

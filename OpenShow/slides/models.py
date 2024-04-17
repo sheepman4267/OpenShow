@@ -20,6 +20,7 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
     pixel_width = models.IntegerField(default=1920)
     pixel_height = models.IntegerField(default=1080)
     custom_css = models.TextField(null=True, blank=True)
+    slide_changed_at = models.DateTimeField(auto_now=True)
     current_show = models.ForeignKey(
         to='Show',
         null=True,
@@ -31,6 +32,13 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+    )
+    previous_slide = models.ForeignKey(
+        to='Slide',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
     )
     current_theme = models.ForeignKey(
         to='Theme',
@@ -339,6 +347,7 @@ class Slide(models.Model):
         """
         for display in displays:
             slide_theme = self.get_theme()
+            display.previous_slide = display.current_slide  # do the slide shuffle
             display.current_slide = self
             display.current_show = show
             if display.current_theme != slide_theme:
