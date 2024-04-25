@@ -1,0 +1,9 @@
+<head>
+    <style>
+        {{ slide.get_theme.css }}
+    </style>
+    <title>Slide {{ slide.pk }}</title>
+</head>
+<body>
+    {% include 'slides/slide.html' with slide=slide %}
+</body>
