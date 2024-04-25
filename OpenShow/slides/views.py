@@ -2,11 +2,11 @@ from datetime import timedelta
 
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse
 from django.utils import timezone
-from django.views.generic import DetailView, FormView, ListView, UpdateView
+from django.views.generic import DetailView, FormView, ListView, UpdateView, TemplateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.template import loader
-from .models import Slide, Display, Show, Deck
+from .models import Slide, Display, Show, Deck, Transition, Theme
 
 from .forms import SlideDisplayForm, ShowDisplaySelectorForm
 
@@ -28,12 +28,18 @@ from django.shortcuts import HttpResponse
 #     send_event('test', f'display-{display}', rendered_slide)
 
 
-class IndexView(ListView):
+class IndexView(TemplateView):
     model = Show
     template_name = 'slides/index.html'
-    extra_context = {
-        'deck_list': Deck.objects.all()
-    }
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['show_list'] = Show.objects.all()
+        context['deck_list'] = Deck.objects.all()
+        context['theme_list'] = Theme.objects.all()
+        context['display_list'] = Display.objects.all()
+        context['transition_list'] = Transition.objects.all()
+        return context
 
 
 class SlideView(DetailView):

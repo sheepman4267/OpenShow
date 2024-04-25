@@ -1,0 +1,12 @@
+{% load icon %}
+<div class="box">
+    <strong class="block titlebar">New {{ object_type }}</strong>
+    <form method="post" action="{% block action %}{% url action %}{% endblock %}">
+        {% csrf_token %}
+        {% block extra_fields %}
+        {% endblock %}
+        {{ form }}
+        {{ form.errors }}
+        <button type="submit">Submit</button>
+    </form>
+</div>

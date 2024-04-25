@@ -39,9 +39,10 @@ class ShowEditorView(DetailView):
 class ShowCreateView(CreateView):
     model = Show
     fields = ['name']
-    template_name = 'editor/simple_create_form.html'
+    template_name = 'editor/snippets/hx-simple_create_form.html'
     extra_context = {
         'action': 'new-show',
+        'object_type': 'Show',
     }
 
 
@@ -98,9 +99,12 @@ class SlideEditView(UpdateView):
 
 class DeckCreateView(CreateView):
     model = Deck
-    template_name = 'editor/simple_create_form.html'
+    template_name = 'editor/snippets/hx-simple_create_form.html'
     fields = ['name']
-    extra_context = {'action': 'new-deck'}
+    extra_context = {
+        'action': 'new-deck',
+        'object_type': 'Deck',
+    }
 
 
 # class DeckUpdateView(UpdateView):
@@ -128,9 +132,12 @@ class DeckEditorView(UpdateView):
 
 class ThemeCreateView(CreateView):
     model = Theme
-    template_name = 'editor/simple_create_form.html'
+    template_name = 'editor/snippets/hx-simple_create_form.html'
     fields = ['name']
-    extra_context = {'action': 'new-theme'}
+    extra_context = {
+        'action': 'new-theme',
+        'object_type': 'Theme',
+    }
 
 
 class ThemeUpdateView(UpdateView):
@@ -203,9 +210,10 @@ class TransitionEditorView(DetailView):
 class TransitionCreateView(CreateView):
     model = Transition
     fields = ["name"]
-    template_name = "editor/simple_create_form.html"
+    template_name = 'editor/snippets/hx-simple_create_form.html'
     extra_context = {
         'action': 'new-transition',
+        'object_type': 'Transition',
     }
 
 

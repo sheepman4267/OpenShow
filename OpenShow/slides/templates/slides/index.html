@@ -1,26 +1,42 @@
-{% extends 'slides/base.html' %}
+{% extends 'core/base.html' %}
 {% load static %}
 {% load icon %}
 
-{% block additional_css %}
-    <link rel="stylesheet" href="{% static 'editor/index.css' %}">
-    <link rel="stylesheet" href="{% static 'editor/common.css' %}">
+{% block extra_js %}
+    {{ block.super }}
+    <script type="module" src="https://unpkg.com/missing.css@1.1.1/dist/js/tabs.js"></script>
+{% endblock %}
+
+{% block header %}
+    <h1>OpenShow Slides</h1>
 {% endblock %}
 
 {% block content %}
-    <header>
-        <a href="{% url 'index' %}"><button class="icon-button">{% icon 'arrow-left' %}</button></a>
-        <h1>OpenShow Slides</h1>
-        <div class="buttons-right">
-            <a href="{% url 'editor_index' %}">
-                <button class="icon-button">
-                    {% icon 'edit' %}
-                </button>
-            </a>
-        </div>
-    </header>
-    <div>
+    <div role="tablist" aria-label="Select shows or decks to browse">
+        <button role="tab" aria-controls="shows" aria-selected="true">
+            Shows
+        </button>
+        <button role="tab" aria-controls="decks">
+            Decks
+        </button>
+        <button role="tab" aria-controls="themes">
+            Themes
+        </button>
+        <button role="tab" aria-controls="displays">
+            Displays
+        </button>
+        <button role="tab" aria-controls="transitions">
+            Transitions
+        </button>
+    </div>
+    <div id="shows" role="tabpanel">
         <h2>Shows</h2>
+        <p>
+            Shows are collections of slides which show up in the "presentation" view, and can be pushed to displays.
+        </p>
+        <button hx-get="{% url 'new-show' %}" hx-swap="outerHTML">
+            New Show
+        </button>
         <ul>
             {% for show in show_list %}
                 <li>
@@ -29,12 +45,56 @@
             {% endfor %}
         </ul>
     </div>
-    <div>
+    <div id="decks" role="tabpanel" hidden>
         <h2>Decks</h2>
+        <p>
+            Decks are small, reusable collections of slides, which can be linked to segments in Shows.
+        </p>
+        <button hx-get="{% url 'new-deck' %}" hx-swap="outerHTML">
+            New Deck
+        </button>
         <ul>
             {% for deck in deck_list %}
                 <li>
-                    <a href="{% url 'deck' deck.pk %}">{{ deck.name }}</a>
+                    <a href="{% url 'edit-deck' deck.pk %}">{{ deck.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="themes" role="tabpanel" hidden>
+        <h2>Themes</h2>
+        <p>
+            Themes are styles which can be applied for shows, decks, or individual slides.
+        </p>
+        <button hx-get="{% url 'new-theme' %}" hx-swap="outerHTML">
+            New Theme
+        </button>
+        <ul>
+            {% for theme in theme_list %}
+                <li>
+                    <a href="{% url 'edit-theme' theme.pk %}">{{ theme.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="displays" role="tabpanel" hidden>
+        <h2>Displays</h2>
+        <p>
+            Displays can be configured to have the correct resolution, and set custom CSS. Editor not yet implemented.
+        </p>
+    </div>
+    <div id="transitions" role="tabpanel" hidden>
+        <h2>Transitions</h2>
+        <p>
+            CSS keyframes to define the transition from one slide to the next.
+        </p>
+        <button hx-get="{% url 'new-transition' %}" hx-swap="outerHTML">
+            New Transition
+        </button>
+        <ul>
+            {% for transition in transition_list %}
+                <li>
+                    <a href="{% url 'edit-transition' transition.pk %}">{{ transition.name }}</a>
                 </li>
             {% endfor %}
         </ul>

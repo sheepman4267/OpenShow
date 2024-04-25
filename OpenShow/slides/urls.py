@@ -8,7 +8,7 @@ import django_eventstream
 
 urlpatterns = [
     # path('send_message', views.send_message),
-    path('', ListView.as_view(template_name='slides/index.html', model=Show), name='slides-index'),
+    path('', views.IndexView.as_view(), name='slides-index'),
     path('get_message/<channel>', include(django_eventstream.urls)),
     path('<int:pk>', views.SlideView.as_view(), name='slide'),
     path('displays/<int:pk>', views.DisplayView.as_view(), name='display'),
