@@ -14,6 +14,9 @@ class CreateShowFromOOSView(FormView):
     form_class = CreateShowFromOOSForm
     template_name = 'uubloomington_api_connector/create_show_from_oos.html'
     # success_url = reverse_lazy('edit-show', pk=object.pk)
+    extra_context = {
+        'previous_page': 'index',
+    }
 
     def __init__(self):
         self.new_show = None

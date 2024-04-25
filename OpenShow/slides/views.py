@@ -39,6 +39,7 @@ class IndexView(TemplateView):
         context['theme_list'] = Theme.objects.all()
         context['display_list'] = Display.objects.all()
         context['transition_list'] = Transition.objects.all()
+        context['previous_page'] = 'index'
         return context
 
 

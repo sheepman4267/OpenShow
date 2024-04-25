@@ -8,6 +8,9 @@ class DeckFromImagesFormView(FormView):
     form_class = DeckFromImagesForm
     template_name = "deck_from_images/upload.html"
     # success_url = "..."  # Replace with your URL or reverse().
+    extra_context = {
+        'previous_page': 'index',
+    }
 
     def __init__(self):
         self.new_deck = None

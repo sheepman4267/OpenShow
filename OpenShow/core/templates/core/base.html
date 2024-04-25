@@ -1,4 +1,5 @@
 {% load static %}
+{% load icon %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,7 @@
     <title>{% block title %}OpenShow{% endblock %}</title>
 {#    <link rel="stylesheet" href="{% static 'hat/hat.css' %}"#}
     <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
+    <link rel="stylesheet" href="{% static 'core/extras.css' %}">
     <script src="https://unpkg.com/htmx.org@1.9.1"></script>
     <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
     {% block extra_js %}
@@ -13,9 +15,20 @@
 </head>
 <body>
     <header>
-        {% block header %}
-            <h1>OpenShow</h1>
-        {% endblock %}
+        <div class="header-back-button">
+            {% if previous_page %}
+                <a class=inline href="{% url previous_page %}">{% icon 'arrow-left' %}</a>
+            {% endif %}
+        </div>
+        <div class="header-main">
+            {% block header %}
+                <h1>OpenShow</h1>
+            {% endblock %}
+        </div>
+        <div class="header-right-button">
+            {% block header_right_button %}
+            {% endblock %}
+        </div>
     </header>
     <main{% block main_attrs %}{% endblock %}>
         {% block content %}

@@ -9,6 +9,9 @@ from .models import Projector
 class ProjectorListView(ListView):
     model = Projector
     template_name = 'pjlink_integration/list.html'
+    extra_context = {
+        'previous_page': 'index',
+    }
 
 
 class ProjectorCreateView(CreateView):

@@ -1,0 +1,15 @@
+body > header {
+    display: grid;
+    grid-template-columns: 5rem 1fr 5rem;
+    text-align: center;
+}
+
+.header-back-button svg {
+    height: 100%;
+    width: 2rem;
+    margin: auto;
+}
+
+.header-back-button a {
+    margin: 0;
+}
