@@ -62,6 +62,7 @@ class ShowView(DetailView):
         context = super().get_context_data(**kwargs)
         context['display_selector_form'] = ShowDisplaySelectorForm(instance=context['show'])
         context['shows'] = Show.objects.all()
+        context['previous_page'] = 'slides-index'
         return context
 
 

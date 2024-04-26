@@ -10,7 +10,10 @@
     <link rel="stylesheet" href="{% static 'core/extras.css' %}">
     <script src="https://unpkg.com/htmx.org@1.9.1"></script>
     <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     {% block extra_js %}
+    {% endblock %}
+    {% block extra_css %}
     {% endblock %}
 </head>
 <body>
@@ -19,6 +22,8 @@
             {% if previous_page %}
                 <a class=inline href="{% url previous_page %}">{% icon 'arrow-left' %}</a>
             {% endif %}
+            {% block header_left_button %}
+            {% endblock %}
         </div>
         <div class="header-main">
             {% block header %}
@@ -30,9 +35,11 @@
             {% endblock %}
         </div>
     </header>
-    <main{% block main_attrs %}{% endblock %}>
-        {% block content %}
-        {% endblock content %}
-    </main>
+    {% block main %}
+        <main{% block main_attrs %}{% endblock %}>
+            {% block content %}
+            {% endblock content %}
+        </main>
+    {% endblock %}
 </body>
 </html>
