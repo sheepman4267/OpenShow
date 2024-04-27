@@ -34,3 +34,9 @@ h2 {
         max-height: calc(100dvh - 7rem);
     }
 }
+
+@media screen and (min-width: 1420px) {
+    .sidebar-layout.double {
+        grid-template-columns: 18rem 2fr 25rem;
+    }
+}
