@@ -14,6 +14,8 @@
     <h1>{{ deck.name }}</h1>
 {% endblock %}
 
+{% block title %}{{ deck.name }} - OpenShow{% endblock %}
+
 {% block header_right_button %}
     <a href="{% url 'edit-deck' deck.pk %}" class="icon-button" aria-label="Edit {{ deck.name }}">{% icon 'edit-2' %}</a>
 {% endblock %}

@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
 {% endblock %}
 
+{% block title %}Editing {{ transition.name }} - OpenShow{% endblock %}
+
 {% block content %}
     <div id="transition-editor" class="show-editor" data-transition-pk="{{ transition.pk }}">
         <span class="navbar">

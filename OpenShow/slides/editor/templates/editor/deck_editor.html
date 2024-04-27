@@ -12,6 +12,8 @@
     </style>
 {% endblock %}
 
+{% block title %}Editing {{ deck.name }} - OpenShow{% endblock %}
+
 {% block content %}
     <div id="show-editor" class="show-editor" data-deck-pk="{{ deck.pk }}">
         <navbar class="navbar">

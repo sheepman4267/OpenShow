@@ -10,6 +10,8 @@
     <style id="theme">{{ theme.css }}</style>
 {% endblock %}
 
+{% block title %}Editing {{ theme.name }} - OpenShow{% endblock %}
+
 {% block content %}
     <div id="show-editor" class="show-editor" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
         <navbar class="navbar">
