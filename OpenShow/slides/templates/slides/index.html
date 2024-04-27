@@ -56,7 +56,7 @@
         <ul>
             {% for deck in deck_list %}
                 <li>
-                    <a href="{% url 'edit-deck' deck.pk %}">{{ deck.name }}</a>
+                    <a href="{% url 'deck' deck.pk %}">{{ deck.name }}</a>
                 </li>
             {% endfor %}
         </ul>

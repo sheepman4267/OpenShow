@@ -15,7 +15,7 @@
 {% block content %}
     <div id="show-editor" class="show-editor" data-deck-pk="{{ deck.pk }}">
         <navbar class="navbar">
-            <a href="{% url 'slides-index' %}"><button>{% icon 'arrow-left' %}</button></a>
+            <a href="{% url 'deck' pk=deck.pk %}"><button>{% icon 'arrow-left' %}</button></a>
             <h1>{{ deck.name }}</h1>
         </navbar>
         <ul class="slides-sidebar">

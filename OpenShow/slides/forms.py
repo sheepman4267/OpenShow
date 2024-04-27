@@ -4,15 +4,17 @@ from .models import Show
 
 
 class SlideDisplayForm(Form):
-    show_pk = IntegerField()
+    show_pk = IntegerField(required=False)
     slide_pk = IntegerField(required=False)
     direction = CharField(required=False)
+    display_pk_multiple = CharField(required=False)
 
     class Meta:
         fields = [
             'show_pk',
             'slide_pk',
             'direction',
+            'display_pk_multiple',
         ]
 
 

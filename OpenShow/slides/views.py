@@ -74,15 +74,25 @@ class ShowDisplaySelectorView(UpdateView):
 class DeckView(DetailView):
     model = Deck
     template_name = "slides/deck.html"
-    extra_context = {
-        'decks': Deck.objects.all
-    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['decks'] = Deck.objects.all()
+        context['display_list'] = Display.objects.all()
+        context['previous_page'] = 'slides-index'
+        return context
 
 
 class ShowSlideView(FormView):
     form_class = SlideDisplayForm
 
     def form_valid(self, form):
+        if form.cleaned_data['display_pk_multiple']:
+            display_pks = form.cleaned_data['display_pk_multiple'].split(',')
+            displays = [Display.objects.get(pk=int(display_pk)) for display_pk in display_pks]
+            slide = Slide.objects.get(pk=form.cleaned_data['slide_pk'])
+            slide.send_to_display(displays, show=displays[0].current_show)
+            return HttpResponseRedirect(reverse('deck', kwargs={'pk': slide.deck.pk}))
         show = Show.objects.get(pk=form.cleaned_data['show_pk'])
         if form.cleaned_data['direction']:
             display = show.displays.all().first()
