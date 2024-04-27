@@ -33,6 +33,11 @@
                     send "grab-theme" to #slide-style
                     send "grab-slide" to #slide-grabber
                 end
+                on display-{{ display.pk }}-clear
+                    getTransition()
+                    make a <div.slide/>
+                    put it at end of body
+                end
             end
             on animationend remove <.slide:not(:last-child)/> then send unlatch
         </script>

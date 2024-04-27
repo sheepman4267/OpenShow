@@ -159,3 +159,10 @@ class AdvanceModeView(UpdateView):
 class AdvanceLoopView(UpdateView):  # TODO: Combine this and the above view, make this all one proper Django form
     model = Show
     fields = ['advance_loop']
+
+
+def clear_slide(request, pk):
+    display = Display.objects.get(pk=pk)
+    send_event('test', f'display-{display.pk}-clear', f'clearing display {display.pk}')
+    return HttpResponse('OK')
+

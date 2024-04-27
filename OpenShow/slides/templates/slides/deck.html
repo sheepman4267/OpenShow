@@ -87,7 +87,7 @@
 {#                </div>#}
 {#                <hr>#}
                 <div id="display-selector">
-                    <div>Displays:</div>
+                    <div>Displays:
                         <ul>
                             {% for display in display_list %}
                                 <li>
@@ -97,6 +97,13 @@
                                 </li>
                             {% endfor %}
                         </ul>
+                        Clear:
+                        <ul>
+                            {% for display in display_list %}
+                                <button hx-get="{% url 'clear-slide' display.pk %}" hx-swap="none">Clear {{ display.name }}</button>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
 {#            <div class="slide-thumbnail">#}
