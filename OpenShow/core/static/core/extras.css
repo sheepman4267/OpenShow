@@ -19,7 +19,7 @@ body > header {
 }
 
 .sidebar-layout.double {
-    grid-template-columns: 15rem 2fr 1fr;
+    grid-template-columns: 18rem 2fr 1fr;
     height: calc(100dvh - 7rem);
 }
 

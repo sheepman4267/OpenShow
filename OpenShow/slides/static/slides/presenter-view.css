@@ -15,7 +15,7 @@ body:not(#specificity-hack){
 }
 
 #shows-sidebar {
-    max-width: 15rem;
+    max-width: 20rem;
     max-height: calc(100dvh - 7.5rem);
     margin: 0.5rem;
     margin-top: 0;
@@ -69,19 +69,14 @@ body:not(#specificity-hack){
     display: none;
 }
 
-/*#settings-toggle {*/
-/*    margin-bottom: initial;*/
-/*}*/
+#settings-toggle {
+    margin-bottom: initial;
+    margin-inline: auto;
+}
 
 #show-controls .settings.expand {
     display: flex;
     flex-direction: column;
-    /*background: #606060;*/
-    /*border: 3px solid lightgray;*/
-    /*border-radius: 1rem;*/
-    /*padding: 1rem;*/
-    /*font-size: 1.2rem;*/
-    /*gap: 0.5rem;*/
 }
 
 #show-controls .slide-thumbnail {
