@@ -17,7 +17,7 @@
                 <section class="tool-bar">
                     <button hx-get="{% url 'power-on' pk=item.pk %}" hx-swap="none">Power On</button>
                     <button hx-get="{% url 'power-off' pk=item.pk %}" hx-swap="none">Power Off</button>
-                    <button hx-get="{% url 'edit-projector' pk=item.pk %}">Edit</button>
+                    <button hx-get="{% url 'edit-projector' pk=item.pk %}" hx-swap="outerHTML" hx-target="closest <section/>">Edit</button>
                 </section>
             </li>
         {% endfor %}

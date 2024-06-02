@@ -8,5 +8,5 @@
         <label>IP Address</label>
         {{ form.address }}
     </p>
-    <button hx-post="{% block action %}{% url 'edit-projector' pk=form.object.pk %}{% endblock action %}" hx-swap="outerHTML" hx-target="closest <main/>" hx-select="<main/>">Submit</button>
+    <button hx-post="{% block action %}{% url 'edit-projector' pk=object.pk %}{% endblock action %}" hx-swap="outerHTML" hx-target="closest <main/>" hx-select="main">Submit</button>
 </form>
