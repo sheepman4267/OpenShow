@@ -32,6 +32,12 @@
             </ul>
         </div>
         <div id="show-container">
+{#        <script id="slide-select-indicator" type="text/hyperscript">#}
+{#            on load#}
+{#            remove .selected from .selected#}
+{#            add .selected to #slide-{{ show.displays.first.current_slide.pk }}#}
+{#        </script>#}
+{#The above isn't functional for Decks because we don't store the current deck in displays.#}
         <div id="show" class="presentation" data-deck-pk="{{ deck.pk }}">
             <ul>
                 <li>

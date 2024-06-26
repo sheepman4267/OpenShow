@@ -32,6 +32,11 @@
             </ul>
         </div>
         <div id="show-container">
+        <script id="slide-select-indicator" type="text/hyperscript">
+            on load
+            remove .selected from .selected
+            add .selected to #slide-{{ show.displays.first.current_slide.pk }}
+        </script>
         <div id="show" class="presentation" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
             <ul>
                 {% for segment in show.segments.all %}
@@ -45,7 +50,7 @@
                                 {% endif %}
                             >
                                 {% for slide in segment.included_deck.slides.all %}
-                                    <li class="deck-slide {% if slide == show.displays.first.current_slide %}selected{% endif %}" id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
+                                    <li class="deck-slide" id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
                                         {% if slide.cue %}
                                             <p>
                                                 {{ slide.cue }}
@@ -74,13 +79,13 @@
                     {% csrf_token %}
                     <input type="hidden" name="show_pk" value="{{ show.pk }}">
                     <input type="hidden" name="direction" value="reverse">
-                    <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="innerHTML" hx-target="#show-container" hx-select="#show">{% icon 'chevron-left' %}</button>
+                    <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="innerHTML" hx-target="#slide-select-indicator" hx-select="#slide-select-indicator">{% icon 'chevron-left' %}</button>
                 </form>
                 <form action="{% url 'show-slide' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="show_pk" value="{{ show.pk }}">
                     <input type="hidden" name="direction" value="forward">
-                    <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="innerHTML" hx-target="#show-container" hx-select="#show">{% icon 'chevron-right' %}</button>
+                    <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="innerHTML" hx-target="#slide-select-indicator" hx-select="#slide-select-indicator">{% icon 'chevron-right' %}</button>
                 </form>
             </div>
             <button class="iconbutton" id="settings-toggle" _="on click toggle .expand on next <.settings/>">{% icon 'settings' %}</button>

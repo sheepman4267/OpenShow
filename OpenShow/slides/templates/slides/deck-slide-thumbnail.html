@@ -13,7 +13,7 @@
             set my @value to displays
             send 'send-slide' to next <div/>
         ">
-        <div hx-post="{% url 'show-slide' %}" hx-trigger="send-slide" hx-swap="innerHTML" hx-target="#show-container" hx-select="#show">
+        <div hx-post="{% url 'show-slide' %}" hx-trigger="send-slide" hx-swap="none" _="on htmx:afterRequest remove .selected from .selected then add .selected to closest <li/>">
             <iframe scrolling="no" class="slide" srcdoc="{% srcdoc %}{% include 'slides/iframe-slide-thumbnail.html' with slide=slide %}{% endsrcdoc %}"></iframe>
         </div>
     </form>
