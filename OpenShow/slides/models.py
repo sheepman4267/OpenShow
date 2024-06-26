@@ -429,6 +429,15 @@ class Slide(models.Model):
                     self.order = self.segment.slides.last().order + 10
         super(Slide, self).save(*args, **kwargs)
 
+    def has_video(self):
+        result = False
+        for element in self.elements.all():
+            print(bool(element.video))
+            if element.video:
+                result = True
+        return result
+
+
 
 class Transition(models.Model):
     name = models.CharField(max_length=30)

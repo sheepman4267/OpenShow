@@ -1,4 +1,5 @@
 {% load static %}
+{% load icon %}
 <head>
     <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
     <style>
@@ -8,4 +9,9 @@
 </head>
 <body>
     {% include 'slides/slide.html' with slide=slide %}
+    <div id="slide-info-overlays">
+        {% if slide.has_video %}
+            {% icon "film" class='slide-info-icon' %}
+        {% endif %}
+    </div>
 </body>
