@@ -2,6 +2,8 @@ from django.db import models
 from django_eventstream import send_event
 from collections.abc import Iterable
 from django.shortcuts import reverse
+from django.utils import timezone
+from datetime import timedelta
 
 import tinycss2
 
@@ -50,6 +52,55 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
         to='Segment',
         blank=True,
     )  # TODO: What the heck is this for?
+
+    def advance_slide(self, direction):
+        if self.previous_slide and self.current_slide.auto_advance:
+            if timezone.now() - \
+                    self.slide_changed_at < \
+                    timedelta(seconds=self.previous_slide.auto_advance_duration):
+                # Abort and continue silently if we're getting a "next slide" directive and
+                # the previous slide's auto_advance_duration has not passed
+                # Manually selecting a different slide will override this.
+                return 1
+        slide = self.current_slide.next(direction)
+        next_segment = None
+        if not slide:
+            if self.current_show.advance_between_segments:
+                try:  # TODO: review this horrible try/except block
+                    if self.current_slide.deck:
+                        # If we're out of room to iterate through a deck...
+                        current_segment = self.current_show.segments.filter(included_deck=self.current_slide.deck).first()
+                        if current_segment.slides.first() and direction == 'forward':
+                            slide = current_segment.slides.first()
+                        elif direction == 'reverse':
+                            slide = current_segment.next_with_slides(direction).get_last_slide()
+                        elif direction == 'forward':
+                            slide = current_segment.next_with_slides(direction).get_first_slide()
+                    else:  # ..if current_slide.segment
+                        current_segment = self.current_slide.segment
+                        if direction == 'reverse' and current_segment.included_deck:
+                            slide = current_segment.included_deck.slides.last()
+                        elif direction == 'reverse':
+                            slide = current_segment.next_with_slides(direction).get_last_slide()
+                        elif direction == 'forward':
+                            slide = current_segment.next_with_slides(direction).get_first_slide()
+                except AttributeError:
+                    slide = self.current_slide
+            elif self.current_show.advance_loop:
+                if direction == 'reverse':
+                    if self.current_slide.deck:
+                        slide = self.current_slide.deck.slides.last()
+                    else:
+                        slide = self.current_slide.segment.slides.last()
+                elif direction == 'forward':
+                    if self.current_slide.deck:
+                        slide = self.current_slide.deck.slides.first()
+                    else:
+                        slide = self.current_slide.segment.slides.first()
+            else:
+                slide = self.current_slide
+        slide.send_to_display([self, ], self.current_show)
+        return 0
 
     def __str__(self):
         return self.name
