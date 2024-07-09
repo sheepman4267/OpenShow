@@ -48,6 +48,13 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
         blank=True,
         on_delete=models.SET_NULL,
     )
+    current_deck = models.ForeignKey(
+        to='Deck',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='current_displays'
+    )
     segments = models.ManyToManyField(
         to='Segment',
         blank=True,
@@ -387,12 +394,13 @@ class Slide(models.Model):
         #     raise RuntimeError('A slide must be part of something... something has gone very wrong.')
         return reverse('edit-slide', kwargs={'pk': self.pk})
 
-    def send_to_display(self, displays:Iterable, show) -> None:
+    def send_to_display(self, displays:Iterable, show:None or Show = None) -> None:
         """
         :param displays:
         An iterable (probably a QuerySet) of Display objects to display the slide on
         :param show:
-        The Show object which this slide is being displayed from currently
+        The Show object which this slide is being displayed from currently. If this is set to None or not supplied,
+        we assume that the slide is being displayed directly from a deck rather than a show.
         :return:
         This method always returns None.
         """
@@ -401,6 +409,10 @@ class Slide(models.Model):
             display.previous_slide = display.current_slide  # do the slide shuffle
             display.current_slide = self
             display.current_show = show
+            if show is None:
+                display.current_deck = self.deck
+            else:
+                display.current_deck = None
             if display.current_theme != slide_theme:
                 display.current_theme = slide_theme
                 display.save()

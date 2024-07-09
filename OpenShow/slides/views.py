@@ -91,7 +91,7 @@ class ShowSlideView(FormView):
             display_pks = form.cleaned_data['display_pk_multiple'].split(',')
             displays = [Display.objects.get(pk=int(display_pk)) for display_pk in display_pks]
             slide = Slide.objects.get(pk=form.cleaned_data['slide_pk'])
-            slide.send_to_display(displays, show=displays[0].current_show)
+            slide.send_to_display(displays)
             return HttpResponseRedirect(reverse('deck', kwargs={'pk': slide.deck.pk}))
         show = Show.objects.get(pk=form.cleaned_data['show_pk'])
         if form.cleaned_data['direction']:
