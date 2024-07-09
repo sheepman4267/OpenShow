@@ -17,6 +17,7 @@ class InvalidArgumentException(Exception):
 class NotSupportedException(Exception):
     pass
 
+
 class Display(models.Model):  # A set of characteristics used to modify slide appearance for different displays
     name = models.CharField(max_length=100)
     pixel_width = models.IntegerField(default=1920)
