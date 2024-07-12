@@ -58,20 +58,28 @@
         </div>
         </div>
         <div id="show-controls" class="mobile-hidden">
-{#            <div id="forward-reverse">#}
-{#                <form action="{% url 'show-slide' %}" method="POST">#}
-{#                    {% csrf_token %}#}
-{#                    <input type="hidden" name="show_pk" value="{{ show.pk }}">#}
-{#                    <input type="hidden" name="direction" value="reverse">#}
-{#                    <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="innerHTML" hx-target="#show-container" hx-select="#show">{% icon 'chevron-left' %}</button>#}
-{#                </form>#}
-{#                <form action="{% url 'show-slide' %}" method="POST">#}
-{#                    {% csrf_token %}#}
-{#                    <input type="hidden" name="show_pk" value="{{ show.pk }}">#}
-{#                    <input type="hidden" name="direction" value="forward">#}
-{#                    <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="innerHTML" hx-target="#show-container" hx-select="#show">{% icon 'chevron-right' %}</button>#}
-{#                </form>#}
-{#            </div>#}
+            <div id="forward-reverse">
+                <button class="icon-button" _="
+                on click
+                for display_checkbox in <input.display-checkbox:checked/>
+                    set display_pk to display_checkbox's @data-display-pk
+                    then log display_pk
+                    set req_body to `{\&quot;display_pk&quot;: $display_pk, &quot;direction&quot;: &quot;reverse&quot;}`
+                    log req_body
+                    then fetch {% url "api-1.0.0:next_slide" %} with method:'POST', body: req_body
+                    then halt
+">{% icon 'chevron-left' %}</button>
+                <button class="icon-button" _="
+                on click
+                for display_checkbox in <input.display-checkbox:checked/>
+                    set display_pk to display_checkbox's @data-display-pk
+                    then log display_pk
+                    set req_body to `{\&quot;display_pk&quot;: $display_pk, &quot;direction&quot;: &quot;forward&quot;}`
+                    log req_body
+                    then fetch {% url "api-1.0.0:next_slide" %} with method:'POST', body: req_body
+                    then halt
+">{% icon 'chevron-right' %}</button>
+            </div>
             <button class="iconbutton" id="settings-toggle" _="on click toggle .expand on next <.settings/>">{% icon 'settings' %}</button>
             <div class="settings box expand">
 {#                <form action="{% url 'advance-mode' show.pk %}">#}

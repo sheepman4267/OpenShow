@@ -62,6 +62,26 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
     )  # TODO: What the heck is this for?
 
     def advance_slide(self, direction):
+        if self.current_deck:
+            self._advance_slide_in_deck(direction)
+        elif self.current_show:
+            self._advance_slide_in_show(direction)
+
+    def _advance_slide_in_deck(self, direction):
+        if self.previous_slide and self.current_slide.auto_advance:
+            if timezone.now() - \
+                    self.slide_changed_at < \
+                    timedelta(seconds=self.previous_slide.auto_advance_duration):
+                # Abort and continue silently if we're getting a "next slide" directive and
+                # the previous slide's auto_advance_duration has not passed
+                # Manually selecting a different slide will override this.
+                return 1
+        slide = self.current_slide.next(direction)
+        if not slide:
+            slide = self.current_slide
+        slide.send_to_display([self, ])
+
+    def _advance_slide_in_show(self, direction):
         if self.previous_slide and self.current_slide.auto_advance:
             if timezone.now() - \
                     self.slide_changed_at < \
