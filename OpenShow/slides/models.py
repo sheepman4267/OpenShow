@@ -434,7 +434,8 @@ class Slide(models.Model):
                 display.current_deck = self.deck
             else:
                 display.current_deck = None
-            if display.current_theme != slide_theme:
+            if display.current_theme != slide_theme and slide_theme is not None:
+                # TODO: Add a UI warning to make it more obvious when a show has no theme set
                 display.current_theme = slide_theme
                 display.save()
                 send_event('test', f'display-{display.pk}-theme', f'sending theme {slide_theme.pk} to display {display.pk}')
