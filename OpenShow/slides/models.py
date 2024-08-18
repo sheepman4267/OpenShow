@@ -182,6 +182,12 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
             slide.cue = cue
             slide.save()
 
+    def pull_aoml(self):
+        aoml_str = ''
+        for slide in self.slides.all():
+            aoml_str += slide.pull_aoml()
+            aoml_str += '~~\r'
+        return aoml_str
 
     class Meta:
         ordering = ('name',)
@@ -522,6 +528,12 @@ class Slide(models.Model):
                 result = True
         return result
 
+    def pull_aoml(self):
+        aoml_str = ''
+        for element in self.elements.all().order_by('order'):
+            aoml_str += f'>>{element.css_class}||\r{element.body}\r'.replace('<br>', '\\')
+            # TODO: Handle video/image once the AOML spec supports media
+        return aoml_str
 
 
 class Transition(models.Model):

@@ -286,3 +286,10 @@ def push_deck_slide_text(request, pk):
             element.slide = slide
             element.save()
     return HttpResponseRedirect(deck.get_absolute_url())
+
+
+def pull_aoml_text(request, pk):
+    deck = get_object_or_404(Deck, pk=pk)
+    deck.slide_text_markup = deck.pull_aoml()
+    deck.save()
+    return HttpResponseRedirect(deck.get_absolute_url())

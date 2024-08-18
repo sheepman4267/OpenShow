@@ -17,6 +17,7 @@ urlpatterns = [
     path('deck/<int:pk>', DeckEditorView.as_view(), name='edit-deck'),
     path('deck/<int:pk>/push-cues', push_deck_cues, name='push-deck-cues'),
     path('deck/<int:pk>/push-text', push_deck_slide_text, name='push-deck-text'),
+    path('deck/<int:pk>/pull-aoml', pull_aoml_text, name='pull-aoml-text'),
     path('theme/new', ThemeCreateView.as_view(), name='new-theme'),
     path('theme/<int:pk>', ThemeUpdateView.as_view(), name='edit-theme'),
     path('lorem/<int:words>/<str:css_class>', generate_lorem, name='lorem'),
