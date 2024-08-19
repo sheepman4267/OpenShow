@@ -167,6 +167,15 @@ class ThemeUpdateView(UpdateView):
     }
 
 
+class ThemeDeleteView(DeleteView):
+    model = Theme
+    success_url = reverse_lazy('slides-index')
+    template_name = 'editor/generic_confirm_delete.html'
+    extra_context = {
+        'action': 'delete-theme',
+    }
+
+
 class SetThemeView(UpdateView):
     model = Show
     # fields = ['theme']

@@ -48,6 +48,7 @@
                 {{ form.css }}
                 <input type="submit">
             </form>
+            <button hx-get="{% url 'delete-theme' pk=theme.pk %}" hx-swap="outerHTML">Delete Theme</button>
             <ul class="class-list">
                 {% for css_class in theme.get_css_classes %}
                     <li>
