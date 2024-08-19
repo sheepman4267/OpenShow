@@ -46,6 +46,12 @@ class ShowCreateView(CreateView):
     }
 
 
+class ShowDeleteView(DeleteView):
+    model = Show
+    success_url = reverse_lazy('slides-index')
+    template_name = 'editor/show_confirm_delete.html'
+
+
 class SegmentCreateView(CreateView):
     model = Segment
     fields = ['show', 'name', 'order']

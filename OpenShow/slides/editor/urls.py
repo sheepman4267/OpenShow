@@ -5,6 +5,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name='editor_index'),
     path('show/<int:pk>', ShowEditorView.as_view(), name='edit-show'),
     path('show/new', ShowCreateView.as_view(), name='new-show'),
+    path('show/<int:pk>/delete', ShowDeleteView.as_view(), name='delete-show'),
     path('segment/<int:pk>', SegmentUpdateView.as_view(), name='edit-segment'),
     path('segment/new', SegmentCreateView.as_view(), name='new-segment'),
     path('slide/new', SlideCreateView.as_view(), name='new-slide'),
