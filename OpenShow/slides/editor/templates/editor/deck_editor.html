@@ -116,6 +116,7 @@
             <a href="{% url 'pull-aoml-text' deck.pk %}">
                 Pull Deck AOML
             </a>
+            <button hx-get="{% url 'delete-deck' pk=deck.pk %}" hx-swap="outerHTML">Delete Deck</button>
         </div>
     </div>
 {% endblock %}

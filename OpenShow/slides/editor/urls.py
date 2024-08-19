@@ -16,6 +16,7 @@ urlpatterns = [
     path('slide/reorder', ChangeSlideOrderView.as_view(), name='reorder-slide'),
     path('deck/new', DeckCreateView.as_view(), name='new-deck'),
     path('deck/<int:pk>', DeckEditorView.as_view(), name='edit-deck'),
+    path('deck/<int:pk>/delete', DeckDeleteView.as_view(), name='delete-deck'),
     path('deck/<int:pk>/push-cues', push_deck_cues, name='push-deck-cues'),
     path('deck/<int:pk>/push-text', push_deck_slide_text, name='push-deck-text'),
     path('deck/<int:pk>/pull-aoml', pull_aoml_text, name='pull-aoml-text'),

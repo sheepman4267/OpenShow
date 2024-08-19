@@ -1,4 +1,4 @@
-<form method="post" action="{% url 'delete-show' pk=object.pk %}">
+<form method="post" action="{% url action pk=object.pk %}">
     {% csrf_token %}
     <p>Are you sure you want to delete "{{ object }}"?</p>
     {{ form }}

@@ -49,7 +49,10 @@ class ShowCreateView(CreateView):
 class ShowDeleteView(DeleteView):
     model = Show
     success_url = reverse_lazy('slides-index')
-    template_name = 'editor/show_confirm_delete.html'
+    template_name = 'editor/generic_confirm_delete.html'
+    extra_context = {
+        'action': 'delete-show',
+    }
 
 
 class SegmentCreateView(CreateView):
@@ -134,6 +137,15 @@ class DeckEditorView(UpdateView):
     ]
     template_name = 'editor/deck_editor.html'
     # extra_context = {'display': Display.objects.all().first()}
+
+
+class DeckDeleteView(DeleteView):
+    model = Deck
+    success_url = reverse_lazy('slides-index')
+    template_name = 'editor/generic_confirm_delete.html'
+    extra_context = {
+        'action': 'delete-deck',
+    }
 
 
 class ThemeCreateView(CreateView):
