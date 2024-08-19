@@ -106,6 +106,23 @@ class SlideEditView(UpdateView):
     template_name = 'editor/edit_slide.html'
 
 
+class SlideDeleteView(DeleteView):
+    model = Slide
+    template_name = 'editor/generic_confirm_delete.html'
+    extra_context = {
+        'action': 'delete-slide',
+    }
+
+    def get_success_url(self):
+        if self.object.deck:
+            success_url = reverse_lazy('edit-deck', kwargs={"pk": self.object.deck.pk})
+        elif self.object.segment:
+            success_url = reverse_lazy('edit-show', kwargs={"pk": self.object.segment.show.pk})
+        else:
+            success_url = reverse_lazy('index')
+        return success_url
+
+
 class DeckCreateView(CreateView):
     model = Deck
     template_name = 'editor/snippets/hx-simple_create_form.html'
