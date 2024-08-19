@@ -225,3 +225,32 @@ ul > a {
 :not(.htmx-swapping) {
     transition: background-color 0.1s, opacity 0.1s;
 }
+
+.confirm-delete-modal {
+    /*position: absolute;*/
+    /*top: calc(50%);*/
+    /*left: 50%;*/
+    margin: auto;
+    margin-top: calc(50dvh - 4rem);
+    width: 15rem;
+    height: 8rem;
+    background: #daa5a5;
+    color: #000000;
+    border: 3px solid #a10000;
+    padding: 1rem;
+    text-align: center;
+
+    border-radius: 0.5rem;
+    z-index: 1070;
+}
+
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(0.5rem);
+}
