@@ -306,7 +306,7 @@ class ChangeSlideOrderView(FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return self.moved_slide.get_absolute_url()
+        return self.moved_slide.deck_or_segment().get_absolute_url()
 
 
 def push_deck_cues(request, pk):
