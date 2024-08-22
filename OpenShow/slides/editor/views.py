@@ -19,7 +19,6 @@ class NotSupportedException(Exception):
     pass
 
 
-
 class IndexView(ListView):
     queryset = Show.objects.all()
     template_name = 'editor/index.html'
