@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
     <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
     <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
-    {% block title %}Editing {{ show.name }} - OpenShow{% endblock %}
     <style>
         {{ show.theme.css }}
     </style>
 {% endblock %}
+
+{% block title %}Editing {{ show.name }} - OpenShow{% endblock %}
 
 {% block content %}
     <div id="show-editor" class="show-editor" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
