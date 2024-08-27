@@ -14,6 +14,7 @@ urlpatterns = [
     path('slide/element/new', SlideElementCreateView.as_view(), name='new-element'),
     path('slide/element/<int:pk>', SlideElementUpdateView.as_view(), name='edit-element'),
     path('slide/element/delete/<int:pk>', SlideElementDeleteView.as_view(), name='delete-element'),
+    path('slide/element/<int:pk>/text-edit', EditSlideElementTextView.as_view(), name='edit-element-text'),
     path('slide/reorder', ChangeSlideOrderView.as_view(), name='reorder-slide'),
     path('deck/new', DeckCreateView.as_view(), name='new-deck'),
     path('deck/<int:pk>', DeckEditorView.as_view(), name='edit-deck'),

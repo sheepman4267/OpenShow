@@ -1,3 +1,5 @@
+from xml.dom.minidom import Element
+
 from django.shortcuts import render, reverse, get_object_or_404, HttpResponseRedirect
 from django.views.generic import DetailView, CreateView, ListView, UpdateView, FormView, DeleteView
 from django.db import transaction
@@ -336,3 +338,12 @@ def pull_aoml_text(request, pk):
     deck.slide_text_markup = deck.pull_aoml()
     deck.save()
     return HttpResponseRedirect(deck.get_absolute_url())
+
+
+class EditSlideElementTextView(UpdateView):
+    model = SlideElement
+    fields = ['body',]
+    template_name = 'editor/element_text_edit.html'
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()

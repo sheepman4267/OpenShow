@@ -254,3 +254,15 @@ ul > a {
     background-color: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(0.5rem);
 }
+
+.editor-editable {
+    outline: 4px solid red;
+}
+
+.element-edit-buttons {
+    scale: 3;
+    width: fit-content;
+    position: absolute;
+    right: 50px;
+}
+
