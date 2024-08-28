@@ -607,3 +607,35 @@ class Theme(models.Model):
         return self.name
 
 
+class ThemeRule(models.Model):
+    css_selector = models.CharField(max_length=100, help_text="CSS Selector")
+    properties = models.TextField()
+    base_rule = models.BooleanField(default=False)
+    theme = models.ForeignKey(
+        to=Theme,
+        on_delete=models.CASCADE,
+        related_name='rules',
+    )
+
+
+class ThemeVariant(models.Model):
+    name = models.CharField(max_length=100)
+    theme = models.ForeignKey(
+        to=Theme,
+        on_delete=models.CASCADE,
+        related_name='variants',
+    )
+
+
+class ThemeVariantRule(models.Model):
+    rule = models.ForeignKey(
+        to=ThemeRule,
+        on_delete=models.CASCADE,
+        related_name='variants',
+    )
+    properties = models.TextField()
+    variant = models.ForeignKey(
+        to=ThemeVariant,
+        on_delete=models.CASCADE,
+        related_name='rules',
+    )
