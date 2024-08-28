@@ -1,7 +1,11 @@
 <div id="slide" class="slide">
     {% for element in slide.get_elements %}
-        <div class="{{ element.css_class }}" hx-get="{% url 'edit-element-text' pk=element.pk %}" hx-swap="outerHTML" id="element-{{ element.pk }}">
-            {{ element.body|safe }}
+        <div class="{{ element.css_class }} editor-element" hx-get="{% url 'edit-element-text' pk=element.pk %}" hx-swap="outerHTML" id="element-{{ element.pk }}">
+            {% if element.body %}
+                {{ element.body|safe }}
+            {% else %}
+                <i class="hint">Click to edit</i>
+            {% endif %}
             {% if element.image %}
                 <img src="{{ element.image.url }}">
             {% endif %}

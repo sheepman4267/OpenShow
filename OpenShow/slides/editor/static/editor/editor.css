@@ -244,6 +244,12 @@ ul > a {
     z-index: 1070;
 }
 
+.confirm-delete-modal {
+    background: #daa5a5;
+    color: #000000;
+    border: 3px solid #a10000;
+}
+
 .modal-container {
     position: fixed;
     top: 0;
@@ -266,3 +272,10 @@ ul > a {
     right: 50px;
 }
 
+.editor-element {
+    min-height: 2rem;
+}
+
+.editor-element .hint {
+    opacity: 0.75;
+}
