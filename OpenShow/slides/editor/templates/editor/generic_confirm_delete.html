@@ -1,5 +1,5 @@
 <div class="modal-container">
-    <form method="post" action="{% url action pk=object.pk %}" class="confirm-delete-modal">
+    <form method="post" action="{% url action pk=object.pk %}" class="confirm-delete-modal modal">
         {% csrf_token %}
         <p>Are you sure you want to delete "{{ object }}"?</p>
         {{ form }}
