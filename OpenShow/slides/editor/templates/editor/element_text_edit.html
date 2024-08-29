@@ -14,9 +14,7 @@
                 then log my @text
                 then log <.grow-wrap/>'s @data-replicated-value
         "
-        >
-            {{ object.get_editable_text|safe }}
-        </textarea>
+        >{{ object.get_editable_text|safe }}</textarea>
     </div>
 {#    <input type="hidden" id="element-{{ object.pk }}-body" name="body">#}
     <div class="element-edit-buttons">
