@@ -4,9 +4,9 @@ from django.shortcuts import render, reverse, get_object_or_404, HttpResponseRed
 from django.views.generic import DetailView, CreateView, ListView, UpdateView, FormView, DeleteView
 from django.db import transaction
 
-from ..models import Show, Segment, Slide, SlideElement, Display, Deck, Theme, Transition, TransitionKeyframe
+from ...models import Show, Segment, Slide, SlideElement, Display, Deck, Theme, Transition, TransitionKeyframe
 
-from .forms import DeleteSlideElementForm, SetThemeForm, ChangeSlideOrderForm
+from ..forms import DeleteSlideElementForm, SetThemeForm, ChangeSlideOrderForm, EditSlideElementTextForm
 
 import slides.aoml_parser as aoml
 
@@ -20,40 +20,6 @@ import lorem
 class NotSupportedException(Exception):
     pass
 
-
-class IndexView(ListView):
-    queryset = Show.objects.all()
-    template_name = 'editor/index.html'
-    extra_context = {
-        'deck_list': Deck.objects.all,
-        'theme_list': Theme.objects.all,
-        'display_list': Display.objects.all,
-    }
-
-
-class ShowEditorView(DetailView):
-    queryset = Show.objects.all()
-    template_name = 'editor/show_editor.html'
-    # extra_context = {'display': Display.objects.all().first()}
-
-
-class ShowCreateView(CreateView):
-    model = Show
-    fields = ['name']
-    template_name = 'editor/snippets/hx-simple_create_form.html'
-    extra_context = {
-        'action': 'new-show',
-        'object_type': 'Show',
-    }
-
-
-class ShowDeleteView(DeleteView):
-    model = Show
-    success_url = reverse_lazy('slides-index')
-    template_name = 'editor/generic_confirm_delete.html'
-    extra_context = {
-        'action': 'delete-show',
-    }
 
 
 class SegmentCreateView(CreateView):

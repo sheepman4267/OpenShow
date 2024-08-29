@@ -1,6 +1,9 @@
 from django.urls import path
 from .views import *
 
+from slides.editor.views.index import IndexView
+from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView
+
 urlpatterns = [
     path('', IndexView.as_view(), name='editor_index'),
     path('show/<int:pk>', ShowEditorView.as_view(), name='edit-show'),
