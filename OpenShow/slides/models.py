@@ -365,6 +365,10 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
                 self.order = 1
         super(SlideElement, self).save(*args, **kwargs)
 
+    def get_editable_text(self):
+        self.body = self.body.replace('<br>', '\n')
+        return self.body
+
 
 class QRCodeElement(SlideElement):
     link = models.TextField()

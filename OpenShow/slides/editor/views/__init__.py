@@ -307,8 +307,9 @@ def pull_aoml_text(request, pk):
 
 
 class EditSlideElementTextView(UpdateView):
+    form_class = EditSlideElementTextForm
     model = SlideElement
-    fields = ['body',]
+    # fields = ['body',]
     template_name = 'editor/element_text_edit.html'
 
     def get_success_url(self):

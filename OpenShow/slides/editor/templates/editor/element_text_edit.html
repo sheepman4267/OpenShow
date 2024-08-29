@@ -1,8 +1,24 @@
 {% load icon %}
 <form id="form-{{ object.pk }}" class="{{ object.css_class }}">
     {% csrf_token %}
-    <div id="edit-element-{{ object.pk }}" class="editor-editable" contenteditable="true">{{ object.body|safe }}</div>
-    <input type="hidden" id="element-{{ object.pk }}-body" name="body">
+    <div class="grow-wrap">
+        <textarea
+                id="edit-element-{{ object.pk }}"
+                name="body"
+                class="editor-editable"
+    {#            contenteditable="true"#}
+    {#            _="on keyup set offset to document.getSelection() then log offset"#}
+                _="
+                on input or load
+                set <.grow-wrap/>'s @data-replicated-value to my innerHTML
+                then log my @text
+                then log <.grow-wrap/>'s @data-replicated-value
+        "
+        >
+            {{ object.get_editable_text|safe }}
+        </textarea>
+    </div>
+{#    <input type="hidden" id="element-{{ object.pk }}-body" name="body">#}
     <div class="element-edit-buttons">
         <button
                 hx-select="#element-{{ object.pk }}"
@@ -12,8 +28,8 @@
                 hx-trigger="hs-submit"
                 _="
                 def submit_text
-                    set #element-{{ object.pk }}-body's @value to #edit-element-{{ object.pk }}'s innerHTML
-                    then send 'hs-submit' to me
+{#                    set #element-{{ object.pk }}-body's @value to #edit-element-{{ object.pk }}'s innerHTML#}
+                    send 'hs-submit' to me
                 end
                 on click
                     submit_text()

@@ -263,6 +263,11 @@ ul > a {
 
 .editor-editable {
     outline: 4px solid red;
+    font-size: unset;
+    overflow: unset;
+    height: unset;
+    text-align: unset;
+    background: transparent;
 }
 
 .element-edit-buttons {
@@ -279,3 +284,29 @@ ul > a {
 .editor-element .hint {
     opacity: 0.75;
 }
+
+.grow-wrap {
+    display: grid;
+}
+
+.grow-wrap::after {
+    content: attr(data-replicated-value) " ";
+    white-space: pre-wrap;
+    visibility: hidden;
+}
+
+.grow-wrap > textarea {
+    resize: none;
+    overflow: hidden;
+}
+
+.grow-wrap > textarea,
+.grow-wrap::after {
+    outline: 4px solid red;
+    border: none;
+    padding: 0;
+    font: inherit;
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+/*Thanks to https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/ for grow-wrap*/
