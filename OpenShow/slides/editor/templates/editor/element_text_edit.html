@@ -10,9 +10,7 @@
     {#            _="on keyup set offset to document.getSelection() then log offset"#}
                 _="
                 on input or load
-                set <.grow-wrap/>'s @data-replicated-value to my innerHTML
-                then log my @text
-                then log <.grow-wrap/>'s @data-replicated-value
+                set <.grow-wrap/>'s @data-replicated-value to me.value
         "
         >{{ object.get_editable_text|safe }}</textarea>
     </div>
