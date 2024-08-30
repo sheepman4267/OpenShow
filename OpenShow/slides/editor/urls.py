@@ -1,8 +1,15 @@
 from django.urls import path
-from .views import *
 
 from slides.editor.views.index import IndexView
-from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView
+from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView, SetThemeView, check_theme_compatibility
+from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView
+from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView
+from slides.editor.views.slide_element import SlideElementCreateView, SlideElementUpdateView, SlideElementDeleteView, SlideElementDeleteView, EditSlideElementTextView
+from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteView, push_deck_cues, push_deck_slide_text, pull_aoml_text
+from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDeleteView
+from slides.editor.views.utils import generate_lorem
+from slides.editor.views.transition import TransitionEditorView, TransitionCreateView, TransitionKeyframeCreateView, TransitionKeyframeUpdateView, TransitionEditorIndexView
+
 
 urlpatterns = [
     path('', IndexView.as_view(), name='editor_index'),
