@@ -28,7 +28,7 @@ class SlideElementDeleteView(DeleteView):
         return super().form_valid(form)
 
 
-class EditSlideElementTextView(UpdateView):
+class SlideElementUpdateTextView(UpdateView):
     form_class = EditSlideElementTextForm
     model = SlideElement
     # fields = ['body',]

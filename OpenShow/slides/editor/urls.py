@@ -4,7 +4,7 @@ from slides.editor.views.index import IndexView
 from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView, SetThemeView, check_theme_compatibility
 from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView
 from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView
-from slides.editor.views.slide_element import SlideElementCreateView, SlideElementUpdateView, SlideElementDeleteView, SlideElementDeleteView, EditSlideElementTextView
+from slides.editor.views.slide_element import SlideElementCreateView, SlideElementUpdateView, SlideElementDeleteView, SlideElementDeleteView, SlideElementUpdateTextView
 from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteView, push_deck_cues, push_deck_slide_text, pull_aoml_text
 from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDeleteView
 from slides.editor.views.utils import generate_lorem
@@ -24,7 +24,7 @@ urlpatterns = [
     path('slide/element/new', SlideElementCreateView.as_view(), name='new-element'),
     path('slide/element/<int:pk>', SlideElementUpdateView.as_view(), name='edit-element'),
     path('slide/element/delete/<int:pk>', SlideElementDeleteView.as_view(), name='delete-element'),
-    path('slide/element/<int:pk>/text-edit', EditSlideElementTextView.as_view(), name='edit-element-text'),
+    path('slide/element/<int:pk>/text-edit', SlideElementUpdateTextView.as_view(), name='edit-element-text'),
     path('slide/reorder', ChangeSlideOrderView.as_view(), name='reorder-slide'),
     path('deck/new', DeckCreateView.as_view(), name='new-deck'),
     path('deck/<int:pk>', DeckEditorView.as_view(), name='edit-deck'),
