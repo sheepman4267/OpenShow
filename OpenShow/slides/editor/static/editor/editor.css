@@ -325,6 +325,7 @@ ul > a {
     display: inline;
 }
 
+.element-action-button-container:has(form),
 .editor-element:hover .element-action-button-container {
     display: block;
 }
