@@ -7,7 +7,7 @@
             {% elif element.video %}
                 <i class="hint">Video: {{ element.video }}</i>
             {% elif not element.image %}
-                <i class="hint">Click to edit</i>
+                <i class="hint">Double-click to edit</i>
             {% endif %}
             {% if element.image %}
                 <img src="{{ element.image.url }}">
