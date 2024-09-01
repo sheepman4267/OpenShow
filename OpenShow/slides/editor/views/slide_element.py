@@ -45,3 +45,12 @@ class SlideElementUpdateCSSClassView(UpdateView):
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
+
+class SlideElementUpdateImageView(UpdateView):
+    model = SlideElement
+    fields = ['image']
+    template_name = 'editor/element_image_edit.html'
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()

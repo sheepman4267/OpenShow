@@ -4,7 +4,7 @@
         <div class="{{ element.css_class }} editor-element" hx-trigger="dblclick" hx-get="{% url 'edit-element-text' pk=element.pk %}" hx-swap="outerHTML" id="element-{{ element.pk }}">
             {% if element.body %}
                 {{ element.body|safe }}
-            {% else %}
+            {% elif not element.image and not element.video %}
                 <i class="hint">Click to edit</i>
             {% endif %}
             {% if element.image %}
@@ -13,6 +13,7 @@
             <nav class="element-action-button-container">
                 <button hx-get="{% url 'delete-element' pk=element.pk %}">{% icon 'trash-2' %}</button>
                 <button hx-get="{% url 'edit-element-css-class' pk=element.pk %}">{% icon 'pen-tool' %}</button>
+                <button hx-get="{% url 'edit-element-image' pk=element.pk %}">{% icon 'image' %}</button>
             </nav>
         </div>
     {% endfor %}

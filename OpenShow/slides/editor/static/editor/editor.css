@@ -319,6 +319,7 @@ ul > a {
     left: 10px;
     display: none;
     height: min-content;
+    text-shadow: none;
 }
 
 .element-action-button-container > * {
@@ -346,6 +347,25 @@ ul > a {
 .element-action-button-container button svg {
     height: 3rem;
     width: 3rem;
+}
+
+.element-action-button-container .element-form-box {
+    background: #606060;
+    border: 6px solid darkgray;
+    border-radius: 2rem;
+    font-size: 2rem;
+    display: inline-block;
+    padding: 1rem;
+    text-align: left;
+}
+
+.element-action-button-container .element-form-box * {
+    font-size: 2rem;
+}
+
+.element-action-button-container .element-form-box input[type=checkbox] {
+    height: 2rem;
+    width: 2rem;
 }
 
 button.danger {
