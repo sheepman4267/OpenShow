@@ -36,3 +36,12 @@ class SlideElementUpdateTextView(UpdateView):
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
+
+class SlideElementUpdateCSSClassView(UpdateView):
+    model = SlideElement
+    fields = ['css_class']
+    template_name = 'editor/element_css_class_edit.html'
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()

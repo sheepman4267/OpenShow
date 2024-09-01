@@ -1,0 +1,13 @@
+{% load icon %}
+<form _="on dblclick halt">  {# Halt doubleclick events so selecting text in our fields isn't super frustrating #}
+    {% csrf_token %}
+    {{ form.css_class }}
+    <button
+        hx-post="{% url 'edit-element-css-class' object.pk %}"
+        hx-select="#element-{{ object.pk }}"
+        hx-target="#element-{{ object.pk }}"
+        hx-swap="outerHTML swap:0.1s"
+    >
+        {% icon 'check' %}
+    </button>
+</form>
