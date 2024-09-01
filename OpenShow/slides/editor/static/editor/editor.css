@@ -321,6 +321,10 @@ ul > a {
     height: min-content;
 }
 
+.element-action-button-container > * {
+    display: inline;
+}
+
 .editor-element:hover .element-action-button-container {
     display: block;
 }
@@ -341,4 +345,9 @@ ul > a {
 .element-action-button-container button svg {
     height: 3rem;
     width: 3rem;
+}
+
+button.danger {
+    background: #9C1A1C;
+    color: white;
 }

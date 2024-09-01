@@ -11,6 +11,7 @@
                 <img src="{{ element.image.url }}">
             {% endif %}
             <nav class="element-action-button-container">
+                <button hx-get="{% url 'delete-element' pk=element.pk %}">{% icon 'trash-2' %}</button>
                 <button hx-get="{% url 'edit-element-css-class' pk=element.pk %}">{% icon 'pen-tool' %}</button>
             </nav>
         </div>
