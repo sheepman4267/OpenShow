@@ -13,7 +13,8 @@
             <nav class="element-action-button-container">
                 <button hx-get="{% url 'delete-element' pk=element.pk %}">{% icon 'trash-2' %}</button>
                 <button hx-get="{% url 'edit-element-css-class' pk=element.pk %}">{% icon 'pen-tool' %}</button>
-                <button hx-get="{% url 'edit-element-image' pk=element.pk %}">{% icon 'image' %}</button>
+                <button hx-get="{% url 'edit-element-image' pk=element.pk %}" class="{% if element.image %}green{% endif %}">{% icon 'image' %}</button>
+                <button hx-get="{% url 'edit-element-video' pk=element.pk %}" class="{% if element.video %}green{% endif %}">{% icon 'video' %}</button>
             </nav>
         </div>
     {% endfor %}

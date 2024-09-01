@@ -372,3 +372,7 @@ button.danger {
     background: #9C1A1C;
     color: white;
 }
+
+button.green {
+    background-color: #bedfb8;
+}

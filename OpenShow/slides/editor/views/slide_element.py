@@ -54,3 +54,12 @@ class SlideElementUpdateImageView(UpdateView):
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
+
+class SlideElementUpdateVideoView(UpdateView):
+    model = SlideElement
+    fields = ['video']
+    template_name = 'editor/element_video_edit.html'
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
