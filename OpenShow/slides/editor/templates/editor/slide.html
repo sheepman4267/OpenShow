@@ -4,7 +4,9 @@
         <div class="{{ element.css_class }} editor-element" hx-trigger="dblclick" hx-get="{% url 'edit-element-text' pk=element.pk %}" hx-swap="outerHTML" id="element-{{ element.pk }}">
             {% if element.body %}
                 {{ element.body|safe }}
-            {% elif not element.image and not element.video %}
+            {% elif element.video %}
+                <i class="hint">Video: {{ element.video }}</i>
+            {% elif not element.image %}
                 <i class="hint">Click to edit</i>
             {% endif %}
             {% if element.image %}

@@ -284,6 +284,9 @@ ul > a {
 
 .editor-element .hint {
     opacity: 0.75;
+    font-size: 3rem;
+    text-align: center;
+    width: 100%;
 }
 
 .grow-wrap {
