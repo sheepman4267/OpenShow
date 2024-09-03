@@ -11,13 +11,6 @@ class SlideElementCreateView(CreateView):
     template_name = 'editor/element_create.html'
 
 
-class SlideElementUpdateView(UpdateView):
-    model = SlideElement
-    fields = ['css_class', 'body', 'order', 'image','video', 'slide']
-    template_name = 'editor/edit_element.html'
-    extra_context = {'action': 'edit'}
-
-
 class SlideElementDeleteView(DeleteView):
     model = SlideElement
     template_name = 'editor/delete_element.html'
