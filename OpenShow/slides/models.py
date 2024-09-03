@@ -186,7 +186,8 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
         aoml_str = ''
         for slide in self.slides.all():
             aoml_str += slide.pull_aoml()
-            aoml_str += '~~\r'
+            if slide != self.slides.last():
+                aoml_str += '~~\r'
         return aoml_str
 
     class Meta:
