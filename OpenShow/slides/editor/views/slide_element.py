@@ -7,9 +7,8 @@ from slides.editor.forms import ChangeSlideElementOrderForm
 
 class SlideElementCreateView(CreateView):
     model = SlideElement
-    fields = ['css_class', 'body', 'order', 'image', 'video', 'slide']
-    template_name = 'editor/edit_element.html'
-    extra_context = {'action': 'new'}
+    fields = ['css_class', 'slide']
+    template_name = 'editor/element_create.html'
 
 
 class SlideElementUpdateView(UpdateView):
