@@ -33,7 +33,7 @@
         >
             {% if element.body %}
                 {{ element.body|safe }}
-            {% elif element.video %}
+            {% elif element.video and not element.image %}
                 <i class="hint">Video: {{ element.video }}</i>
             {% elif not element.image %}
                 <i class="hint">Double-click to edit</i>
