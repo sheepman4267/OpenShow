@@ -1,7 +1,8 @@
-from django.views.generic import CreateView, DeleteView, UpdateView
+from django.views.generic import CreateView, DeleteView, UpdateView, FormView
 from django.urls import reverse
-from slides.models import SlideElement
+from slides.models import SlideElement, Slide
 from slides.editor.forms import DeleteSlideElementForm, EditSlideElementTextForm
+from slides.editor.forms import ChangeSlideElementOrderForm
 
 
 class SlideElementCreateView(CreateView):
@@ -63,3 +64,34 @@ class SlideElementUpdateVideoView(UpdateView):
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
+
+class ChangeSlideElementOrderView(FormView):
+    form_class = ChangeSlideElementOrderForm
+
+    def __init__(self):
+        self.moved_slide = None
+        super().__init__()
+
+    def form_valid(self, form):
+        self.moved_element = SlideElement.objects.get(pk=form.cleaned_data['moved_element_pk'])
+        if form.cleaned_data['next_element_pk']:
+            next_element = SlideElement.objects.get(pk=form.cleaned_data['next_element_pk'])
+            previous_element = SlideElement.objects.filter(
+                slide=self.moved_element.slide,
+                order__lt=next_element.order,
+            ).last()
+            if previous_element:
+                order_difference = next_element.order - previous_element.order
+                self.moved_element.order = next_element.order - (order_difference / 2)
+                self.moved_element.save()
+            else:
+                self.moved_element.order = next_element.order - 1
+                self.moved_element.save()
+        else:
+            self.moved_element.order = self.moved_element.slide.elements.last().order + 10
+            self.moved_element.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.moved_element.slide.get_absolute_url()

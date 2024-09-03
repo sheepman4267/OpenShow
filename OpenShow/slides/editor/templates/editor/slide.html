@@ -1,7 +1,36 @@
 {% load icon %}
 <div id="slide" class="slide">
     {% for element in slide.get_elements %}
-        <div class="{{ element.css_class }} editor-element" hx-trigger="dblclick" hx-get="{% url 'edit-element-text' pk=element.pk %}" hx-swap="outerHTML" id="element-{{ element.pk }}">
+        <form
+            class="dragbox"
+            hx-post="{% url 'reorder-element' %}"
+            hx-swap="outerHTML"
+            hx-trigger="drop"
+            hx-select="#slide"
+            hx-target="#slide"
+            _="
+            on dragover or dragenter call event.preventDefault() then add .dragover to me
+            on dragleave remove .dragover from me
+        ">
+            {% csrf_token %}
+            <input type="hidden" name="next_element_pk" value="{{ element.pk }}">
+            <input type="hidden" name="moved_element_pk" class="movedelement">
+        </form>
+        <div
+                class="{{ element.css_class }} editor-element"
+                hx-trigger="dblclick"
+                hx-get="{% url 'edit-element-text' pk=element.pk %}"
+                hx-swap="outerHTML"
+                id="element-{{ element.pk }}"
+                draggable="true"
+                data-element-pk="{{ element.pk }}"
+                _="
+                    on dragstart
+                        call event.dataTransfer.setData('text/plain', target) {# don't know why, drop event never fires unless something is set here #}
+                        then set @value of <input[name='moved_element_pk']/> to my @data-element-pk
+                    end
+                "
+        >
             {% if element.body %}
                 {{ element.body|safe }}
             {% elif element.video %}
@@ -20,4 +49,19 @@
             </nav>
         </div>
     {% endfor %}
+    <form
+        class="dragbox"
+        hx-post="{% url 'reorder-element' %}"
+        hx-swap="outerHTML"
+        hx-trigger="drop"
+        hx-select="#slide"
+        hx-target="#slide"
+        _="
+        on dragover or dragenter call event.preventDefault() then add .dragover to me
+        on dragleave remove .dragover from me
+    ">
+        {% csrf_token %}
+        {# don't sent next_slide as this is the end #}
+        <input type="hidden" name="moved_element_pk" class="movedelement">
+    </form>
 </div>

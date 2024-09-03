@@ -40,6 +40,11 @@ class ChangeSlideOrderForm(Form):
     next_slide_pk = IntegerField(required=False)
 
 
+class ChangeSlideElementOrderForm(Form):
+    moved_element_pk = IntegerField()
+    next_element_pk = IntegerField(required=False)
+
+
 class EditSlideElementTextForm(ModelForm):
     class Meta:
         model = SlideElement
