@@ -366,7 +366,8 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         super(SlideElement, self).save(*args, **kwargs)
 
     def get_editable_text(self):
-        self.body = self.body.replace('<br>', '\n')
+        if self.body:
+            self.body = self.body.replace('<br>', '\n')
         return self.body
 
 
