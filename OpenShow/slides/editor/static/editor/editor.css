@@ -207,6 +207,7 @@ ul > a {
     height: 1rem;
     background-color: unset;
     margin-block: 0;
+    margin-bottom: -1rem;
     transition: height, background-color 500ms;
 }
 
