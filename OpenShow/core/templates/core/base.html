@@ -6,10 +6,10 @@
     <meta charset="UTF-8">
     <title>{% block title %}OpenShow{% endblock %}</title>
 {#    <link rel="stylesheet" href="{% static 'hat/hat.css' %}"#}
-    <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
+    <link rel="stylesheet" href="{% static 'css/missing.css' %}">
     <link rel="stylesheet" href="{% static 'core/extras.css' %}">
-    <script src="https://unpkg.com/htmx.org@1.9.1"></script>
-    <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
+    <script src="{% static 'js/htmx.js' %}"></script>
+    <script src="{% static 'js/hyperscript.js' %}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {% block extra_js %}
     {% endblock %}
