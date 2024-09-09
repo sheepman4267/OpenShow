@@ -82,8 +82,18 @@
     <div id="displays" role="tabpanel" hidden>
         <h2>Displays</h2>
         <p>
-            Displays can be configured to have the correct resolution, and set custom CSS. Editor not yet implemented.
+            Displays can be configured to have the correct resolution, and set custom CSS.
         </p>
+        <button hx-get="{% url 'new-display' %}" hx-swap="outerHTML">
+            New Display
+        </button>
+        <ul>
+            {% for display in display_list %}
+                <li>
+                    <a href="{% url 'display-detail' display.pk %}">{{ display.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
     <div id="transitions" role="tabpanel" hidden>
         <h2>Transitions</h2>

@@ -14,6 +14,7 @@ from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDel
 from slides.editor.views.utils import generate_lorem
 from slides.editor.views.transition import TransitionEditorView, TransitionCreateView, TransitionKeyframeCreateView, \
     TransitionKeyframeUpdateView, TransitionEditorIndexView
+from slides.editor.views.display import DisplayCreateView, DisplayDeleteView, DisplayUpdateView, DisplayDetailView
 
 
 urlpatterns = [
@@ -51,4 +52,8 @@ urlpatterns = [
     path('transition/new', TransitionCreateView.as_view(), name='new-transition'),
     path('transition/keyframe/new', TransitionKeyframeCreateView.as_view(), name='new-keyframe'),
     path('transition/keyframe/<int:pk>', TransitionKeyframeUpdateView.as_view(), name='edit-keyframe'),
+    path('display/new', DisplayCreateView.as_view(), name='new-display'),
+    path('display/<int:pk>', DisplayDetailView.as_view(), name='display-detail'),
+    path('display/<int:pk>/update', DisplayUpdateView.as_view(), name='update-display'),
+    path('display/<int:pk>/delete', DisplayDeleteView.as_view(), name='delete-display'),
 ]

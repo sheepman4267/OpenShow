@@ -137,6 +137,9 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
     # TODO: The Display should probably know the current segment, as well as the current show.
     # auto_advance_paused = models.BooleanField(default=False, null=False)
 
+    def get_absolute_url(self):
+        return reverse('display-detail', kwargs={'pk': self.pk})
+
 
 class Deck(models.Model):  # A Reusable set of slides, which can be included in a Show Segment
     name = models.CharField(max_length=100)
