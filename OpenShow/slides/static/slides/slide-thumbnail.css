@@ -1,11 +1,15 @@
+body {
+    --display-size-divisor: 10
+}
+
 .slide-thumbnail .slide {
     min-width: 1920px;
     width: 1920px;
     min-height: 1080px;
-    transform: scale(0.1);
-    margin-right: calc(-1920px / 10);
-    margin-bottom: calc(-1080px / 10);
-    margin-left: calc(calc(100% - calc(1920px / 10)) / 2);
+    transform: scale(calc(1 / var(--display-size-divisor)));
+    margin-right: calc(-1920px / var(--display-size-divisor));
+    margin-bottom: calc(-1080px / var(--display-size-divisor));
+    margin-left: calc(calc(100% - calc(1920px / var(--display-size-divisor))) / 2);
     transform-origin: left top;
     background: black;
     align-self: center;
@@ -13,8 +17,8 @@
 }
 
 .slide-thumbnail {
-    max-width: calc(1920px / 10);
-    max-height: calc(1080px / 10);
+    max-width: calc(1920px / var(--display-size-divisor));
+    max-height: calc(1080px / var(--display-size-divisor));
     overflow: hidden;
     /*margin: 0.5rem;*/
     outline: 1px solid var(--faded-fg);
