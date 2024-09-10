@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,7 +29,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'slides',
     'slides.editor',
-    'channels',
     'django_eventstream',
     'uubloomington_api_connector',
     'django_feather',
