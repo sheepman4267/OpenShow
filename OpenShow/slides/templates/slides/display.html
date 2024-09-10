@@ -48,7 +48,7 @@
 <span id="slide-grabber" hx-get="{% url 'display' display.pk %}" hx-trigger="grab-slide" hx-select="#slide" hx-target="body" hx-swap="beforeend"></span>
 
 <body hx-ext="sse" sse-connect="/events" class="slide-body">
-    <div class="slide" id="slide">
+    <div class="slide" id="slide" {% if not display.current_slide.transition %}_="on load send animationend"{% endif %}>
         {% if display.current_slide.auto_advance %}
             <form action="{% url 'show-slide' %}" method="POST" hx-trigger="load delay:{{ display.current_slide.auto_advance_duration }}s" hx-post="{% url "show-slide" %}" hx-swap="none">
                 {% csrf_token %}
