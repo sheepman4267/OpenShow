@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'pjlink_integration',
     'core',
     'deck_from_images',
+    'django_srcdoc',
 ]
 
 MIDDLEWARE = [
