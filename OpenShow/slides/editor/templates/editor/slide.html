@@ -46,6 +46,7 @@
                 <button hx-get="{% url 'edit-element-css-class' pk=element.pk %}">{% icon 'pen-tool' %}</button>
                 <button hx-get="{% url 'edit-element-image' pk=element.pk %}" class="{% if element.image %}green{% endif %}">{% icon 'image' %}</button>
                 <button hx-get="{% url 'edit-element-video' pk=element.pk %}" class="{% if element.video %}green{% endif %}">{% icon 'video' %}</button>
+                <button hx-get="{% url 'edit-element-text' pk=element.pk %}" hx-swap="outerHTML" hx-swap="outerHTML" hx-target="#element-{{ element.id }}">{% icon 'edit' %}</button>
             </nav>
         </div>
     {% endfor %}
