@@ -15,3 +15,5 @@ django-ninja
 django-srcdoc==1.0.1
 neapolitan==24.6
 django-extensions
+django-q2==1.7.2
+honcho==2.0.0
