@@ -7,7 +7,7 @@ from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView
 from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView
 from slides.editor.views.slide_element import SlideElementCreateView, SlideElementDeleteView, \
     SlideElementUpdateTextView, SlideElementUpdateCSSClassView, SlideElementUpdateImageView, \
-    SlideElementUpdateVideoView, ChangeSlideElementOrderView
+    SlideElementUpdateVideoView, ChangeSlideElementOrderView, SlideElementUpdateMediaObjectView
 from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteView, push_deck_cues, \
     push_deck_slide_text, pull_aoml_text
 from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDeleteView
@@ -15,6 +15,7 @@ from slides.editor.views.utils import generate_lorem
 from slides.editor.views.transition import TransitionEditorView, TransitionCreateView, TransitionKeyframeCreateView, \
     TransitionKeyframeUpdateView, TransitionEditorIndexView
 from slides.editor.views.display import DisplayCreateView, DisplayDeleteView, DisplayUpdateView, DisplayDetailView
+from slides.editor.views.media import MediaObjectCRUDView
 
 
 urlpatterns = [
@@ -33,6 +34,7 @@ urlpatterns = [
     path('slide/element/<int:pk>/css-class', SlideElementUpdateCSSClassView.as_view(), name='edit-element-css-class'),
     path('slide/element/<int:pk>/image', SlideElementUpdateImageView.as_view(), name='edit-element-image'),
     path('slide/element/<int:pk>/video', SlideElementUpdateVideoView.as_view(), name='edit-element-video'),
+    path('slide/element/<int:pk>/media_object', SlideElementUpdateMediaObjectView.as_view(), name='edit-element-media_object'),
     path('slide/element/reorder', ChangeSlideElementOrderView.as_view(), name='reorder-element'),
     path('slide/reorder', ChangeSlideOrderView.as_view(), name='reorder-slide'),
     path('deck/new', DeckCreateView.as_view(), name='new-deck'),
@@ -56,4 +58,5 @@ urlpatterns = [
     path('display/<int:pk>', DisplayDetailView.as_view(), name='display-detail'),
     path('display/<int:pk>/update', DisplayUpdateView.as_view(), name='update-display'),
     path('display/<int:pk>/delete', DisplayDeleteView.as_view(), name='delete-display'),
+    *MediaObjectCRUDView.get_urls(),
 ]

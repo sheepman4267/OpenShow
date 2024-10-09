@@ -13,3 +13,5 @@ uvicorn
 django-environ
 django-ninja
 django-srcdoc==1.0.1
+neapolitan==24.6
+django-extensions

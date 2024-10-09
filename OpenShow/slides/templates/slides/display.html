@@ -67,6 +67,9 @@
                         <source src="{{ element.video.url }}">
                     </video>
                 {% endif %}
+                {% if element.media_object %}
+                    {% include element.media_object.get_slide_element_template with media_object=element.media_object %}
+                {% endif %}
             </div>
         {% endfor %}
     </div>
