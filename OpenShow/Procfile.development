@@ -1,2 +1,2 @@
-web: python manage.py runserver 8030
-worker: python manage.py qcluster
+web: PYTHONUNBUFFERED=1 python manage.py runserver 8030
+worker: PYTHONUNBUFFERED=1 python manage.py qcluster

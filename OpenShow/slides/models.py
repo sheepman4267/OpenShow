@@ -3,7 +3,8 @@ from django_eventstream import send_event
 from collections.abc import Iterable
 from django.shortcuts import reverse
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
+from django_q.models import Schedule
 
 import tinycss2
 
@@ -698,6 +699,23 @@ class MediaObject(models.Model):
         # until more features are implemented, but let's leave the bones of it here for the future.
     )
     file_hash = models.CharField(max_length=256, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.media_type == VIDEO and not self.final_file:
+            Schedule.objects.create(
+                func='slides.editor.tasks.transcode_video',
+                args=self.pk,
+                schedule_type=Schedule.ONCE,
+                next_run=datetime.utcnow(),
+            )
+        elif self.media_type == AUDIO and not self.final_file:
+            Schedule.objects.create(
+                func='slides.editor.tasks.transcode_audio',
+                args=self.pk,
+                schedule_type=Schedule.ONCE,
+                next_run=datetime.utcnow(),
+            )
 
     def get_slide_element_template(self):
         template_name = None

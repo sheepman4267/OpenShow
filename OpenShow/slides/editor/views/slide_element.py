@@ -54,7 +54,12 @@ class SlideElementUpdateVideoView(UpdateView):
     fields = ['video']
     template_name = 'editor/element_video_edit.html'
 
+    def form_invalid(self, form):
+        print(form.errors)
+        return(super().form_invalid(form))
+
     def get_success_url(self):
+        print('SUCCESS')
         return self.object.get_absolute_url()
 
 

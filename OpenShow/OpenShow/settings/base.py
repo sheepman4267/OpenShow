@@ -119,9 +119,13 @@ DATA_UPLOAD_MAX_NUMBER_FILES = None
 Q_CLUSTER = {
     'name': 'DjangORM',
     'workers': 4,
-    'timeout': 90,
-    'retry': 120,
+    'timeout': None,
+    'retry': 2147483647,
     'queue_limit': 50,
     'bulk': 10,
     'orm': 'default'
 }
+
+SHELL_PLUS_IMPORTS = [
+    'from slides.editor.tasks import transcode_video'
+]

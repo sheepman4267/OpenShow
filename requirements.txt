@@ -1,5 +1,4 @@
 django==5.1
-honcho==1.1.0
 django-eventstream==5.3.1
 daphne==4.1.2
 django-colorfield==0.8.0
@@ -17,3 +16,4 @@ neapolitan==24.6
 django-extensions
 django-q2==1.7.2
 honcho==2.0.0
+python-ffmpeg==2.0.12
