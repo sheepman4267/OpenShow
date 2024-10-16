@@ -30,6 +30,9 @@
         <button role="tab" aria-controls="transitions">
             Transitions
         </button>
+        <button role="tab" aria-controls="mediaobjects">
+            Media Objects
+        </button>
     </div>
     <div id="shows" role="tabpanel">
         <h2>Shows</h2>
@@ -107,6 +110,22 @@
             {% for transition in transition_list %}
                 <li>
                     <a href="{% url 'edit-transition' transition.pk %}">{{ transition.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="mediaobjects" role="tabpanel" hidden>
+        <h2>Media Objects</h2>
+        <p>
+            Media (video, audio, or embedded content) which can be added to slide elements.
+        </p>
+        <button hx-get="{% url 'mediaobject-create' %}" hx-swap="outerHTML" hx-select="#mediaobject_form_container">
+            New Media Object
+        </button>
+        <ul>
+            {% for mediaobject in mediaobject_list %}
+                <li>
+                    <a href="{% url 'mediaobject-detail' mediaobject.pk %}">{{ mediaobject.title }}</a>
                 </li>
             {% endfor %}
         </ul>

@@ -6,7 +6,7 @@ from django.views.generic import DetailView, FormView, ListView, UpdateView, Tem
 from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.template import loader
-from .models import Slide, Display, Show, Deck, Transition, Theme
+from .models import Slide, Display, Show, Deck, Transition, Theme, MediaObject
 
 from .forms import SlideDisplayForm, ShowDisplaySelectorForm
 
@@ -39,6 +39,7 @@ class IndexView(TemplateView):
         context['theme_list'] = Theme.objects.all()
         context['display_list'] = Display.objects.all()
         context['transition_list'] = Transition.objects.all()
+        context['mediaobject_list'] = MediaObject.objects.all()
         context['previous_page'] = 'index'
         return context
 

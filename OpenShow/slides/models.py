@@ -709,6 +709,7 @@ class MediaObject(models.Model):
                 schedule_type=Schedule.ONCE,
                 next_run=datetime.utcnow(),
             )
+            print('scheduled video')
         elif self.media_type == AUDIO and not self.final_file:
             Schedule.objects.create(
                 func='slides.editor.tasks.transcode_audio',
@@ -716,6 +717,7 @@ class MediaObject(models.Model):
                 schedule_type=Schedule.ONCE,
                 next_run=datetime.utcnow(),
             )
+            print('scheduled audio')
 
     def get_slide_element_template(self):
         template_name = None
