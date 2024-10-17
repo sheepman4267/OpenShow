@@ -8,6 +8,8 @@ RUN pip install -r requirements.txt
 
 COPY OpenShow .
 
+RUN apk add ffmpeg
+
 ARG OPENSHOW_DEBUG='False'
 ARG OPENSHOW_STATIC_ROOT='/static-root'
 ARG OPENSHOW_MEDIA_ROOT='/media-root'
