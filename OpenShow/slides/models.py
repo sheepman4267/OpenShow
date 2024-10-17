@@ -665,7 +665,7 @@ AUDIO = 'AUDIO'
 
 
 class MediaObject(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)
     media_type = models.CharField(
         max_length=100,
         choices=[
