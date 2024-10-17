@@ -30,4 +30,4 @@ EXPOSE 8000/
 ENTRYPOINT echo Migrating... \
     && python manage.py migrate --no-input \
     && python manage.py collectstatic --no-input \
-    && python -m uvicorn --host 0.0.0.0 --port 8000 OpenShow.asgi:application
+    && honcho start
