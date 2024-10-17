@@ -8,6 +8,8 @@ RUN pip install -r requirements.txt
 
 COPY OpenShow .
 
+RUN apk add ffmpeg
+
 ARG OPENSHOW_DEBUG='False'
 ARG OPENSHOW_STATIC_ROOT='/static-root'
 ARG OPENSHOW_MEDIA_ROOT='/media-root'
@@ -28,4 +30,4 @@ EXPOSE 8000/
 ENTRYPOINT echo Migrating... \
     && python manage.py migrate --no-input \
     && python manage.py collectstatic --no-input \
-    && python -m uvicorn --host 0.0.0.0 --port 8000 OpenShow.asgi:application
+    && honcho start

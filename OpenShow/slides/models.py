@@ -3,7 +3,8 @@ from django_eventstream import send_event
 from collections.abc import Iterable
 from django.shortcuts import reverse
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
+from django_q.models import Schedule
 
 import tinycss2
 
@@ -346,6 +347,13 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         null=True,
         upload_to='element_videos/'
     )
+    media_object = models.ForeignKey(
+        to='MediaObject',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='elements',
+    )
 
     def get_absolute_url(self):
         return reverse('edit-slide', kwargs={'pk': self.slide.pk})
@@ -362,6 +370,7 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         ordering = ["-order"]
 
     def save(self, *args, **kwargs):
+        print(f'MEDIA{self.media_object}')
         if not self.pk:
             if self.slide.elements.last():
                 self.order = self.slide.elements.last().order + 10
@@ -537,6 +546,13 @@ class Slide(models.Model):
                 result = True
         return result
 
+    def has_mediaobject(self):
+        result = False
+        for element in self.elements.all():
+            if element.media_object:
+                result = True
+        return result
+
     def pull_aoml(self):
         aoml_str = ''
         for element in self.elements.all().order_by('order'):
@@ -648,3 +664,76 @@ class ThemeVariantRule(models.Model):
         on_delete=models.CASCADE,
         related_name='rules',
     )
+
+
+VIMEO_LIVE_EMBED = 'VIMEO_LIVE_EMBED'
+VIDEO = 'VIDEO'
+AUDIO = 'AUDIO'
+
+
+class MediaObject(models.Model):
+    title = models.CharField(max_length=100, unique=True)
+    media_type = models.CharField(
+        max_length=100,
+        choices=[
+            (VIMEO_LIVE_EMBED, 'Vimeo Live Embed'),
+            (VIDEO, 'Video'),
+            (AUDIO, 'Audio'),
+        ],
+        default=VIDEO,
+    )
+    # We'll use the same field regardless of what file type is uploaded - the FileField does no validation, so there's
+    # no particular benefit to adding more fields here.
+    raw_file = models.FileField(
+        blank=True,
+        null=True,
+        upload_to='media_intake/'
+    )
+    # We'll use the same field regardless of what file type is uploaded - the FileField does no validation, so there's
+    # no particular benefit to adding more fields here.
+    final_file = models.FileField(
+        blank=True,
+        null=True,
+        upload_to='media_final/'
+    )
+    embed_url = models.URLField(
+        blank=True,
+        null=True,
+    )
+    autoplay = models.BooleanField(
+        default=True,
+        # Currently, there would be no mechanism to manually start a non-autoplaying media object, so this will just sit
+        # until more features are implemented, but let's leave the bones of it here for the future.
+    )
+    file_hash = models.CharField(max_length=256, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.media_type == VIDEO and not self.final_file:
+            Schedule.objects.create(
+                func='slides.editor.tasks.transcode_video',
+                args=self.pk,
+                schedule_type=Schedule.ONCE,
+                next_run=datetime.utcnow(),
+            )
+            print('scheduled video')
+        elif self.media_type == AUDIO and not self.final_file:
+            Schedule.objects.create(
+                func='slides.editor.tasks.transcode_audio',
+                args=self.pk,
+                schedule_type=Schedule.ONCE,
+                next_run=datetime.utcnow(),
+            )
+            print('scheduled audio')
+
+    def get_slide_element_template(self):
+        template_name = None
+        match self.media_type:
+            case 'VIDEO':
+                template_name = 'slides/media/video.html'
+            case 'AUDIO':
+                template_name = 'slides/media/audio.html'
+            case 'VIMEO_LIVE_EMBED':
+                template_name = 'slides/media/vimeo_live_embed.html'
+        return template_name
+        

@@ -13,6 +13,9 @@
         {% if slide.has_video %}
             {% icon "film" class='slide-info-icon' %}
         {% endif %}
+        {% if slide.has_mediaobject %}
+            {% icon "play" class='slide-info-icon' %}
+        {% endif %}
         {% if slide.auto_advance %}
             {% icon 'clock' class='slide-info-icon' %}
         {% endif %}

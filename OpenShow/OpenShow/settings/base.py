@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'core',
     'deck_from_images',
     'django_srcdoc',
+    'neapolitan',
+    'django_extensions',
+    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -108,3 +111,21 @@ STATIC_URL = '/static/'
 
 # Remove restriction on number of files uploaded for "deck from images" functionality
 DATA_UPLOAD_MAX_NUMBER_FILES = None
+
+# The example from https://django-q2.readthedocs.io/en/master/configure.html#orm-configuration
+# We are currently only using django-q2 for managing media transcodes; the ORM broker should be fine.
+# If this is ever used for more intensive parts of the system (scheduled slides, auto advance, etc.), it might be
+# a good idea to look at a Redis (Valkey) setup instead. For now, simplicity is king.
+Q_CLUSTER = {
+    'name': 'DjangORM',
+    'workers': 4,
+    'timeout': None,
+    'retry': 2147483647,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default'
+}
+
+SHELL_PLUS_IMPORTS = [
+    'from slides.editor.tasks import transcode_video'
+]

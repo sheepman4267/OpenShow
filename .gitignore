@@ -1,2 +1,4 @@
 OpenShow/media/*
 */static-root/
+.ipython/profile_default/history.sqlite
+*db.sqlite3

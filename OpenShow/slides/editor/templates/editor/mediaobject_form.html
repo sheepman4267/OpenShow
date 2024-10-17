@@ -1,0 +1,66 @@
+{% extends "core/base.html" %}
+{% load icon %}
+
+{% block header %}
+    {% if object %}
+        <h1>{{ object.title }}</h1>
+    {% else %}
+        <h1>New Media Object</h1>
+    {% endif %}
+{% endblock %}
+
+{% block header_right_button %}
+    {% if object %}
+        <a href="{% url 'mediaobject-delete' object.pk %}" class="icon-button" aria-label="Delete {{ object.title }}">{% icon 'trash-2' %}</a>
+    {% endif %}
+{% endblock %}
+
+{% block header_left_button %}
+    {% if object %}
+        <a class=inline href="{% url 'mediaobject-detail' object.pk %}">{% icon 'arrow-left' %}</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h2>{% if object %}Edit {{object_verbose_name}}{% else %}Create {{object_verbose_name}}{% endif %}</h2>
+    <div id="mediaobject_form_container" class="{% if not object %}box{% endif %}">
+        {% if not object %}
+            <strong class="block titlebar">New Media Object</strong>
+            <script type="text/hyperscript">
+                def configure_form
+                    if #id_media_type.value == "VIMEO_LIVE_EMBED"
+                        add .hidden to #file_upload
+                        remove .hidden from #embed
+                    else
+                        add .hidden to #embed
+                        remove .hidden from #file_upload
+                    end
+                end
+                on change from #id_media_type
+                    configure_form()
+                end
+                on load
+                    configure_form()
+                end
+            </script>
+        {% endif %}
+        <form
+                method="POST"
+                {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}
+                action="{% if object %}{{ update_view_url }}{% else %}{{ create_view_url }}{% endif %}"
+        >
+        {% csrf_token %}
+            {{ form.title.as_field_group }}
+            <p class="{% if object %}hidden{% endif %}">
+                {{ form.media_type.as_field_group }}
+            </p>
+            <p id="embed" class="{% if object and object.media_type != 'VIMEO_LIVE_EMBED' %}hidden{% endif %}">
+                {{ form.embed_url.as_field_group }}
+            </p>
+            <p id="file_upload" class="{% if object and object.media_type == 'VIMEO_LIVE_EMBED' %}hidden{% endif %}">
+                {{ form.raw_file.as_field_group }}
+            </p>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+{% endblock %}
