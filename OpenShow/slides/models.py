@@ -546,6 +546,13 @@ class Slide(models.Model):
                 result = True
         return result
 
+    def has_mediaobject(self):
+        result = False
+        for element in self.elements.all():
+            if element.media_object:
+                result = True
+        return result
+
     def pull_aoml(self):
         aoml_str = ''
         for element in self.elements.all().order_by('order'):
