@@ -9,7 +9,7 @@ from ffmpeg import FFmpeg, Progress
 def transcode_video(media_object_pk: int) -> None:
     media_object = MediaObject.objects.get(pk=media_object_pk)
     final_file_name = slugify(media_object.title) + '.mp4'
-    tmp_transcode_out_path = settings.MEDIA_ROOT + 'media_final/video/' + final_file_name
+    tmp_transcode_out_path = settings.MEDIA_ROOT + '/media_final/video/' + final_file_name
     pathlib.Path(tmp_transcode_out_path).parents[0].mkdir(parents=True, exist_ok=True)
     ffmpeg = (
         FFmpeg()
