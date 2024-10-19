@@ -736,4 +736,6 @@ class MediaObject(models.Model):
             case 'VIMEO_LIVE_EMBED':
                 template_name = 'slides/media/vimeo_live_embed.html'
         return template_name
-        
+
+    def __str__(self):
+        return self.title
