@@ -1,9 +1,10 @@
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
-from slides.models import Deck, Slide
+from slides.models import Deck, Slide, SlideElement
 from django.db import transaction
 from django.shortcuts import get_object_or_404, HttpResponseRedirect
 import slides.aoml_parser as aoml
+from slides.editor.forms import DeckFromImagesForm
 
 
 class DeckCreateView(CreateView):
@@ -75,3 +76,31 @@ def pull_aoml_text(request, pk):
     deck.slide_text_markup = deck.pull_aoml()
     deck.save()
     return HttpResponseRedirect(deck.get_absolute_url())
+
+
+class DeckFromImagesView(FormView):
+    form_class = DeckFromImagesForm
+    template_name = 'editor/snippets/hx-simple_create_form.html'
+    extra_context = {
+        'previous_page': 'slides-index',
+        'action': 'import-deck-from-images',
+        'object_type': 'Deck From Many Images',
+    }
+
+    def form_valid(self, form):
+        files = form.cleaned_data['files']
+        print(files)
+        print('^^FILES')
+        form.save()
+        for image in files:
+            new_slide = Slide(deck=form.instance)
+            new_slide.save()
+            new_slide_element = SlideElement(
+                css_class=form.cleaned_data["image_css_class"],
+                order=0,
+                slide=new_slide,
+                image=image,
+                body="",
+            )
+            new_slide_element.save()
+        return HttpResponseRedirect(reverse_lazy('edit-deck', kwargs={'pk': form.instance.pk}))

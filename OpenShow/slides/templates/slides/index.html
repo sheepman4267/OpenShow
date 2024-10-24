@@ -58,6 +58,9 @@
         <button hx-get="{% url 'new-deck' %}" hx-swap="outerHTML">
             New Deck
         </button>
+        <button hx-get="{% url 'import-deck-from-images' %}" hx-swap="outerHTML">
+            Import Images
+        </button>
         <ul>
             {% for deck in deck_list %}
                 <li>
