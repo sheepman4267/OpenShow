@@ -14,7 +14,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
   openshow-dynamic:
-    image: sheepman4267/openshow:0.1.0
+    image: sheepman4267/openshow:0.2.0
     volumes:
       - "./openshow/static-root:/static-root"
       - "./openshow/media-root:/media-root"
