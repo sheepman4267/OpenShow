@@ -37,8 +37,40 @@ As of release v0.1.0, OpenShow now has an official Docker container. The contain
 
 This is just my method, and nothing about OpenShow requires that you use Traefik or NGINX. It's the way I'm familiar with, though, and it works well for me.
 
-A quickstart guide for actually using OpenShow will be written soon. However, for now:
-The one thing you won't be able to find by poking around the UI is the URL to actually see a display. That is `/slides/displays/<pk>`, so the first display you add will be `localhost:8000/slides/displays/1`.
+### Container Setup
+> [!NOTE]
+> This setup guide assumes that your container host is running linux. Any distro with a functional docker-compose should work. OpenShow has not been tested running anywhere other than a Linux host. If you have a working setup on another OS, please open an issue and share notes!
+
+1. Save `docker-compose.yml.example` as `docker-compose.yml` somewhere on your system.
+2. Edit `docker-compose.yml` to your specification.
+    1. Out of the box, the only thing you must change is the value of `OPENSHOW_SECRET_KEY`. Set that to a random 50 character string.
+    2. Be advised that the default docker-compose file will create a directory `./openshow` relative to the directory containing your docker-compose setup and place the application state within. This includes media files, static files, and the sqlite database. 
+3. Start up the containers with `docker-compose up -d`.  
+4. Open a web browser and visit [localhost:8080](localhost:8080). You should see the OpenShow index, assuming everything worked correctly. OpenShow currently has no authentication at all, so there's no initial account creation necessary.
+
+### Usage
+Now that you have a working instance of OpenShow, the next step is to learn how to use it. In-depth documentation is in progress, but here's a general overview.
+Refer to the "Concepts" section above for explanation of terminology such as "Show", "Segment", "Theme", etc.
+#### Hello, World!
+1. Click "Slides" to enter the slides module. Other modules are not essential to most installations.
+2. Before you start creating slides, you'll need a theme. Create one by clicking on the "Themes" tab, followed by "New Theme". Set a name and submit it.
+   > [!NOTE]
+   > The current theme editor dates back to the initial prototype of OpenShow, and is due for a complete rewrite. This isn't the final form of this interface (thank goodness!).
+3. The unlabeled text box below the preview winodw is where you put CSS rules which make up your theme. If you're not experienced with CSS, or if you just want a somewhat sane place to start, copy the contents of `example-theme.css` from this repository into that text box and click "Submit".
+4. Next, you'll need a display. Click the back button on the left side of the header to return to the slides index, select the "Displays" tab, and click "New Display". Enter a name for your display and submit it.
+5. Click the link to open that display in a new tab, then move that tab to a new window. Put it somewhere that you can get to it easily.
+4. Click the back button to return to the slides index. You'll automatically be on the Show page. Click "New Show", enter a name, and submit it.
+5. Welcome to the show editor! Now, you'll want to select the theme you just created. Click on "Set Theme", select your theme in the resulting dropdown, and click "Submit".
+6. Next, create a segment using the plus button in the left sidebar. Enter a name and click the checkbox. 
+7. You'll see a box in the sidebar labeled with the name of your segment. Click on the smaller plus button near the bottom of the segment to add a slide.
+8. Click on the slide. This will open your new slide for editing. 
+9. The bottom left panel of the editor contains options for changing the properties of the entire slide. You can leave all of that alone for now and click "New Element".
+10. Enter the CSS class which you would like to apply to your new element. This should be a class (or set of classes) which is defined in the CSS you placed in the theme in step three. Click the checkmark button.
+11. You should see placeholder text appear in the preview area saying "Double-click to edit". Follow that direction and add some text to your slide element. Press ctrl+enter or click the checkmark to save the content.
+12. Click the back button again, which this time will take you to the presenter view for your show. In the right sidebar, there's a gear button. Click that, select your display in the list, and click the checkmark. That sets this Show object to send slides to your display.
+13. In the main body of the presenter view, you'll see a thumbnail for the slide you just created. Click on it! The slide you created should appear in the browser window where you opened your display.
+
+Congratulations! You've just displayed your first slide using OpenShow! Keep reading to get familiar with more powerful features.
 
 ## Development Setup
 
