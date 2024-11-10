@@ -97,12 +97,12 @@ class ShowSlideView(FormView):
         show = Show.objects.get(pk=form.cleaned_data['show_pk'])
         if form.cleaned_data['direction']:
             display = show.displays.all().first()
-            if display.previous_slide and display.current_slide.auto_advance:
+            if display.current_slide and display.current_slide.auto_advance:
                 if timezone.now() - \
                         display.slide_changed_at < \
-                        timedelta(seconds=display.previous_slide.auto_advance_duration):
+                        timedelta(seconds=display.current_slide.auto_advance_duration):
                     # Abort and continue silently if we're getting a "next slide" directive and
-                    # the previous slide's auto_advance_duration has not passed
+                    # the current slide's auto_advance_duration has not passed
                     # Manually selecting a different slide will override this.
                     return HttpResponseRedirect(reverse('show', kwargs={'pk': show.pk}))
             current_slide = display.current_slide
@@ -149,6 +149,7 @@ class ShowSlideView(FormView):
         else:
             slide = Slide.objects.get(pk=form.cleaned_data['slide_pk'])
         slide.send_to_display(show.displays.all(), show=show)
+        print(f'SHOWING SLIDE{slide.pk}')
         return HttpResponseRedirect(reverse('show', kwargs={'pk': show.pk}))
 
 

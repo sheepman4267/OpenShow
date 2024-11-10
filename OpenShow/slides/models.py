@@ -72,7 +72,7 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
         if self.previous_slide and self.current_slide.auto_advance:
             if timezone.now() - \
                     self.slide_changed_at < \
-                    timedelta(seconds=self.previous_slide.auto_advance_duration):
+                    timedelta(seconds=self.current_slide.auto_advance_duration):
                 # Abort and continue silently if we're getting a "next slide" directive and
                 # the previous slide's auto_advance_duration has not passed
                 # Manually selecting a different slide will override this.
@@ -86,7 +86,7 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
         if self.previous_slide and self.current_slide.auto_advance:
             if timezone.now() - \
                     self.slide_changed_at < \
-                    timedelta(seconds=self.previous_slide.auto_advance_duration):
+                    timedelta(seconds=self.current_slide.auto_advance_duration):
                 # Abort and continue silently if we're getting a "next slide" directive and
                 # the previous slide's auto_advance_duration has not passed
                 # Manually selecting a different slide will override this.
@@ -541,7 +541,7 @@ class Slide(models.Model):
     def has_video(self):
         result = False
         for element in self.elements.all():
-            print(bool(element.video))
+            # print(bool(element.video))
             if element.video:
                 result = True
         return result
