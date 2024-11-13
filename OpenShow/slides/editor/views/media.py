@@ -1,4 +1,6 @@
 from django.core.exceptions import ImproperlyConfigured
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from neapolitan.views import CRUDView, Role
 
 from slides.models import MediaObject
@@ -13,6 +15,13 @@ class MediaObjectCRUDView(CRUDView):
         'embed_url',
         #'autoplay',  # Uncomment this once it will be useful for something
     ]
+
+    def get_success_url(self):
+        if self.role is Role.DELETE:
+            success_url = reverse('slides-index')
+        else:
+            success_url = super(self.__class__).get_success_url()
+        return success_url
 
     def detail(self, request, *args, **kwargs):
         """GET handler for the detail view."""
