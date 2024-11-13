@@ -1,3 +1,4 @@
+from django.core.exceptions import ImproperlyConfigured
 from neapolitan.views import CRUDView, Role
 
 from slides.models import MediaObject
