@@ -519,6 +519,7 @@ class Slide(models.Model):
                     return None
         # or, if there are no more (say, we're at the beginning/end...)
         return self  # TODO: Make this mess better - add a toggle for "continue past end of deck" on the show control sidebar
+        # TODO: Not going to pull a chesterton's fence here while working on something else, but let's revisit whether the above return ever gets executed. I don't think it does.
 
     def save(self, *args, **kwargs):
         if not self.pk:
