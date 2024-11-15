@@ -79,7 +79,10 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
                 return 1
         slide = self.current_slide.next(direction)
         if not slide:
-            slide = self.current_slide
+            if self.current_slide.deck.advance_in_loop:
+                slide = self.current_slide.deck.slides.first()
+            else:
+                slide = self.current_slide
         slide.send_to_display([self, ])
 
     def _advance_slide_in_show(self, direction):
@@ -163,6 +166,7 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
         blank=True,
     )
     default_auto_advance = models.BooleanField(default=False, null=False)
+    advance_in_loop = models.BooleanField(default=False, null=False)
     default_auto_advance_duration = models.FloatField(default=10)
     script = models.TextField(null=True, blank=True)
     slide_text_markup = models.TextField(null=True, blank=True)

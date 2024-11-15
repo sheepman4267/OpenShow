@@ -33,6 +33,7 @@ class DeckEditorView(UpdateView):
         'default_transition_duration',
         'default_auto_advance',
         'default_auto_advance_duration',
+        'advance_in_loop',
         'script',
         'slide_text_markup',
     ]

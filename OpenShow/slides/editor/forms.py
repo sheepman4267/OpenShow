@@ -82,6 +82,7 @@ class DeckFromImagesForm(ModelForm):
             'default_transition_duration',
             'default_auto_advance',
             'default_auto_advance_duration',
+            'advance_in_loop',
             'theme',
         ]
     files = MultipleFileField()
