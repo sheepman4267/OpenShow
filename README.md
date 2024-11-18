@@ -54,8 +54,8 @@ Refer to the "Concepts" section above for explanation of terminology such as "Sh
 #### Hello, World!
 1. Click "Slides" to enter the slides module. Other modules are not essential to most installations.
 2. Before you start creating slides, you'll need a theme. Create one by clicking on the "Themes" tab, followed by "New Theme". Set a name and submit it.
-   > [!NOTE]
-   > The current theme editor dates back to the initial prototype of OpenShow, and is due for a complete rewrite. This isn't the final form of this interface (thank goodness!).
+> [!NOTE]
+> The current theme editor dates back to the initial prototype of OpenShow, and is due for a complete rewrite. This isn't the final form of this interface (thank goodness!).
 3. The unlabeled text box below the preview winodw is where you put CSS rules which make up your theme. If you're not experienced with CSS, or if you just want a somewhat sane place to start, copy the contents of `example-theme.css` from this repository into that text box and click "Submit".
 4. Next, you'll need a display. Click the back button on the left side of the header to return to the slides index, select the "Displays" tab, and click "New Display". Enter a name for your display and submit it.
 5. Click the link to open that display in a new tab, then move that tab to a new window. Put it somewhere that you can get to it easily.
@@ -81,8 +81,8 @@ In production, you should almost certainly use the docker container, but here's 
 2. Create a python virtual environment: `python3 -m venv venv`
 3. Activate the virtual environment: `source venv/bin/activate`
 4. Install requirements as usual: `pip install -r requirements.txt`
-   > [!NOTE]
-   > If you want your development instance to transcode media objects, you'll need to install `ffmpeg` as well. Everything else will work without it.
+> [!NOTE]
+> If you want your development instance to transcode media objects, you'll need to install `ffmpeg` as well. Everything else will work without it.
 5. Run the server: `honcho start -f Procfile.development`
 
 Once you have this running, you can navigate to localhost:8030 in your web browser and start messing with OpenShow. The development server port can be changed by editing `Procfile.development` to suit your needs.
