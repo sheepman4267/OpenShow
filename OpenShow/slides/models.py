@@ -306,18 +306,16 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
 
     def next_with_slides(self, direction):
         siblings = self.show.segments.all()
+        future_segments = []
         if direction == 'reverse':
             siblings = siblings.reverse()
         for idx, segment in enumerate(siblings):
             if segment == self:
-                try:
-                    next_segment =  siblings[idx + 1]
-                except IndexError:
-                    return None
-                if next_segment.slides.first() or next_segment.included_deck:
-                    return next_segment
-                else:
-                    pass
+                future_segments = siblings[idx + 1:]
+        for segment in future_segments:
+            print(segment)
+            if segment.slides.first() or segment.included_deck:
+                return segment
 
     def get_first_slide(self):
         if self.included_deck:
