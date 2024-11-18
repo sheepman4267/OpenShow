@@ -26,6 +26,7 @@ class DisplayUpdateView(UpdateView):
         # 'pixel_height',
         # Changing these will break things right now; non-1080p resolutions are not supported. See #22.
         'custom_css',
+        'default',
         # Display.custom_css might go away to be replaced by theme display variants.
     ]
     template_name = 'editor/display/update.html'

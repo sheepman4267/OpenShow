@@ -25,6 +25,7 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
     pixel_height = models.IntegerField(default=1080)
     custom_css = models.TextField(null=True, blank=True)
     slide_changed_at = models.DateTimeField(auto_now=True)
+    default = models.BooleanField(default=False, help_text='Activate this display for any newly created shows')
     current_show = models.ForeignKey(
         to='Show',
         null=True,
@@ -252,6 +253,18 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            set_defaults = True
+        else:
+            set_defaults = False
+        super(self.__class__, self).save(*args, **kwargs)
+        if set_defaults:
+            for display in Display.objects.filter(default=True):
+                self.displays.add(display.pk)
+            self.save()
+
 
     class Meta:
         ordering = ('name',)
