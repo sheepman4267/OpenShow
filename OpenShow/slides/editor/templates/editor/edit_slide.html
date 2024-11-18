@@ -9,6 +9,8 @@
 {#                </li>#}
 {#            {% endfor %}#}
 {#        </ul>#}
+        <button hx-get="{% url 'new-element' %}" hx-swap="outerHTML">New Element</button>
+        <button hx-get="{% url 'delete-slide' pk=slide.pk %}" hx-swap="outerHTML">Delete Slide</button>
         <form method="post" action="{% url 'edit-slide' slide.pk %}">
             {% csrf_token %}
             {{ form.transition }}
@@ -26,21 +28,8 @@
 {#            <input type="submit">#}
             <button hx-select="#editor" hx-target="#editor" hx-swap="outerHTML swap:0.1s" hx-post="{% url 'edit-slide' slide.pk %}">Submit</button>
         </form>
-        <ul class="segment-list">
-            {% for element in slide.get_elements %}
-                <li class="element" data-element-order="{{ element.order }}" hx-get="{% url 'edit-element' element.pk %}" hx-swap="outerHTML" hx-target="this">
-                    {{ element.body }}
-{#                    <button hx-get="{% url 'edit-element' element.pk %}" hx-swap="outerHTML" hx-target="closest li">#}
-{#                        Edit Element#}
-{#                    </button>#}
-                </li>
-            {% endfor %}
-            <button class="icon-button center" hx-get="{% url 'new-element' %}" hx-swap="outerHTML">
-                {% icon "plus" %}
-            </button>
-        </ul>
     </div>
     <div id="preview" hx-swap-oob="true" data-slide-pk="{{ slide.pk }}">
-        {% include 'slides/slide.html' with slide=slide %}
+        {% include 'editor/slide.html' with slide=slide %}
     </div>
 {% endblock %}

@@ -1,0 +1,12 @@
+{% load icon %}
+<form>
+    {% csrf_token %}
+    {{ form.css_class.as_field_group }}
+    <input type="hidden" name="slide" _="on load set my @value to @data-slide-pk of #editor">
+    <button
+        hx-post="{% url 'new-element' %}"
+        hx-select="#editor"
+        hx-target="#editor"
+        hx-swap="outerHTML swap:0.1s"
+        >{% icon 'check' %}</button>
+</form>

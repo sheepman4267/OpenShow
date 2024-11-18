@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+{% load icon %}
+
+{% block header %}
+    <h1>Importing Images to deck "{{ deck.name }}"</h1>
+{% endblock %}
+
+{% block header_left_button %}
+    <a href="{% url 'edit-deck' deck.pk %}" class="icon-button" aria-label="Return to editing {{ deck.name }}">{% icon 'chevron-left' %}</a>
+{% endblock %}
+
+{% block content %}
+    <p>
+    Submitting images here will import them to the deck "{{ deck.name }}", creating a new slide for each submitted image. "Append" will place your imported images at the end. "Overwrite" will replace all slides in the deck with the images you upload.
+    </p>
+    <hr>
+    <form method="post" action="{% url 'import-images-to-deck' deck.pk %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+    </form>
+{% endblock %}

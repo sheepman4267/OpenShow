@@ -1,127 +1,135 @@
-{% extends 'editor/base.html' %}
+{% extends 'core/base.html' %}
 
 {% load static %}
 {% load icon %}
 
-{% block additional_css %}
-    <style>
-        {{ show.theme.css }}
-    </style>
-    <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
+{% block extra_css %}
+{#    <link rel="stylesheet" href="{% static 'slides/slide.css' %}">#}
     <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
     <link rel="stylesheet" href="{% static 'slides/presenter-view.css' %}">
+
 {% endblock %}
 
-{% block content %}
-    <navbar class="navbar">
-        <a href="{% url 'slides-index' %}"><button>{% icon 'arrow-left' %}</button></a>
-        <h1>{{ show.name }}</h1>
-    </navbar>
-    <div id="shows-sidebar" class="mobile-hidden">
-        <ul>
-            {% for show in shows %}
-                <a href="{% url 'show' show.pk %}">
+{% block title %}{{ show.name }} - OpenShow{% endblock %}
+
+{% block header %}
+    <h1>{{ show.name }}</h1>
+{% endblock %}
+
+{% block header_right_button %}
+    <a href="{% url 'edit-show' show.pk %}" class="icon-button" aria-label="Edit {{ show.name }}">{% icon 'edit-2' %}</a>
+{% endblock %}
+
+{% block main %}
+    <div id="view-container" class="sidebar-layout double">
+        <div id="shows-sidebar" class="mobile-hidden box">
+            <ul>
+                {% for show in shows %}
                     <li>
-                        <h2>{{ show.name }}</h2>
+                        <a href="{% url 'show' show.pk %}">{{ show.name }}</a>
                     </li>
-                </a>
-            {% endfor %}
-        </ul>
-    </div>
-    <div id="show-container">
-    <div id="show" class="presentation" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
-        <h1>{{ show.name }}</h1>
-        <ul>
-            {% for segment in show.segments.all %}
-                <li>
-                    <h2>{{ segment.name }}</h2>
-                    {% if segment.included_deck %}
-                        <h3>{{ segment.included_deck.name }}</h3>
-                        <ul
-                            {% if segment.included_deck.script %}
-                                class="with-cues"
-                            {% endif %}
-                        >
-                            {% for slide in segment.included_deck.slides.all %}
-                                <li class="deck-slide {% if slide == show.displays.first.current_slide %}selected{% endif %}" id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
-                                    {% if slide.cue %}
-                                        <p>
-                                            {{ slide.cue }}
-                                        </p>
-                                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="show-container">
+        <script id="slide-select-indicator" type="text/hyperscript">
+            on load
+            remove .selected from .selected
+            add .selected to #slide-{{ show.displays.first.current_slide.pk }}
+        </script>
+        <div id="show" class="presentation" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
+            <ul>
+                {% for segment in show.segments.all %}
+                    <li>
+                        <h2>{{ segment.name }}</h2>
+                        {% if segment.included_deck %}
+                            <h3>{{ segment.included_deck.name }}</h3>
+                            <ul
+                                {% if segment.included_deck.script %}
+                                    class="with-cues"
+                                {% endif %}
+                            >
+                                {% for slide in segment.included_deck.slides.all %}
+                                    <li class="deck-slide" id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
+                                        {% if slide.cue %}
+                                            <p>
+                                                {{ slide.cue }}
+                                            </p>
+                                        {% endif %}
+                                        {% include 'slides/slide-thumbnail.html' %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <ul>
+                            {% for slide in segment.slides.all %}
+                                <li {% if slide == show.displays.first.current_slide %}class="selected"{% endif %} id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
                                     {% include 'slides/slide-thumbnail.html' %}
                                 </li>
                             {% endfor %}
                         </ul>
-                    {% endif %}
-                    <ul>
-                        {% for slide in segment.slides.all %}
-                            <li {% if slide == show.displays.first.current_slide %}class="selected"{% endif %} id="slide-{{ slide.pk }}" data-slide-pk="{{ slide.pk }}">
-                                {% include 'slides/slide-thumbnail.html' %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    </div>
-    <div id="show-controls" class="mobile-hidden">
-        <div id="forward-reverse">
-            <form action="{% url 'show-slide' %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="show_pk" value="{{ show.pk }}">
-                <input type="hidden" name="direction" value="reverse">
-                <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="innerHTML" hx-target="#show-container" hx-select="#show">{% icon 'chevron-left' %}</button>
-            </form>
-            <form action="{% url 'show-slide' %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="show_pk" value="{{ show.pk }}">
-                <input type="hidden" name="direction" value="forward">
-                <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="innerHTML" hx-target="#show-container" hx-select="#show">{% icon 'chevron-right' %}</button>
-            </form>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
-        <button class="icon-button" id="settings-toggle" _="on click toggle .expand on next <.settings/>">{% icon 'settings' %}</button>
-        <div class="settings">
-            <form action="{% url 'advance-mode' show.pk %}">
-                {% csrf_token %}
-                <div class="checkbox-row">
-                    <input type="checkbox" name="advance_between_segments" hx-post="{% url 'advance-mode' show.pk %}" hx-swap="none" hx-trigger="change" {% if show.advance_between_segments %}checked{% endif %}>
-                    <label>Advance between decks</label>
+        </div>
+        <div id="show-controls" class="mobile-hidden">
+            <div id="forward-reverse">
+                <form action="{% url 'show-slide' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="show_pk" value="{{ show.pk }}">
+                    <input type="hidden" name="direction" value="reverse">
+                    <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="innerHTML" hx-target="#slide-select-indicator" hx-select="#slide-select-indicator">{% icon 'chevron-left' %}</button>
+                </form>
+                <form action="{% url 'show-slide' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="show_pk" value="{{ show.pk }}">
+                    <input type="hidden" name="direction" value="forward">
+                    <button class="icon-button" hx-post="{% url 'show-slide' %}" hx-swap="innerHTML" hx-target="#slide-select-indicator" hx-select="#slide-select-indicator">{% icon 'chevron-right' %}</button>
+                </form>
+            </div>
+            <button class="iconbutton" id="settings-toggle" _="on click toggle .expand on next <.settings/>">{% icon 'settings' %}</button>
+            <div class="settings box">
+                <form action="{% url 'advance-mode' show.pk %}">
+                    {% csrf_token %}
+                    <div class="checkbox-row">
+                        <input type="checkbox" name="advance_between_segments" hx-post="{% url 'advance-mode' show.pk %}" hx-swap="none" hx-trigger="change" {% if show.advance_between_segments %}checked{% endif %}>
+                        <label>Advance between decks</label>
+                    </div>
+                    <div class="checkbox-row">
+                        <input type="checkbox" name="advance_loop" hx-post="{% url 'advance-loop' show.pk %}" hx-swap="none" hx-trigger="change" {% if show.advance_loop %}checked{% endif %}>
+                        <label>Advance in a loop</label>
+                    </div>
+                </form>
+                <hr>
+                <div class="horizontal-buttons">
+                    {% if show.displays.all.first %}
+                        {% for display in show.displays.all %}
+                            <button title="{{ display.name }}" class="icon-button tall" _="on click set @src of #controls-preview to '{% url 'display' display.pk %}'">{% icon "eye" %}{{ display.pk }}</button>
+                        {% endfor %}
+                    {% endif %}
                 </div>
-                <div class="checkbox-row">
-                    <input type="checkbox" name="advance_loop" hx-post="{% url 'advance-loop' show.pk %}" hx-swap="none" hx-trigger="change" {% if show.advance_loop %}checked{% endif %}>
-                    <label>Advance in a loop</label>
+                <hr>
+                <div id="display-selector">
+                    <div>Displays:</div>
+                    <form>
+                        {% csrf_token %}
+                        {{ display_selector_form.displays }}
+                        <button class="icon-button" hx-post="{% url 'select-displays' show.pk %}" hx-swap="none">{% icon 'check' %}</button>
+                    </form>
+                    <div><i>Hold ctrl to select multiple</i></div>
                 </div>
-            </form>
-            <hr>
-            <div class="horizontal-buttons">
+            </div>
+            <div class="slide-thumbnail">
                 {% if show.displays.all.first %}
-                    {% for display in show.displays.all %}
-                        <button title="{{ display.name }}" class="icon-button tall" _="on click set @src of #controls-preview to '{% url 'display' display.pk %}'">{% icon "eye" %}{{ display.pk }}</button>
-                    {% endfor %}
+                    <iframe class="slide" id="controls-preview" src="{% url 'display' show.displays.all.first.pk %}"></iframe>
                 {% endif %}
             </div>
-            <hr>
-            <div id="display-selector">
-                <div>Displays:</div>
-                <form>
-                    {% csrf_token %}
-                    {{ display_selector_form.displays }}
-                    <button class="icon-button" hx-post="{% url 'select-displays' show.pk %}" hx-swap="none">{% icon 'check' %}</button>
-                </form>
-                <div><i>Hold ctrl to select multiple</i></div>
-            </div>
         </div>
-        <div class="slide-thumbnail">
-            {% if show.displays.all.first %}
-                <iframe class="slide" id="controls-preview" src="{% url 'display' show.displays.all.first.pk %}"></iframe>
-            {% endif %}
+        <div class="box mobile-tab-controls">
+            <button class="icon-button mobile-hidden" id="shows-sidebar-button" _="on click add .mobile-hidden to <#view-container > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#shows-sidebar, #shows-sidebar-button/>">{% icon 'menu' %}</button>
+            <button class="icon-button" id="show-button" _="on click add .mobile-hidden to <#view-container > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#show-container, #show-button/>">{% icon 'monitor' %}</button>
+            <button class="icon-button mobile-hidden" id="show-controls-button" _="on click add .mobile-hidden to <#view-container > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#show-controls, #show-controls-button/>">{% icon 'play' %}</button>
         </div>
-    </div>
-    <div class="mobile-tab-controls">
-        <button class="icon-button mobile-hidden" id="shows-sidebar-button" _="on click add .mobile-hidden to <body > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#shows-sidebar, #shows-sidebar-button/>">{% icon 'menu' %}</button>
-        <button class="icon-button" id="show-button" _="on click add .mobile-hidden to <body > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#show-container, #show-button/>">{% icon 'monitor' %}</button>
-        <button class="icon-button mobile-hidden" id="show-controls-button" _="on click add .mobile-hidden to <body > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#show-controls, #show-controls-button/>">{% icon 'play' %}</button>
     </div>
 {% endblock %}

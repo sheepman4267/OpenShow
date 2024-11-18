@@ -11,12 +11,12 @@ These are features which are planned for the future. Anything crossed out here h
 - ~Mobile presenter remote~
 
 ## v0.2.0
+- Bunch of stuff got done, check the release notes
+
+## v0.3.0
 - Display element on only one display (Possible, but hacky- needs a custom CSS class set on the display. This will be added to the next major overhaul of the element editor.)
 - Overhauled segment and show editor
 - New theme format and theme editor
-
-## v0.3.0
-- Deprecate old theme format
 
 ## Future
 - Video capture input

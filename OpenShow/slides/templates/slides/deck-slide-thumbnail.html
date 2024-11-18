@@ -1,0 +1,20 @@
+{% load srcdoc %}
+<div class="slide-thumbnail">
+    <form method="post" action="{% url 'show-slide' %}">
+        {% csrf_token%}
+        <input type="hidden" name="slide_pk" value="{{ slide.pk }}">
+        <input type="hidden" name="display_pk_multiple" _="
+            on click from closest .slide-thumbnail
+            set displays to []
+            for display_checkbox in <input.display-checkbox:checked/>
+                append display_checkbox's @data-display-pk to displays
+                log displays
+                end
+            set my @value to displays
+            send 'send-slide' to next <div/>
+        ">
+        <div hx-post="{% url 'show-slide' %}" hx-trigger="send-slide" hx-swap="none" _="on htmx:afterRequest remove .selected from .selected then add .selected to closest <li/>">
+            <iframe scrolling="no" class="slide" srcdoc="{% srcdoc %}{% include 'slides/iframe-slide-thumbnail.html' with slide=slide %}{% endsrcdoc %}"></iframe>
+        </div>
+    </form>
+</div>

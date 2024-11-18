@@ -37,3 +37,16 @@ body {
 #slide-grabber {
     display: none;
 }
+
+#slide-info-overlays {
+    position: absolute;
+    bottom: 45px;
+    right: 45px;
+    height: 200px;
+}
+
+.slide-info-icon {
+    height: 200px;
+    width: 200px;
+    color: white;
+}

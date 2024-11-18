@@ -1,0 +1,71 @@
+{% load icon %}
+<div id="slide" class="slide">
+    {% for element in slide.get_elements %}
+        <form
+            class="dragbox"
+            hx-post="{% url 'reorder-element' %}"
+            hx-swap="outerHTML"
+            hx-trigger="drop"
+            hx-select="#slide"
+            hx-target="#slide"
+            _="
+            on dragover or dragenter call event.preventDefault() then add .dragover to me
+            on dragleave remove .dragover from me
+        ">
+            {% csrf_token %}
+            <input type="hidden" name="next_element_pk" value="{{ element.pk }}">
+            <input type="hidden" name="moved_element_pk" class="movedelement">
+        </form>
+        <div
+                class="{{ element.css_class }} editor-element"
+                hx-trigger="dblclick"
+                hx-get="{% url 'edit-element-text' pk=element.pk %}"
+                hx-swap="outerHTML"
+                id="element-{{ element.pk }}"
+                draggable="true"
+                data-element-pk="{{ element.pk }}"
+                _="
+                    on dragstart
+                        call event.dataTransfer.setData('text/plain', target) {# don't know why, drop event never fires unless something is set here #}
+                        then set @value of <input[name='moved_element_pk']/> to my @data-element-pk
+                    end
+                "
+        >
+            {% if element.body %}
+                {{ element.body|safe }}
+            {% elif element.video and not element.image %}
+                <i class="hint">Video: {{ element.video }}</i>
+            {% elif element.media_object %}
+                <i class="hint">Media Object {{ element.media_object }}</i>
+            {% elif not element.image %}
+                <i class="hint">Double-click to edit</i>
+            {% endif %}
+            {% if element.image %}
+                <img src="{{ element.image.url }}">
+            {% endif %}
+            <nav class="element-action-button-container">
+                <button hx-get="{% url 'delete-element' pk=element.pk %}">{% icon 'trash-2' %}</button>
+                <button hx-get="{% url 'edit-element-css-class' pk=element.pk %}">{% icon 'pen-tool' %}</button>
+                <button hx-get="{% url 'edit-element-image' pk=element.pk %}" class="{% if element.image %}green{% endif %}">{% icon 'image' %}</button>
+                <button hx-get="{% url 'edit-element-video' pk=element.pk %}" class="{% if element.video %}green{% endif %}">{% icon 'video' %}</button>
+                <button hx-get="{% url 'edit-element-media_object' pk=element.pk %}" class="{% if element.media_object %}green{% endif %}">{% icon 'play' %}</button>
+                <button hx-get="{% url 'edit-element-text' pk=element.pk %}" hx-swap="outerHTML" hx-swap="outerHTML" hx-target="#element-{{ element.id }}">{% icon 'edit' %}</button>
+            </nav>
+        </div>
+    {% endfor %}
+    <form
+        class="dragbox"
+        hx-post="{% url 'reorder-element' %}"
+        hx-swap="outerHTML"
+        hx-trigger="drop"
+        hx-select="#slide"
+        hx-target="#slide"
+        _="
+        on dragover or dragenter call event.preventDefault() then add .dragover to me
+        on dragleave remove .dragover from me
+    ">
+        {% csrf_token %}
+        {# don't sent next_slide as this is the end #}
+        <input type="hidden" name="moved_element_pk" class="movedelement">
+    </form>
+</div>

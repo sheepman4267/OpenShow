@@ -1,0 +1,33 @@
+{% load icon %}
+<form id="form-{{ object.pk }}" class="{{ object.css_class }}">
+    {% csrf_token %}
+    <div class="grow-wrap">
+        <textarea
+                id="edit-element-{{ object.pk }}"
+                name="body"
+                class="editor-editable"
+                _="
+                on input or load
+                set <.grow-wrap/>'s @data-replicated-value to me.value
+        "
+        >{{ object.get_editable_text|safe }}</textarea>
+    </div>
+    <div class="element-edit-buttons">
+        <button
+                hx-select="#element-{{ object.pk }}"
+                hx-target="#form-{{ object.pk }}"
+                hx-swap="outerHTML swap:0.1s"
+                hx-post="{% url 'edit-element-text' object.pk %}"
+                _="
+                on keydown[ctrlKey and key is 'Enter'] from the closest <form/>
+                    send 'click' to me
+                end
+                "
+                type="button"
+                class="icon-button element-submit"
+                id="submit-element-{{ object.pk }}"
+        >
+            {% icon 'check' %}
+        </button>
+    </div>
+</form>

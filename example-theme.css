@@ -1,0 +1,59 @@
+* {
+  font-family: sans-serif;
+}
+
+body.slide-body {
+  background-color: black;
+  overflow: clip;
+  width: 1920px;
+}
+
+.slide {
+  width: 1920px;
+  height: 1080px;
+  overflow: clip;
+}
+
+.lyrics {
+  text-align: center;
+  font-size: 60pt;
+  margin-top: 1rem;
+  margin-bottom: auto;
+  margin-inline: 4rem;
+  color: white;
+  text-shadow: 2px 2px 6px #000000;
+}
+
+.subtitle {
+  color: white;
+  align-self: center;
+  font-size: 50pt;
+  margin-bottom: 1rem;
+  margin-top: auto;
+  text-shadow: 2px 2px 6px #000000;
+}
+
+.fit-image-height {
+  display: flex;
+}
+
+.fit-image-height img {
+  width: auto;
+  height: 100vh;
+  max-height: 100%;
+  margin-inline: auto;
+}
+
+.annotation {
+  font-size: 30pt;
+  color: white;
+  text-align: right;
+  margin-right: 2rem;
+  margin-bottom: 1rem;
+  margin-top: auto;
+  text-shadow: 2px 2px 6px #000000;
+}
+
+.audio video {
+  display: none;
+}

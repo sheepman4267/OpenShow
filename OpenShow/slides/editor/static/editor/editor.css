@@ -207,6 +207,7 @@ ul > a {
     height: 1rem;
     background-color: unset;
     margin-block: 0;
+    margin-bottom: -1rem;
     transition: height, background-color 500ms;
 }
 
@@ -224,4 +225,158 @@ ul > a {
 
 :not(.htmx-swapping) {
     transition: background-color 0.1s, opacity 0.1s;
+}
+
+.modal {
+    /*position: absolute;*/
+    /*top: calc(50%);*/
+    /*left: 50%;*/
+    margin: auto;
+    margin-top: calc(50dvh - 4rem);
+    width: 15rem;
+    height: 8rem;
+    background: #606060;
+    color: white;
+    border: 3px solid darkgray;
+    padding: 1rem;
+    text-align: center;
+
+    border-radius: 0.5rem;
+    z-index: 1070;
+}
+
+.confirm-delete-modal {
+    background: #daa5a5;
+    color: #000000;
+    border: 3px solid #a10000;
+}
+
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(0.5rem);
+}
+
+.editor-editable {
+    outline: 4px solid red;
+    font-size: unset;
+    overflow: unset;
+    height: unset;
+    text-align: unset;
+    background: transparent;
+}
+
+.element-edit-buttons {
+    scale: 3;
+    width: fit-content;
+    position: absolute;
+    right: 50px;
+}
+
+.editor-element {
+    min-height: 2rem;
+    position: relative;
+}
+
+.editor-element .hint {
+    opacity: 0.75;
+    font-size: 3rem;
+    text-align: center;
+    width: 100%;
+}
+
+.grow-wrap {
+    display: grid;
+}
+
+.grow-wrap::after {
+    content: attr(data-replicated-value) " ";
+    white-space: pre-wrap;
+    visibility: hidden;
+}
+
+.grow-wrap > textarea {
+    resize: none;
+    overflow: hidden;
+}
+
+.grow-wrap > textarea,
+.grow-wrap::after {
+    outline: 4px solid red;
+    border: none;
+    padding: 0;
+    font: inherit;
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+/*Thanks to https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/ for grow-wrap*/
+
+.element-action-button-container {
+    width: fit-content;
+    position: absolute;
+    top: 0;
+    left: 10px;
+    display: none;
+    height: min-content;
+    text-shadow: none;
+}
+
+.element-action-button-container > * {
+    display: inline;
+}
+
+.element-action-button-container:has(form),
+.editor-element:hover .element-action-button-container {
+    display: block;
+}
+
+.element-action-button-container form > * {
+    display: inline;
+    width: unset;
+    vertical-align: middle;
+    height: 4rem;
+    font-size: 3rem;
+}
+
+.element-action-button-container button {
+    height: 4rem;
+    width: 4rem;
+}
+
+.element-action-button-container button svg {
+    height: 3rem;
+    width: 3rem;
+}
+
+.element-action-button-container .element-form-box {
+    background: #606060;
+    border: 6px solid darkgray;
+    border-radius: 2rem;
+    font-size: 2rem;
+    display: inline-block;
+    padding: 1rem;
+    text-align: left;
+}
+
+.element-action-button-container .element-form-box * {
+    font-size: 2rem;
+}
+
+.element-action-button-container .element-form-box input[type=checkbox] {
+    height: 2rem;
+    width: 2rem;
+}
+
+button.danger {
+    background: #9C1A1C;
+    color: white;
+}
+
+button.green {
+    background-color: #bedfb8;
 }

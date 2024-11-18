@@ -13,7 +13,9 @@ def parse_element_body(markup:str) -> str:
     :return:
     """
     body = markup
+    body = "".join(body.splitlines())
     body = body.replace("\\", "<br>")
+    print(bytes(body, "utf-8"))
     return body
 
 

@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+{% load icon %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
+    <style>body {--display-size-divisor: 3} .slide-thumbnail:hover{box-shadow: none}</style>
+{% endblock %}
+
+{% block header %}
+    <h1>{{ object.name }}</h1>
+{% endblock %}
+
+{% block title %}Editing {{ object.name }} - OpenShow{% endblock %}
+
+{% block header_right_button %}
+    <a
+            hx-get="{% url 'update-display' object.pk %}"
+            hx-target="<main/>"
+            hx-swap="innerHTML"
+            class="icon-button"
+            aria-label="Edit {{ object.name }}"
+    >
+        {% icon 'edit-2' %}
+    </a>
+{% endblock %}
+
+{% block content %}
+    <h2>Current Slide</h2>
+    <div>
+        {% if display.current_slide %}
+            {% include 'slides/slide-thumbnail.html' with slide=object.current_slide %}
+        {% else %}
+            None
+        {% endif %}
+    </div>
+    <a href="{% url 'display' object.pk %}" target="_blank">Open this display (in a new tab)</a>
+{% endblock %}

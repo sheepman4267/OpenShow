@@ -1,0 +1,5 @@
+<form method="post" action="{% url 'update-display' object.pk %}">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Submit</button>
+</form>

@@ -17,13 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+import django_eventstream
+from .api import api
 
 urlpatterns = [
     path('', include('core.urls')),
     path('admin/', admin.site.urls),
+    path('api/', api.urls),
     path('slides/', include('slides.urls')),
     path('uubloomington/', include('uubloomington_api_connector.urls')),
     path('pjlink/', include('pjlink_integration.urls')),
-    path('deck_from_images/', include('deck_from_images.urls')),
+    path("events/", include(django_eventstream.urls), {"channels": ["test"]}),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

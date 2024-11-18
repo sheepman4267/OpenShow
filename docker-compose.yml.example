@@ -6,15 +6,15 @@ services:
     command:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.address=:8080"
       - "--providers.docker.useBindPortIP=true"
     ports:
-      - "80:80"
+      - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
   openshow-dynamic:
-    image: sheepman4267/openshow:0.1.0
+    image: sheepman4267/openshow:0.2.0
     volumes:
       - "./openshow/static-root:/static-root"
       - "./openshow/media-root:/media-root"

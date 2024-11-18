@@ -1,0 +1,46 @@
+body > header {
+    display: grid;
+    grid-template-columns: 5rem 1fr 5rem;
+    text-align: center;
+    height: 6rem;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.header-right-button svg,
+.header-back-button svg {
+    height: 100%;
+    width: 2rem;
+    margin: auto;
+}
+
+.header-back-button a {
+    margin: 0;
+}
+
+.sidebar-layout.double {
+    grid-template-columns: 18rem 2fr 1fr;
+    height: calc(100dvh - 7rem);
+}
+
+h2 {
+    margin: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+@media screen and (max-width: 50rem) {
+    .sidebar-layout.double {
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100dvh - 7rem);
+    }
+}
+
+@media screen and (min-width: 1420px) {
+    .sidebar-layout.double {
+        grid-template-columns: 18rem 2fr 25rem;
+    }
+}

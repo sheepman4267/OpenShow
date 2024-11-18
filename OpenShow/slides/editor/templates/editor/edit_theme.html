@@ -10,10 +10,12 @@
     <style id="theme">{{ theme.css }}</style>
 {% endblock %}
 
+{% block title %}Editing {{ theme.name }} - OpenShow{% endblock %}
+
 {% block content %}
     <div id="show-editor" class="show-editor" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
         <navbar class="navbar">
-            <a href="{% url 'editor_index' %}"><button>{% icon 'arrow-left' %}</button></a>
+            <a href="{% url 'slides-index' %}"><button>{% icon 'arrow-left' %}</button></a>
             <h1>{{ theme.name }}</h1>
         </navbar>
         <ul class="slides-sidebar">
@@ -46,6 +48,7 @@
                 {{ form.css }}
                 <input type="submit">
             </form>
+            <button hx-get="{% url 'delete-theme' pk=theme.pk %}" hx-swap="outerHTML">Delete Theme</button>
             <ul class="class-list">
                 {% for css_class in theme.get_css_classes %}
                     <li>
