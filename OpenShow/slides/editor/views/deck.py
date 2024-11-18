@@ -4,7 +4,7 @@ from slides.models import Deck, Slide, SlideElement
 from django.db import transaction
 from django.shortcuts import get_object_or_404, HttpResponseRedirect
 import slides.aoml_parser as aoml
-from slides.editor.forms import DeckFromImagesForm
+from slides.editor.forms import DeckFromImagesForm, ImportImagesForm
 
 
 class DeckCreateView(CreateView):
@@ -105,3 +105,41 @@ class DeckFromImagesView(FormView):
             )
             new_slide_element.save()
         return HttpResponseRedirect(reverse_lazy('edit-deck', kwargs={'pk': form.instance.pk}))
+
+
+class ImportImagesToExistingDeckView(FormView):
+    model = Deck
+    form_class = ImportImagesForm
+    template_name = 'editor/import_images_to_deck.html'
+
+    def get_object(self):
+        db_object = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        return db_object
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        context['deck'] = self.get_object()
+        return context
+
+    def form_valid(self, form):
+        deck = self.get_object()
+        # If we're in overwrite mode, delete all the deck's slides first
+        if form.cleaned_data['mode'] == ImportImagesForm.OVERWRITE:
+            existing_slides = list(deck.slides.all())
+            if len(existing_slides) > 0:
+                for slide in existing_slides:
+                    slide.delete()
+        # Actually import the images
+        files = form.cleaned_data['files']
+        for image in files:
+            new_slide = Slide(deck=deck)
+            new_slide.save()
+            new_slide_element = SlideElement(
+                css_class=form.cleaned_data["image_css_class"],
+                order=0,
+                slide=new_slide,
+                image=image,
+                body="",
+            )
+            new_slide_element.save()
+        return HttpResponseRedirect(reverse_lazy('edit-deck', kwargs={'pk': deck.pk}))

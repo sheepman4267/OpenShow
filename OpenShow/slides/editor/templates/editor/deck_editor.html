@@ -19,6 +19,94 @@
         <navbar class="navbar">
             <a href="{% url 'deck' pk=deck.pk %}"><button>{% icon 'arrow-left' %}</button></a>
             <h1>{{ deck.name }}</h1>
+            <a href="{% url 'import-images-to-deck' pk=deck.pk %}" title="Import Images to Deck"><button><svg
+   viewBox="0 0 24 24"
+   width="24"
+   height="24"
+   class="main-grid-item-icon"
+   fill="none"
+   stroke="currentColor"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   stroke-width="2"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="g1"
+     transform="matrix(0.74436145,0,0,0.74436145,0.14838963,3.0856183)">
+    <rect
+       height="11.752888"
+       rx="1.3058764"
+       ry="1.3058764"
+       width="11.752888"
+       x="9.5941744"
+       y="9.5941744"
+       id="rect1"
+       style="stroke-width:1.30588" />
+    <circle
+       cx="13.185334"
+       cy="13.185334"
+       r="0.97940731"
+       id="circle1"
+       style="stroke-width:1.30588" />
+    <polyline
+       points="21 15 16 10 5 21"
+       id="polyline1"
+       transform="matrix(0.6529382,0,0,0.6529382,7.6353596,7.6353596)" />
+  </g>
+  <g
+     id="g2"
+     transform="matrix(0.74436145,0,0,0.74436145,-5.0060971,-1.9766044)">
+    <path
+       style="stroke-width:1.30588"
+       d="m 12.948768,21.347062 h -2.048717 c -0.723456,0 -1.3058766,-0.582421 -1.3058766,-1.305876 v -9.141135 c 0,-0.723456 0.5824206,-1.3058766 1.3058766,-1.3058766 h 9.141135 c 0.723455,0 1.305876,0.5824206 1.305876,1.3058766 v 1.847882"
+       id="path5" />
+    <path
+       style="stroke-width:1.30588;stroke-linecap:butt;stroke-miterlimit:4"
+       d="m 13.185334,14.164742 c -0.540912,0 -0.979407,-0.438496 -0.979407,-0.979408 0,-0.540911 0.438496,-0.979407 0.979407,-0.979407 0.540912,0 0.979408,0.438495 0.979408,0.979407"
+       id="path1" />
+    <path
+       d="M 7.8599351,18.140065 5,21"
+       transform="matrix(0.6529382,0,0,0.6529382,7.6353596,7.6353596)"
+       id="path4" />
+  </g>
+  <path
+     style="stroke-width:0.972047"
+     d="M 7.2741248,16.43521 H 5.6847241 c -0.5385128,0 -0.9720442,-0.433531 -0.9720442,-0.972043 V 8.6588582 c 0,-0.5385127 0.4335314,-0.9720442 0.9720442,-0.9720442 h 6.8043089 c 0.538512,0 0.972043,0.4335315 0.972043,0.9720442 v 1.5425758"
+     id="rect1-0" />
+  <path
+     style="stroke-width:0.972047;stroke-linecap:butt"
+     d="m 7.3858008,11.088968 c -0.4026338,0 -0.729033,-0.326399 -0.729033,-0.729033 -1e-7,-0.4026339 0.3263991,-0.7290332 0.729033,-0.7290332 0.4026339,0 0.7290332,0.3263993 0.7290331,0.7290332"
+     id="path2" />
+  <path
+     d="m 7.2876747,14.83226 -1.602951,1.60295"
+     id="path3"
+     style="stroke-width:0.972044" />
+  <g
+     id="g2-5"
+     transform="matrix(0.57051915,0,0,0.57051915,8.0414368,5.7242893)">
+    <g
+       id="g6"
+       transform="translate(1.0809285)">
+      <line
+         x1="20"
+         x2="20"
+         y1="8"
+         y2="14"
+         id="line1" />
+      <line
+         x1="23"
+         x2="17"
+         y1="11"
+         y2="11"
+         id="line2" />
+    </g>
+  </g>
+</svg></button></a>
         </navbar>
         <ul class="slides-sidebar">
             {% for slide in deck.slides.all %}

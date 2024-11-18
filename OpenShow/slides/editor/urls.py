@@ -9,7 +9,7 @@ from slides.editor.views.slide_element import SlideElementCreateView, SlideEleme
     SlideElementUpdateTextView, SlideElementUpdateCSSClassView, SlideElementUpdateImageView, \
     SlideElementUpdateVideoView, ChangeSlideElementOrderView, SlideElementUpdateMediaObjectView
 from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteView, push_deck_cues, \
-    push_deck_slide_text, pull_aoml_text, DeckFromImagesView
+    push_deck_slide_text, pull_aoml_text, DeckFromImagesView, ImportImagesToExistingDeckView
 from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDeleteView
 from slides.editor.views.utils import generate_lorem
 from slides.editor.views.transition import TransitionEditorView, TransitionCreateView, TransitionKeyframeCreateView, \
@@ -43,6 +43,7 @@ urlpatterns = [
     path('deck/<int:pk>/push-cues', push_deck_cues, name='push-deck-cues'),
     path('deck/<int:pk>/push-text', push_deck_slide_text, name='push-deck-text'),
     path('deck/<int:pk>/pull-aoml', pull_aoml_text, name='pull-aoml-text'),
+    path('deck/<int:pk>/import-images', ImportImagesToExistingDeckView.as_view(), name='import-images-to-deck'),
     path('deck/import/images', DeckFromImagesView.as_view(), name='import-deck-from-images'),
     path('theme/new', ThemeCreateView.as_view(), name='new-theme'),
     path('theme/<int:pk>', ThemeUpdateView.as_view(), name='edit-theme'),

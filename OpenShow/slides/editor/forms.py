@@ -87,3 +87,17 @@ class DeckFromImagesForm(ModelForm):
         ]
     files = MultipleFileField()
     image_css_class = CharField()
+
+
+class ImportImagesForm(Form):
+    OVERWRITE = 'OVERWRITE'
+    APPEND = 'APPEND'
+    IMPORT_MODE_CHOICES = [
+        (APPEND, 'Append'),
+        (OVERWRITE, 'Overwrite (DANGER!! Will permanently erase all slides in this deck!)'),
+    ]
+    files = MultipleFileField()
+    image_css_class = CharField()
+    mode = ChoiceField(
+        choices=IMPORT_MODE_CHOICES,
+    )
