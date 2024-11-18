@@ -94,7 +94,7 @@
                     {% csrf_token %}
                     <div class="checkbox-row">
                         <input type="checkbox" name="advance_between_segments" hx-post="{% url 'advance-mode' show.pk %}" hx-swap="none" hx-trigger="change" {% if show.advance_between_segments %}checked{% endif %}>
-                        <label>Advance between decks</label>
+                        <label>Advance between segments</label>
                     </div>
                     <div class="checkbox-row">
                         <input type="checkbox" name="advance_loop" hx-post="{% url 'advance-loop' show.pk %}" hx-swap="none" hx-trigger="change" {% if show.advance_loop %}checked{% endif %}>
