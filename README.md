@@ -70,16 +70,17 @@ Refer to the "Concepts" section above for explanation of terminology such as "Sh
 12. Click the back button again, which this time will take you to the presenter view for your show. In the right sidebar, there's a gear button. Click that, select your display in the list, and click the checkmark. That sets this Show object to send slides to your display.
 13. In the main body of the presenter view, you'll see a thumbnail for the slide you just created. Click on it! The slide you created should appear in the browser window where you opened your display.
 
-Congratulations! You've just displayed your first slide using OpenShow! Keep reading to get familiar with more powerful features.
+Congratulations! You've just displayed your first slide using OpenShow! Hopefully that gives you an idea of the UI. Many pieces of the editor have function descriptions built in - otherwise, more documentation will be forthcoming. Feel free to file an issue if you have any question, even if it's probably not a bug.
 
 ## Development Setup
 
-This is a standard Django + Channels application, and a development copy can be set up (on Linux) by:
+OpenShow uses [honcho](https://honcho.readthedocs.io/en/latest/) both in development and production, as we need a separate worker process for video transcoding.
+In production, you should almost certainly use the docker container, but here's how you set up a development environment:
 
 1. Clone this repository
 2. Create a python virtual environment: `python3 -m venv venv`
 3. Activate the virtual environment: `source venv/bin/activate`
 4. Install requirements as usual: `pip install -r requirements.txt`
-5. Run the server: `python manage.py runserver`
+5. Run the server: `honcho start -f Procfile.development`
 
-Once you have this running, you can navigate to localhost:8000 in your web browser and start messing with OpenShow. 
+Once you have this running, you can navigate to localhost:8030 in your web browser and start messing with OpenShow. The development server port can be changed by editing `Procfile.development` to suit your needs.
