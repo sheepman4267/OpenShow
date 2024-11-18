@@ -4,8 +4,8 @@
 
 
 
-{{ display.current_slide.segment.show.theme.css }}
-{{ display.current_slide.deck.theme.css }}
-{{ display.current_slide.theme.css }}
+{{ display.current_slide.segment.show.theme.css|safe }}
+{{ display.current_slide.deck.theme.css|safe }}
+{{ display.current_slide.theme.css|safe }}
 
-{{ display.custom_css }}
+{{ display.custom_css|safe }}
