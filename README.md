@@ -81,6 +81,8 @@ In production, you should almost certainly use the docker container, but here's 
 2. Create a python virtual environment: `python3 -m venv venv`
 3. Activate the virtual environment: `source venv/bin/activate`
 4. Install requirements as usual: `pip install -r requirements.txt`
+   > [!NOTE]
+   > If you want your development instance to transcode media objects, you'll need to install `ffmpeg` as well. Everything else will work without it.
 5. Run the server: `honcho start -f Procfile.development`
 
 Once you have this running, you can navigate to localhost:8030 in your web browser and start messing with OpenShow. The development server port can be changed by editing `Procfile.development` to suit your needs.
