@@ -27,7 +27,6 @@ urlpatterns = [
     path('slides/', include('slides.urls')),
     path('uubloomington/', include('uubloomington_api_connector.urls')),
     path('pjlink/', include('pjlink_integration.urls')),
-    path('deck_from_images/', include('deck_from_images.urls')),
     path("events/", include(django_eventstream.urls), {"channels": ["test"]}),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

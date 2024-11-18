@@ -34,7 +34,6 @@ INSTALLED_APPS = [
     'django_feather',
     'pjlink_integration',
     'core',
-    'deck_from_images',
     'django_srcdoc',
     'neapolitan',
     'django_extensions',
