@@ -1,3 +1,4 @@
+import hashlib
 from django.db import models
 from django_eventstream import send_event
 from collections.abc import Iterable
@@ -357,6 +358,13 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         blank=True,
         null=True,
         upload_to='element_images/'
+    )
+    image_object = models.ForeignKey(
+        to='Image',
+        blank=True,
+        null=True,
+        related_name='elements',
+        on_delete=models.SET_NULL,
     )
     video = models.FileField(
         blank=True,
@@ -761,3 +769,22 @@ class MediaObject(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Image(models.Model):
+    file = models.ImageField(
+        blank=False,
+        null=False,
+        upload_to='images/',
+    )
+    file_hash = models.CharField(max_length=256, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            super(self.__class__, self).save(*args, **kwargs)
+        hash_func = hashlib.new('sha256')
+        with open(self.file.path, 'rb') as file:
+            while chunk := file.read(65536):
+                hash_func.update(chunk)
+        self.file_hash = hash_func.hexdigest()
+        super(self.__class__, self).save(*args, **kwargs)

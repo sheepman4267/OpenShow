@@ -1,5 +1,6 @@
 from django.urls import path
 
+from slides.editor.views.image import ImageCRUDView
 from slides.editor.views.index import IndexView
 from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView, SetThemeView, \
     check_theme_compatibility
@@ -61,4 +62,5 @@ urlpatterns = [
     path('display/<int:pk>/update', DisplayUpdateView.as_view(), name='update-display'),
     path('display/<int:pk>/delete', DisplayDeleteView.as_view(), name='delete-display'),
     *MediaObjectCRUDView.get_urls(),
+    *ImageCRUDView.get_urls(),
 ]
