@@ -8,7 +8,8 @@ from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView
 from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView
 from slides.editor.views.slide_element import SlideElementCreateView, SlideElementDeleteView, \
     SlideElementUpdateTextView, SlideElementUpdateCSSClassView, SlideElementUpdateImageView, \
-    SlideElementUpdateVideoView, ChangeSlideElementOrderView, SlideElementUpdateMediaObjectView
+    SlideElementUpdateVideoView, ChangeSlideElementOrderView, SlideElementUpdateMediaObjectView, \
+    SlideElementUpdateImageObjectView
 from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteView, push_deck_cues, \
     push_deck_slide_text, pull_aoml_text, DeckFromImagesView, ImportImagesToExistingDeckView
 from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDeleteView
@@ -34,6 +35,7 @@ urlpatterns = [
     path('slide/element/<int:pk>/text-edit', SlideElementUpdateTextView.as_view(), name='edit-element-text'),
     path('slide/element/<int:pk>/css-class', SlideElementUpdateCSSClassView.as_view(), name='edit-element-css-class'),
     path('slide/element/<int:pk>/image', SlideElementUpdateImageView.as_view(), name='edit-element-image'),
+    path('slide/element/<int:pk>/image_object', SlideElementUpdateImageObjectView.as_view(), name='edit-element-image_object'),
     path('slide/element/<int:pk>/video', SlideElementUpdateVideoView.as_view(), name='edit-element-video'),
     path('slide/element/<int:pk>/media_object', SlideElementUpdateMediaObjectView.as_view(), name='edit-element-media_object'),
     path('slide/element/reorder', ChangeSlideElementOrderView.as_view(), name='reorder-element'),

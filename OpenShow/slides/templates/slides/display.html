@@ -76,6 +76,9 @@
                 {% if element.image %}
                     <img src="{{ element.image.url }}">
                 {% endif %}
+                {% if element.image_object %}
+                    <img src="{{ element.image_object.file.url }}">
+                {% endif %}
                 {% if element.video %}
                     <video autoplay name="media" _="on load js(me, me) me.play() end">
                         <source src="{{ element.video.url }}">

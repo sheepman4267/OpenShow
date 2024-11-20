@@ -71,6 +71,13 @@ class SlideElementUpdateMediaObjectView(UpdateView):
     def get_success_url(self):
         return self.object.get_absolute_url()
 
+class SlideElementUpdateImageObjectView(UpdateView):
+    model = SlideElement
+    fields = ['image_object']
+    template_name = 'editor/element_image_object_edit.html'
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 class ChangeSlideElementOrderView(FormView):
     form_class = ChangeSlideElementOrderForm

@@ -7,6 +7,7 @@ from django.utils import timezone
 from datetime import timedelta, datetime
 from django_q.models import Schedule
 import yaml
+import os
 
 import tinycss2
 
@@ -788,3 +789,6 @@ class Image(models.Model):
                 hash_func.update(chunk)
         self.file_hash = hash_func.hexdigest()
         super(self.__class__, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return os.path.basename(self.file.name)
