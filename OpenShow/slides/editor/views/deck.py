@@ -64,9 +64,10 @@ def push_deck_slide_text(request, pk):
         for slide in existing_slides:  # TODO: Add some options here...
             slide.delete()
     for slide_markup in aoml.parse_markup(deck.slide_text_markup):
-        slide = Slide(deck=deck)
+        slide_intermediate = aoml.parse_slide(slide_markup)
+        slide = Slide(deck=deck, cue=slide_intermediate.cue)
         slide.save()
-        for element in aoml.parse_slide(slide_markup):
+        for element in slide_intermediate.elements:
             element.slide = slide
             element.save()
     return HttpResponseRedirect(deck.get_absolute_url())

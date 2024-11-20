@@ -1,9 +1,20 @@
 # Functions for parsing (and generally tolerating) AOML - "Awful OpenShow Markup Language"
+from dataclasses import dataclass
+from typing import List
+import tomllib
+
 from slides.models import Slide, SlideElement
 
 
 class InvalidArgumentException(Exception):
     pass
+
+
+@dataclass
+class AOMLSlideIntermediate:
+    """An intermediate data type for use in parsing AOML to slides and back again"""
+    elements: List[SlideElement]
+    cue: str or None = None
 
 
 def parse_element_body(markup:str) -> str:
@@ -34,18 +45,30 @@ def parse_element(markup: str) -> SlideElement:
     return SlideElement(css_class=css_class, body=body)
 
 
-def parse_slide(markup: str) -> list:
+def parse_slide(markup: str) -> AOMLSlideIntermediate:
     """
-    Parse an AOML-formatted slide, returning a list of SlideElement objects which can be assigned a Slide, then saved in the database.
+    Parse an AOML-formatted slide, returning a dict describing an entire slide, including elements. The key "elements" is a list of SlideElement objects which can be assigned a Slide, then saved in the database.
     :param markup:
     :return: list
     """
-    return [
+    split_markup = markup.split('##')
+    if len(split_markup) > 1:
+        element_markup = split_markup[-1]
+        slide_metadata = tomllib.loads(split_markup[0])
+        cue = slide_metadata.get('cue')
+    else:
+        element_markup = split_markup[-1]
+        cue = None
+    elements = [
         parse_element(element)
         for element
-        in markup.split('>>')
+        in element_markup.split('>>')
         if len(element.strip()) > 0
     ]
+    return AOMLSlideIntermediate(
+        elements=elements,
+        cue=cue,
+    )
 
 
 def parse_markup(markup: str) -> list:
