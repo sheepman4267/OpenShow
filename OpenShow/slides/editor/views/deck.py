@@ -1,6 +1,6 @@
 from django.views.generic import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
-from slides.models import Deck, Slide, SlideElement
+from slides.models import Deck, Slide, SlideElement, Image
 from django.db import transaction
 from django.shortcuts import get_object_or_404, HttpResponseRedirect
 import slides.aoml_parser as aoml
@@ -97,11 +97,13 @@ class DeckFromImagesView(FormView):
         for image in files:
             new_slide = Slide(deck=form.instance)
             new_slide.save()
+            new_image_object = Image(file=image)
+            new_image_object.save()
             new_slide_element = SlideElement(
                 css_class=form.cleaned_data["image_css_class"],
                 order=0,
                 slide=new_slide,
-                image=image,
+                image_object=new_image_object,
                 body="",
             )
             new_slide_element.save()
@@ -135,11 +137,13 @@ class ImportImagesToExistingDeckView(FormView):
         for image in files:
             new_slide = Slide(deck=deck)
             new_slide.save()
+            new_image_object = Image(file=image)
+            new_image_object.save()
             new_slide_element = SlideElement(
                 css_class=form.cleaned_data["image_css_class"],
                 order=0,
                 slide=new_slide,
-                image=image,
+                image_object=new_image_object,
                 body="",
             )
             new_slide_element.save()
