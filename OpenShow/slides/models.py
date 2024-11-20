@@ -5,6 +5,7 @@ from django.shortcuts import reverse
 from django.utils import timezone
 from datetime import timedelta, datetime
 from django_q.models import Schedule
+import yaml
 
 import tinycss2
 
@@ -570,7 +571,12 @@ class Slide(models.Model):
         return result
 
     def pull_aoml(self):
-        aoml_str = ''
+        metadata = yaml.safe_dump(
+            {
+                'cue': self.cue,
+            }
+        )
+        aoml_str = f'{metadata}##\n'
         for element in self.elements.all().order_by('order'):
             aoml_str += f'>>{element.css_class}||\r{element.body}\r'.replace('<br>', '\\')
             # TODO: Handle video/image once the AOML spec supports media
