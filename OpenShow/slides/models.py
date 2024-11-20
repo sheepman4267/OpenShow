@@ -355,11 +355,6 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         related_name='elements',
         on_delete=models.CASCADE,
     )
-    image = models.ImageField(
-        blank=True,
-        null=True,
-        upload_to='element_images/'
-    )
     image_object = models.ForeignKey(
         to='Image',
         blank=True,
