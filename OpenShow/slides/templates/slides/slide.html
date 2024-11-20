@@ -9,9 +9,6 @@
     {% for element in slide.get_elements %}
         <div class="{{ element.css_class }}">
             {{ element.body|safe }}
-            {% if element.image %}
-                <img src="{{ element.image.url }}">
-            {% endif %}
             {% if element.image_object %}
                 <img src="{{ element.image_object.file.url }}">
             {% endif %}

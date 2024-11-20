@@ -33,15 +33,12 @@
         >
             {% if element.body %}
                 {{ element.body|safe }}
-            {% elif element.video and not element.image and not element.image_object %}
+            {% elif element.video and not element.image_object %}
                 <i class="hint">Video: {{ element.video }}</i>
             {% elif element.media_object %}
                 <i class="hint">Media Object {{ element.media_object }}</i>
-            {% elif not element.image and not element.image_object %}
+            {% elif not element.image_object %}
                 <i class="hint">Double-click to edit</i>
-            {% endif %}
-            {% if element.image %}
-                <img src="{{ element.image.url }}">
             {% endif %}
             {% if element.image_object %}
                 <img src="{{ element.image_object.file.url }}">
@@ -49,7 +46,6 @@
             <nav class="element-action-button-container">
                 <button hx-get="{% url 'delete-element' pk=element.pk %}">{% icon 'trash-2' %}</button>
                 <button hx-get="{% url 'edit-element-css-class' pk=element.pk %}">{% icon 'pen-tool' %}</button>
-                <button hx-get="{% url 'edit-element-image' pk=element.pk %}" class="{% if element.image %}green{% endif %}">{% icon 'image' %}</button>
                 <button hx-get="{% url 'edit-element-image_object' pk=element.pk %}" class="{% if element.image_object %}green{% endif %}">{% icon 'image' %}</button>
                 <button hx-get="{% url 'edit-element-video' pk=element.pk %}" class="{% if element.video %}green{% endif %}">{% icon 'video' %}</button>
                 <button hx-get="{% url 'edit-element-media_object' pk=element.pk %}" class="{% if element.media_object %}green{% endif %}">{% icon 'play' %}</button>
