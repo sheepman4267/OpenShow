@@ -33,6 +33,9 @@
         <button role="tab" aria-controls="mediaobjects">
             Media Objects
         </button>
+        <button role="tab" aria-controls="images">
+            Images
+        </button>
     </div>
     <div id="shows" role="tabpanel">
         <h2>Shows</h2>
@@ -133,4 +136,21 @@
             {% endfor %}
         </ul>
     </div>
+    <div id="images" role="tabpanel" hidden>
+        <h2>Images</h2>
+        <p>
+            Images which can be added to slide elements.
+        </p>
+        <button hx-get="{% url 'image-create' %}" hx-swap="outerHTML" hx-select="#image_form_container">
+            New Media Object
+        </button>
+        <ul>
+            {% for image in image_list %}
+                <li>
+                    <a href="{% url 'image-detail' image.pk %}">{{ image }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
 {% endblock %}
