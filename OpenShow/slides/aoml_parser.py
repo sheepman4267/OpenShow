@@ -1,7 +1,7 @@
 # Functions for parsing (and generally tolerating) AOML - "Awful OpenShow Markup Language"
 from dataclasses import dataclass
 from typing import List
-import tomllib
+import yaml
 
 from slides.models import Slide, SlideElement
 
@@ -54,7 +54,7 @@ def parse_slide(markup: str) -> AOMLSlideIntermediate:
     split_markup = markup.split('##')
     if len(split_markup) > 1:
         element_markup = split_markup[-1]
-        slide_metadata = tomllib.loads(split_markup[0])
+        slide_metadata = yaml.safe_load(split_markup[0])
         cue = slide_metadata.get('cue')
     else:
         element_markup = split_markup[-1]
