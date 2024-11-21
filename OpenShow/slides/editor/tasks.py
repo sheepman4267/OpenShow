@@ -5,6 +5,14 @@ from django.utils.text import slugify
 
 from slides.models import MediaObject
 from ffmpeg import FFmpeg, Progress
+import hashlib
+
+def get_file_hash(file):
+    hash_func = hashlib.new('sha256')
+    with open(file, 'rb') as file:
+        while chunk := file.read(65536):
+            hash_func.update(chunk)
+    return hash_func.hexdigest()
 
 def get_mediafile_seconds(media_path):
     result = subprocess.check_output(
@@ -40,6 +48,7 @@ def transcode_video(media_object_pk: int) -> None:
 
     ffmpeg.execute()
     media_object.final_file = 'media_final/video/' + final_file_name
+    media_object.file_hash = get_file_hash(media_object.final_file.path)
     media_object.save()
 
 
@@ -67,4 +76,5 @@ def transcode_audio(media_object_pk: int) -> None:
 
     ffmpeg.execute()
     media_object.final_file = 'media_final/audio/' + final_file_name
+    media_object.file_hash = get_file_hash(media_object.final_file.path)
     media_object.save()
