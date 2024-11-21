@@ -2,10 +2,10 @@
 
 <head id="head">
     <title>OpenShow Display {{ display.pk }}</title>
-    <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
-    <script src="https://unpkg.com/hyperscript.org@0.9.13/dist/_hyperscript.js"></script>
-    <script src="https://unpkg.com/hyperscript.org@0.9.13/dist/eventsource.js"></script>
+    <script src="{% static 'js/htmx.js' %}"></script>
+    <script src="{% static 'js/sse.js' %}"></script>
+    <script src="{% static 'js/hyperscript.js' %}"></script>
+    <script src="{% static 'js/eventsource.js' %}"></script>
     <style id="slide-style" _="on 'grab-theme' fetch {% url 'display-style' display.pk %} then put it into me">
         {{ display.current_theme.css|safe }}
         {{ display.custom_css|safe }}
