@@ -20,7 +20,7 @@ class MediaObjectCRUDView(CRUDView):
         if self.role is Role.DELETE:
             success_url = reverse('slides-index')
         else:
-            success_url = super(self.__class__).get_success_url()
+            success_url = super(self.__class__, self).get_success_url()
         return success_url
 
     def detail(self, request, *args, **kwargs):
