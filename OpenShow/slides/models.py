@@ -393,6 +393,10 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
 
     def save(self, *args, **kwargs):
         print(f'MEDIA{self.media_object}')
+        if self.missing_image_object and self.image_object:
+            self.missing_image_object = False
+        if self.missing_media_object and self.media_object:
+            self.missing_media_object = False
         if not self.pk:
             if self.slide.elements.last():
                 self.order = self.slide.elements.last().order + 10
@@ -404,6 +408,16 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         if self.body:
             self.body = self.body.replace('<br>', '\n')
         return self.body
+
+    def pull_aoml(self):
+        aoml_str = f'>>{self.css_class}||\r'
+        if self.image_object:
+            aoml_str += f'image:{self.image_object.file_hash}||\r'
+        if self.media_object:
+            aoml_str += f'media:{self.media_object.file_hash}||\r'
+        aoml_str += f'{self.body}\r'.replace('<br>', '\\')
+
+        return aoml_str
 
 
 class QRCodeElement(SlideElement):
@@ -584,8 +598,7 @@ class Slide(models.Model):
         )
         aoml_str = f'{metadata}##\n'
         for element in self.elements.all().order_by('order'):
-            aoml_str += f'>>{element.css_class}||\r{element.body}\r'.replace('<br>', '\\')
-            # TODO: Handle video/image once the AOML spec supports media
+            aoml_str += element.pull_aoml()
         return aoml_str
 
 
