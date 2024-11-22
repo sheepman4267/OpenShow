@@ -362,11 +362,13 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         related_name='elements',
         on_delete=models.SET_NULL,
     )
+    missing_image_object = models.BooleanField(default=False)
     video = models.FileField(
         blank=True,
         null=True,
         upload_to='element_videos/'
     )
+    missing_media_object = models.BooleanField(default=False)
     media_object = models.ForeignKey(
         to='MediaObject',
         blank=True,
