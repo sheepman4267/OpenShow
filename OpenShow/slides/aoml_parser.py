@@ -26,7 +26,6 @@ def parse_element_body(markup:str) -> str:
     body = markup
     body = "".join(body.splitlines())
     body = body.replace("\\", "<br>")
-    print(bytes(body, "utf-8"))
     return body
 
 
@@ -36,7 +35,6 @@ def parse_element(markup: str) -> SlideElement:
     :param markup:
     :return: SlideElement
     """
-    print('MARKUP'+markup+str(len(markup)))
     markup = markup.split('||')
     if len(markup) > 4:
         raise InvalidArgumentException(f'Invalid markup: too many || tokens in element {markup}')
