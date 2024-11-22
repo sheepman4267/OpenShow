@@ -246,9 +246,7 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
     def check_compatibility(self, theme):
         missing = []
         show_classes = self.get_css_classes()
-        print(show_classes)
         theme_classes = theme.get_css_classes()
-        print(theme_classes)
         for css_class in show_classes:
             if css_class not in theme_classes:
                 missing.append(css_class)
@@ -316,7 +314,6 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
             if segment == self:
                 future_segments = siblings[idx + 1:]
         for segment in future_segments:
-            print(segment)
             if segment.slides.first() or segment.included_deck:
                 return segment
 
@@ -392,7 +389,6 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         ordering = ["-order"]
 
     def save(self, *args, **kwargs):
-        print(f'MEDIA{self.media_object}')
         if self.missing_image_object and self.image_object:
             self.missing_image_object = False
         if self.missing_media_object and self.media_object:
@@ -578,7 +574,6 @@ class Slide(models.Model):
     def has_video(self):
         result = False
         for element in self.elements.all():
-            # print(bool(element.video))
             if element.video:
                 result = True
         return result
@@ -665,7 +660,6 @@ class Theme(models.Model):
                     if type(token) == IdentToken:
                         class_list.append(token.value)
                 class_string = ' '.join(class_list)
-                print(class_string)
                 classes.append(class_string)
         return classes
 
@@ -757,7 +751,6 @@ class MediaObject(models.Model):
                 schedule_type=Schedule.ONCE,
                 next_run=datetime.utcnow(),
             )
-            print('scheduled video')
         elif self.media_type == AUDIO and not self.final_file:
             Schedule.objects.create(
                 func='slides.editor.tasks.transcode_audio',
@@ -765,7 +758,6 @@ class MediaObject(models.Model):
                 schedule_type=Schedule.ONCE,
                 next_run=datetime.utcnow(),
             )
-            print('scheduled audio')
 
     def get_slide_element_template(self):
         template_name = None
