@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import List
 import yaml
 
-from slides.models import Slide, SlideElement
+from slides.models import Slide, SlideElement, Image, MediaObject
 
 
 class InvalidArgumentException(Exception):
@@ -38,11 +38,29 @@ def parse_element(markup: str) -> SlideElement:
     """
     print('MARKUP'+markup+str(len(markup)))
     markup = markup.split('||')
-    if len(markup) > 2:
+    if len(markup) > 4:
         raise InvalidArgumentException(f'Invalid markup: too many || tokens in element {markup}')
     css_class = markup[0]
-    body = parse_element_body(markup[1])
-    return SlideElement(css_class=css_class, body=body)
+    body = parse_element_body(markup[-1])
+    element = SlideElement(css_class=css_class, body=body)
+    for media in markup[1:-1]:
+        # Note: This for loop only runs if len(markup) > 3.
+        media = media.split(':')
+        if len(media) > 2:
+            raise InvalidArgumentException(f'Invalid markup: malformed media token in element {markup}')
+        media_type = media[0]
+        match media_type:
+            case "image":
+                try:
+                    element.image_object = Image.objects.filter(file_hash=media[1]).first()
+                except Image.DoesNotExist:
+                    element.missing_image_object = True
+            case "media":
+                try:
+                    element.media_object = MediaObject.objects.filter(file_hash=media[1]).first()
+                except MediaObject.DoesNotExist:
+                    element.missing_media_object = True
+    return element
 
 
 def parse_slide(markup: str) -> AOMLSlideIntermediate:
