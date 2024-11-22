@@ -40,6 +40,12 @@
             {% elif not element.image_object %}
                 <i class="hint">Double-click to edit</i>
             {% endif %}
+            {% if element.missing_image_object %}
+                <i class="hint">Missing Image!</i>
+            {% endif %}
+            {% if element.missing_media_object %}
+                <i class="hint">Missing Media!</i>
+            {% endif %}
             {% if element.image_object %}
                 <img src="{{ element.image_object.file.url }}">
             {% endif %}
