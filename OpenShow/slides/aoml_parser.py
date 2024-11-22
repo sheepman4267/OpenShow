@@ -45,20 +45,18 @@ def parse_element(markup: str) -> SlideElement:
     element = SlideElement(css_class=css_class, body=body)
     for media in markup[1:-1]:
         # Note: This for loop only runs if len(markup) > 3.
-        media = media.split(':')
+        media = media.strip('\r').strip('\n').split(':')
         if len(media) > 2:
             raise InvalidArgumentException(f'Invalid markup: malformed media token in element {markup}')
         media_type = media[0]
         match media_type:
             case "image":
-                try:
-                    element.image_object = Image.objects.filter(file_hash=media[1]).first()
-                except Image.DoesNotExist:
+                element.image_object = Image.objects.filter(file_hash=media[1]).first()
+                if element.image_object is None:
                     element.missing_image_object = True
             case "media":
-                try:
-                    element.media_object = MediaObject.objects.filter(file_hash=media[1]).first()
-                except MediaObject.DoesNotExist:
+                element.media_object = MediaObject.objects.filter(file_hash=media[1]).first()
+                if element.media_object is None:
                     element.missing_media_object = True
     return element
 
