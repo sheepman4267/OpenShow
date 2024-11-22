@@ -743,6 +743,8 @@ class MediaObject(models.Model):
     file_hash = models.CharField(max_length=256, null=True, blank=True)
 
     def save(self, *args, **kwargs):
+        if self.embed_url:
+            self.file_hash = hashlib.sha256(self.embed_url.encode("utf-8")).hexdigest()
         super().save(*args, **kwargs)
         if self.media_type == VIDEO and not self.final_file:
             Schedule.objects.create(
