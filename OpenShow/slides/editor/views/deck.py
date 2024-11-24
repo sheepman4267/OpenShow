@@ -34,7 +34,6 @@ class DeckEditorView(UpdateView):
         'default_auto_advance',
         'default_auto_advance_duration',
         'advance_in_loop',
-        'script',
         'slide_text_markup',
     ]
     template_name = 'editor/deck_editor.html'

@@ -172,7 +172,6 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
     default_auto_advance = models.BooleanField(default=False, null=False)
     advance_in_loop = models.BooleanField(default=False, null=False)
     default_auto_advance_duration = models.FloatField(default=10)
-    script = models.TextField(null=True, blank=True)
     slide_text_markup = models.TextField(null=True, blank=True)
 
     def get_absolute_url(self):
@@ -184,15 +183,6 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
     def recompute_order(self):
         # TODO: recompute slide order occasionally
         pass
-
-    def push_cues(self):
-        slides = list(self.slides.all())
-        cues = self.script.split('~~')
-        if len(slides) != len(cues):
-            raise InvalidArgumentException('You have a mismatched number of cues and slides')
-        for slide, cue in zip(slides, cues):
-            slide.cue = cue
-            slide.save()
 
     def pull_aoml(self):
         aoml_str = ''
