@@ -15,7 +15,7 @@
 
 {% block editor-right %}
     <div id="preview" class="slide-thumbnail no-hover" data-slide-pk="{{ slide.pk }}">
-        <iframe class="slide" src="{% url 'slide-wysiwyg' slide.pk %}"></iframe>
+        <iframe scrolling="no" class="slide" src="{% url 'slide-wysiwyg' slide.pk %}"></iframe>
     </div>
 {% endblock %}
 
