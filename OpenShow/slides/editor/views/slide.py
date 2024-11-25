@@ -20,7 +20,7 @@ class SlideTextEditView(DetailView):
 
 class SlideEditView(UpdateView):
     model = Slide
-    fields = ['transition', 'transition_duration', 'auto_advance', 'auto_advance_duration', 'order']
+    fields = ['transition', 'transition_duration', 'auto_advance', 'auto_advance_duration']
     template_name = 'editor/edit_slide.html'
 
     def get_context_data(self, **kwargs):
