@@ -27,3 +27,14 @@
 #preview .slide {
     pointer-events: all;
 }
+
+form.slide-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+form.slide-form > * {
+    margin-top: 0;
+    height: 100%;
+}

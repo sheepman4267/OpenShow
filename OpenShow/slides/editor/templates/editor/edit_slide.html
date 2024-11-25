@@ -21,10 +21,27 @@
                 <iframe scrolling="no" class="slide" src="{% url 'slide-wysiwyg' slide.pk %}"></iframe>
             </div>
         </div>
-        <div class="box slide-options">
-            <strong class="titlebar block">Slide Options</strong>
-            form
-        </div>
+        <form
+                hx-post="{% url 'edit-slide' slide.pk %}"
+                hx-trigger="change throttle:2s"
+                hx-swap="outerHTML"
+                hx-select="#view-container"
+                hx-target="#view-container"
+                class="slide-form"
+                method="post"
+        >
+            {% csrf_token %}
+            <fieldset class="box">
+                <strong class="titlebar block">Transition Options</strong>
+                <label class="block">Transition: {{ form.transition }}</label>
+                <label class="block">Transition Duration: {{ form.transition_duration }}</label>
+            </fieldset>
+            <fieldset class="box">
+                <strong class="titlebar block">Auto Advance Options</strong>
+                <label class="block">Auto advance from this slide: {{ form.auto_advance }}</label>
+                <label class="block">Auto advance after: {{ form.auto_advance_duration }} (in seconds)</label>
+            </fieldset>
+        </form>
     </div>
 {% endblock %}
 
