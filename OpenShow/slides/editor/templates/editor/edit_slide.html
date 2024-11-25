@@ -14,8 +14,17 @@
 {% endblock %}
 
 {% block editor-right %}
-    <div id="preview" class="slide-thumbnail no-hover" data-slide-pk="{{ slide.pk }}">
-        <iframe scrolling="no" class="slide" src="{% url 'slide-wysiwyg' slide.pk %}"></iframe>
+    <div id="editor-right" class="slide">
+        <div class="box">
+            <strong class="titlebar block">Slide Editor/Preview</strong>
+            <div id="preview" class="slide-thumbnail no-hover" data-slide-pk="{{ slide.pk }}">
+                <iframe scrolling="no" class="slide" src="{% url 'slide-wysiwyg' slide.pk %}"></iframe>
+            </div>
+        </div>
+        <div class="box slide-options">
+            <strong class="titlebar block">Slide Options</strong>
+            form
+        </div>
     </div>
 {% endblock %}
 
