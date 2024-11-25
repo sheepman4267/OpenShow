@@ -23,7 +23,7 @@
 {% block main %}
     <div id="view-container" class="sidebar-layout single">
         <div class="mobile-hidden box">
-            <ul class="slides-sidebar">
+            <ul class="slides-sidebar" id="slides-sidebar">
                 {% for slide in deck.slides.all %}
                     <form
                         class="dragbox"
@@ -72,10 +72,17 @@
                         <input type="hidden" name="moved_slide_pk" class="movedslide">
                     </form>
                 <li>
-                    <form method="post" action="{% url 'new-slide' %}">
+                    <form>
                         {% csrf_token %}
                         <input type="hidden" name="deck" value="{{ deck.pk }}">
-                        <input type="submit" value="New Slide">
+                        <button
+                                hx-post="{% url 'new-slide' %}"
+                                hx-select="#slides-sidebar"
+                                hx-target="#slides-sidebar"
+                                hx-trigger="click"
+                        >
+                            New Slide
+                        </button>
                     </form>
                 </li>
             </ul>
