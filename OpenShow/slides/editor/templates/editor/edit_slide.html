@@ -1,7 +1,9 @@
-{% extends edit_slide_or_deck %}
+{% extends edit_show_or_deck_template %}
 
 {% block editor-right %}
     <div id="preview" data-slide-pk="{{ slide.pk }}">
         {% include 'editor/slide.html' with slide=slide %}
     </div>
 {% endblock %}
+
+{{ deck.pk }}

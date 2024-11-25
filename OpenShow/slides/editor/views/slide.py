@@ -18,6 +18,14 @@ class SlideEditView(UpdateView):
     fields = ['transition', 'transition_duration', 'auto_advance', 'auto_advance_duration', 'order']
     template_name = 'editor/edit_slide.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        if self.object.deck:
+            context['edit_show_or_deck_template'] = 'editor/deck_editor.html'
+            context['deck'] = self.object.deck
+        elif self.object.segment:
+            context['edit_show_or_segment_template'] = 'editor/show_editor.html'
+        return context
 
 class SlideDeleteView(DeleteView):
     model = Slide
