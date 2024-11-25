@@ -1,26 +1,15 @@
 {% load static %}
 {% load icon %}
 <head>
+    <link rel="stylesheet" href="{% static 'editor/slide-wysiwyg.css' %}">
     <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
     <script src="{% static 'js/hyperscript.js' %}"></script>
     <script src="{% static 'js/htmx.js' %}"></script>
     <style>
         {{ slide.get_theme.css }}
-{#        {{ display.custom_css }}#}
     </style>
     <title>Slide {{ slide.pk }}</title>
 </head>
 <body>
     {% include 'editor/slide.html' with slide=slide %}
-{#    <div id="slide-info-overlays">#}
-{#        {% if slide.has_video %}#}
-{#            {% icon "film" class='slide-info-icon' %}#}
-{#        {% endif %}#}
-{#        {% if slide.has_mediaobject %}#}
-{#            {% icon "play" class='slide-info-icon' %}#}
-{#        {% endif %}#}
-{#        {% if slide.auto_advance %}#}
-{#            {% icon 'clock' class='slide-info-icon' %}#}
-{#        {% endif %}#}
-{#    </div>#}
 </body>
