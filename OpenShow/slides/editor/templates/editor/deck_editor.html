@@ -52,7 +52,9 @@
                         call event.dataTransfer.setData('text/plain',target) {# don't know why, drop event never fires unless something is set here #}
                         then set @value of <input[name='moved_slide_pk']/> to my @data-slide-pk"
                     >
-                        {% include "slides/slide-thumbnail.html" with slide=slide %}
+                        <a href="{% url 'edit-slide' slide.pk %}" title="Edit this slide">
+                            {% include "slides/slide-thumbnail.html" with slide=slide %}
+                        </a>
                     </li>
                 {% endfor %}
                     <form

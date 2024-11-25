@@ -2,10 +2,15 @@
 
 {% load static %}
 {% load srcdoc %}
+{% load icon %}
 
 {% block extra_css %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'editor/slide-editor.css' %}">
+{% endblock %}
+
+{% block header_left_button %}
+    <a href="{% url 'edit-deck' deck.pk %}" class="icon-button" aria-label="Back to editing {{ deck.name }}">{% icon 'arrow-left' %}</a>
 {% endblock %}
 
 {% block editor-right %}
