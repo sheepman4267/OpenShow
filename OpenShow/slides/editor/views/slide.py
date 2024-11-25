@@ -1,4 +1,4 @@
-from django.views.generic import CreateView, FormView, UpdateView, DeleteView
+from django.views.generic import CreateView, FormView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 from slides.models import Slide
 from slides.editor.forms import ChangeSlideOrderForm
@@ -11,6 +11,11 @@ class SlideCreateView(CreateView):
     def form_valid(self, form):
         self.success_url = self.request.META['HTTP_REFERER']
         return super().form_valid(form)
+
+
+class SlideTextEditView(DetailView):
+    model = Slide
+    template_name = 'editor/iframe-slide-preview.html'
 
 
 class SlideEditView(UpdateView):

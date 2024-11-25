@@ -1,0 +1,19 @@
+.slide {
+    width: 1920px;
+    height: 1080px;
+    transform: scale(0.5);
+    margin-right: calc(-1920px / 2);
+    margin-bottom: calc(-1080px / 2);
+    margin-left: calc(calc(100% - calc(1920px / 2)) / 2);
+    transform-origin: left top;
+    background: black;
+    align-self: center;
+}
+
+#preview {
+    --display-size-divisor: 1.5;
+}
+
+#preview .slide {
+    pointer-events: all;
+}

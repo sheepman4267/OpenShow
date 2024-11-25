@@ -5,7 +5,8 @@ from slides.editor.views.index import IndexView
 from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView, SetThemeView, \
     check_theme_compatibility
 from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView
-from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView
+from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView, \
+    SlideTextEditView
 from slides.editor.views.slide_element import SlideElementCreateView, SlideElementDeleteView, \
     SlideElementUpdateTextView, SlideElementUpdateCSSClassView, SlideElementUpdateImageView, \
     SlideElementUpdateVideoView, ChangeSlideElementOrderView, SlideElementUpdateMediaObjectView, \
@@ -29,6 +30,7 @@ urlpatterns = [
     path('segment/new', SegmentCreateView.as_view(), name='new-segment'),
     path('slide/new', SlideCreateView.as_view(), name='new-slide'),
     path('slide/<int:pk>', SlideEditView.as_view(), name='edit-slide'),
+    path('slide/<int:pk>/wysiwyg', SlideTextEditView.as_view(), name='slide-wysiwyg'),
     path('slide/<int:pk>/delete', SlideDeleteView.as_view(), name='delete-slide'),
     path('slide/element/new', SlideElementCreateView.as_view(), name='new-element'),
     path('slide/element/delete/<int:pk>', SlideElementDeleteView.as_view(), name='delete-element'),

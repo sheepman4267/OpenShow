@@ -365,7 +365,7 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
     )
 
     def get_absolute_url(self):
-        return reverse('edit-slide', kwargs={'pk': self.slide.pk})
+        return reverse('slide-wysiwyg', kwargs={'pk': self.slide.pk})
 
     def __str__(self):
         if self.slide.segment:

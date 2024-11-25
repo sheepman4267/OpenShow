@@ -17,7 +17,7 @@ class SlideElementDeleteView(DeleteView):
     form_class = DeleteSlideElementForm
 
     def form_valid(self, form):
-        self.success_url = reverse('edit-slide', kwargs={"pk": form.cleaned_data["slide_pk"]})
+        self.success_url = reverse('slide-wysiwyg', kwargs={"pk": form.cleaned_data["slide_pk"]})
         return super().form_valid(form)
 
 

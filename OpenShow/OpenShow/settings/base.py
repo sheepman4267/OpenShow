@@ -128,3 +128,5 @@ Q_CLUSTER = {
 SHELL_PLUS_IMPORTS = [
     'from slides.editor.tasks import transcode_video'
 ]
+
+X_FRAME_OPTIONS = "SAMEORIGIN"

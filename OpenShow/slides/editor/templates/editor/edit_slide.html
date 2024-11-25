@@ -1,8 +1,16 @@
 {% extends edit_show_or_deck_template %}
 
+{% load static %}
+{% load srcdoc %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'editor/slide-editor.css' %}">
+{% endblock %}
+
 {% block editor-right %}
-    <div id="preview" data-slide-pk="{{ slide.pk }}">
-        {% include 'editor/slide.html' with slide=slide %}
+    <div id="preview" class="slide-thumbnail no-hover" data-slide-pk="{{ slide.pk }}">
+        <iframe class="slide" src="{% url 'slide-wysiwyg' slide.pk %}"></iframe>
     </div>
 {% endblock %}
 
