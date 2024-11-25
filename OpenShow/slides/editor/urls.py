@@ -10,7 +10,7 @@ from slides.editor.views.slide_element import SlideElementCreateView, SlideEleme
     SlideElementUpdateTextView, SlideElementUpdateCSSClassView, SlideElementUpdateImageView, \
     SlideElementUpdateVideoView, ChangeSlideElementOrderView, SlideElementUpdateMediaObjectView, \
     SlideElementUpdateImageObjectView
-from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteView, push_deck_cues, \
+from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteView, \
     push_deck_slide_text, pull_aoml_text, DeckFromImagesView, ImportImagesToExistingDeckView
 from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDeleteView
 from slides.editor.views.utils import generate_lorem
@@ -43,7 +43,6 @@ urlpatterns = [
     path('deck/new', DeckCreateView.as_view(), name='new-deck'),
     path('deck/<int:pk>', DeckEditorView.as_view(), name='edit-deck'),
     path('deck/<int:pk>/delete', DeckDeleteView.as_view(), name='delete-deck'),
-    path('deck/<int:pk>/push-cues', push_deck_cues, name='push-deck-cues'),
     path('deck/<int:pk>/push-text', push_deck_slide_text, name='push-deck-text'),
     path('deck/<int:pk>/pull-aoml', pull_aoml_text, name='pull-aoml-text'),
     path('deck/<int:pk>/import-images', ImportImagesToExistingDeckView.as_view(), name='import-images-to-deck'),

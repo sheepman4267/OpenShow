@@ -1,35 +1,7 @@
-{% extends 'editor/base.html' %}
-{% load icon %}
-{% block content %}
-    <div id="editor" data-slide-pk="{{ slide.pk }}">
-{#        <ul class="sidebar">#}
-{#            {% for slide in slide.segment.slides.all %}#}
-{#                <li>#}
-{#                    <a href="{% url 'edit-slide' pk=slide.pk %}">{{ slide.pk }}</a>#}
-{#                </li>#}
-{#            {% endfor %}#}
-{#        </ul>#}
-        <button hx-get="{% url 'new-element' %}" hx-swap="outerHTML">New Element</button>
-        <button hx-get="{% url 'delete-slide' pk=slide.pk %}" hx-swap="outerHTML">Delete Slide</button>
-        <form method="post" action="{% url 'edit-slide' slide.pk %}">
-            {% csrf_token %}
-            {{ form.transition }}
-            {{ form.transition_duration }}
-            <fieldset>
-                <label>Auto Advance</label>
-                {{ form.auto_advance }}
-                <label>Auto Advance Duration</label>
-                {{ form.auto_advance_duration }}
-            </fieldset>
-            <fieldset>
-                <label>Order</label>
-                {{ form.order }}
-            </fieldset>
-{#            <input type="submit">#}
-            <button hx-select="#editor" hx-target="#editor" hx-swap="outerHTML swap:0.1s" hx-post="{% url 'edit-slide' slide.pk %}">Submit</button>
-        </form>
-    </div>
-    <div id="preview" hx-swap-oob="true" data-slide-pk="{{ slide.pk }}">
+{% extends edit_slide_or_deck %}
+
+{% block editor-right %}
+    <div id="preview" data-slide-pk="{{ slide.pk }}">
         {% include 'editor/slide.html' with slide=slide %}
     </div>
 {% endblock %}

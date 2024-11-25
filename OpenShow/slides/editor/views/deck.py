@@ -49,12 +49,6 @@ class DeckDeleteView(DeleteView):
     }
 
 
-def push_deck_cues(request, pk):
-    deck = get_object_or_404(Deck, pk=pk)
-    deck.push_cues()
-    return HttpResponseRedirect(deck.get_absolute_url())
-
-
 @transaction.atomic()
 def push_deck_slide_text(request, pk):
     deck = get_object_or_404(Deck, pk=pk)
