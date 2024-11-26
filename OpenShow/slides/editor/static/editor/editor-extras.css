@@ -7,6 +7,25 @@ body {
     --rhythm: 0;
 }
 
+.slides-sidebar.show > .box {
+    margin-bottom: 1rem;
+    --rhythm: 1rem;
+    margin-top: 0;
+}
+
+ul.slides:not(#specificity-hack) {
+    padding-left: 0;
+    display: grid;
+    gap: 1rem;
+}
+
+.slides-sidebar button {
+    display: block;
+    margin-inline: auto;
+    padding-block: 0.25rem;
+    padding-inline: 0.75rem;
+}
+
 .slides-sidebar li {
     margin-inline: auto;
     --display-size-divisor: 8.2;
@@ -56,6 +75,10 @@ body {
 #editor-right.deck > #aoml-buttons button:hover {
     background: #a9a9a9;
     transition: background 200ms;
+}
+
+#editor-right.show {
+    margin-left: 1rem;
 }
 
 .double-box-container {

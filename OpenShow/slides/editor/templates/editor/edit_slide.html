@@ -10,7 +10,11 @@
 {% endblock %}
 
 {% block header_left_button %}
-    <a href="{% url 'edit-deck' deck.pk %}" class="icon-button" aria-label="Back to editing {{ deck.name }}">{% icon 'arrow-left' %}</a>
+    {% if deck %}
+        <a href="{% url 'edit-deck' deck.pk %}" class="icon-button" aria-label="Back to editing {{ deck.name }}">{% icon 'arrow-left' %}</a>
+    {% elif show %}
+        <a href="{% url 'edit-show' show.pk %}" class="icon-button" aria-label="Back to editing {{ show.name }}">{% icon 'arrow-left' %}</a>
+    {% endif %}
 {% endblock %}
 
 {% block editor-right %}

@@ -1,8 +1,9 @@
-<div id="editor">
-    <form method="post" action="{% url 'edit-segment' segment.pk %}">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit">
-    </form>
+<div id="editor-right" class="box show">
+        <strong class="titlebar block">Segment Options for "{{ segment.name }}"</strong>
+        <form method="post" action="{% url 'edit-segment' segment.pk %}">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">Submit Edits</button>
+        </form>
 </div>
 

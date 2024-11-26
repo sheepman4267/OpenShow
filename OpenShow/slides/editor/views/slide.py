@@ -29,7 +29,8 @@ class SlideEditView(UpdateView):
             context['edit_show_or_deck_template'] = 'editor/deck_editor.html'
             context['deck'] = self.object.deck
         elif self.object.segment:
-            context['edit_show_or_segment_template'] = 'editor/show_editor.html'
+            context['edit_show_or_deck_template'] = 'editor/show_editor.html'
+            context['show'] = self.object.segment.show
         return context
 
 class SlideDeleteView(DeleteView):

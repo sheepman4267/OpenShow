@@ -1,0 +1,94 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load icon %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
+    <link rel="stylesheet" href="{% static 'editor/editor-extras.css' %}">
+{% endblock %}
+
+{% block header %}
+    <h1>{{ show.name }}</h1>
+{% endblock %}
+
+{% block header_right_button %}
+    <a href="{% url 'delete-show' show.pk %}" class="icon-button" aria-label="Edit {{ show.name }}">{% icon 'trash-2' %}</a>
+{% endblock %}
+
+{% block header_left_button %}
+    <a href="{% url 'show' show.pk %}" class="icon-button" aria-label="Back to {{ show.name }}">{% icon 'arrow-left' %}</a>
+{% endblock %}
+
+{% block main %}
+    <div id="view-container" class="sidebar-layout single">
+        <ul class="slides-sidebar show" id="slides-sidebar">
+            {% for segment in show.segments.all %}
+                <li class="box show-segment">
+                    <strong class="titlebar block">{{ segment.name }}</strong>
+                    <a href="htmx"
+                            hx-get="{% url 'edit-segment' segment.pk %}"
+                            hx-select="#editor-right"
+                            hx-target="#editor-right"
+                            hx-swap="outerHTML swap:0.1s"
+                    >Edit Segment Details</a>
+                    {% if segment.included_deck %}
+                        <h4>Deck: {{ segment.included_deck.name }}</h4>
+                    {% endif %}
+                    <ul class="slides">
+                        {% for slide in segment.slides.all %}
+                            <li class="slide-thumbnail">
+                                <a href="{% url 'edit-slide' slide.pk %}" title="Edit this slide">
+                                    {% include "slides/slide-thumbnail.html" with slide=slide %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <form method="post" action="{% url 'new-slide' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="segment" value="{{ segment.pk }}">
+{#                                <input type="submit" value="+">#}
+                        <button hx-post="{% url 'new-slide' %}" hx-select="#slides-sidebar > *" hx-target="#slides-sidebar" hx-swap="innerHTML swap:0.1s">New Slide</button>
+                    </form>
+                </li>
+            {% endfor %}
+                <button class='add-button' hx-get="{% url 'new-segment' %}" hx-swap="outerHTML">
+                    New Segment
+                </button>
+        </ul>
+    {% block editor-right %}
+        <div id="editor-right" class="show">
+            <form
+                    hx-trigger="change throttle:2s"
+                    hx-post="{% url 'edit-show' show.pk %}"
+                    hx-swap="outerHTML"
+                    hx-select="#view-container"
+                    hx-target="#view-container"
+                    class="deck-form"
+            >
+                {% csrf_token %}
+                <div class="double-box-container">
+                <fieldset class="box">
+                    <strong class="titlebar block">General Options</strong>
+                    <label class="block">Deck Name: {{ form.name }}</label>
+                    <label class="block">Theme: {{ form.theme }}</label>
+                    <label class="block">Default Transition: {{ form.default_transition }}</label>
+                    <label class="block">Default Transition Duration: {{ form.default_transition_duration }}</label>
+                </fieldset>
+                <fieldset class="box">
+                    <strong class="titlebar block">Auto Advance Options</strong>
+                    <label class="block">Auto Advance {{ form.default_auto_advance }}</label>
+                    <label class="block">Advance In Loop (only when not in a show) {{ form.advance_in_loop }}</label>
+                    <label class="block">Auto Advance Duration {{ form.default_auto_advance_duration }}</label>
+                </fieldset>
+                </div>
+                <div class="box aoml-editor">
+                    <strong class="titlebar block">AOML Slide Text</strong>
+                    {{ form.slide_text_markup }}
+                </div>
+                {{ form.errors }}
+            </form>
+        </div>
+    {% endblock %}
+</div>
+{% endblock %}
