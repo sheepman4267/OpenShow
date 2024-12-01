@@ -57,38 +57,7 @@
                 </button>
         </ul>
     {% block editor-right %}
-        <div id="editor-right" class="show">
-            <form
-                    hx-trigger="change throttle:2s"
-                    hx-post="{% url 'edit-show' show.pk %}"
-                    hx-swap="outerHTML"
-                    hx-select="#view-container"
-                    hx-target="#view-container"
-                    class="deck-form"
-            >
-                {% csrf_token %}
-                <div class="double-box-container">
-                <fieldset class="box">
-                    <strong class="titlebar block">General Options</strong>
-                    <label class="block">Deck Name: {{ form.name }}</label>
-                    <label class="block">Theme: {{ form.theme }}</label>
-                    <label class="block">Default Transition: {{ form.default_transition }}</label>
-                    <label class="block">Default Transition Duration: {{ form.default_transition_duration }}</label>
-                </fieldset>
-                <fieldset class="box">
-                    <strong class="titlebar block">Auto Advance Options</strong>
-                    <label class="block">Auto Advance {{ form.default_auto_advance }}</label>
-                    <label class="block">Advance In Loop (only when not in a show) {{ form.advance_in_loop }}</label>
-                    <label class="block">Auto Advance Duration {{ form.default_auto_advance_duration }}</label>
-                </fieldset>
-                </div>
-                <div class="box aoml-editor">
-                    <strong class="titlebar block">AOML Slide Text</strong>
-                    {{ form.slide_text_markup }}
-                </div>
-                {{ form.errors }}
-            </form>
-        </div>
+
     {% endblock %}
 </div>
 {% endblock %}
