@@ -17,6 +17,7 @@ ul.slides:not(#specificity-hack) {
     padding-left: 0;
     display: grid;
     gap: 1rem;
+    list-style: none;
 }
 
 .slides-sidebar button {
