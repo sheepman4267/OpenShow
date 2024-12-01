@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+{% load neapolitan %}
+{% load icon %}
+
+{% block title %}{{ object }} - OpenShow Editor{% endblock %}
+{% block header %}<h1>{{ object }}</h1>{% endblock %}
+
+{% block header_right_button %}
+        <a href="{% url 'image-update' object.pk %}" class="icon-button" aria-label="Edit {{ object.title }}">{% icon 'edit-2' %}</a>
+{% endblock %}
+
+{% block content %}
+    <img src="{{ object.file.url }}">
+    <div>
+        File hash:
+        <pre>{{ object.file_hash }}</pre>
+    </div>
+{% endblock %}

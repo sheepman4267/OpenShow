@@ -1,19 +1,15 @@
 from django.core.exceptions import ImproperlyConfigured
-from django.http import HttpResponseRedirect
 from django.urls import reverse
 from neapolitan.views import CRUDView, Role
 
-from slides.models import MediaObject
+from slides.models import Image
 
 
-class MediaObjectCRUDView(CRUDView):
-    model = MediaObject
+class ImageCRUDView(CRUDView):
+    model = Image
     fields = [
-        'title',
-        'media_type',
-        'raw_file',
-        'embed_url',
-        #'autoplay',  # Uncomment this once it will be useful for something
+        'file',
+        'file_hash'
     ]
 
     def get_success_url(self):
