@@ -57,7 +57,11 @@
                 </button>
         </ul>
     {% block editor-right %}
-
+        <div id="editor-right" class="box show" data-show-pk="{{ show.pk }}">
+            <strong class="titlebar block">Show Editor</strong>
+            Current Theme: {{ show.theme }}
+            <button class=block hx-get="{% url 'set-theme' show.pk %}" hx-swap="outerHTML">Set Theme</button>
+        </div>
     {% endblock %}
 </div>
 {% endblock %}
