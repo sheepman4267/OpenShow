@@ -53,6 +53,11 @@ ul.slides:not(#specificity-hack) {
     transition: height, background-color 200ms;
 }
 
+#editor-right {
+    width: fit-content;
+    height: fit-content;
+}
+
 #editor-right.deck{
     display: grid;
     grid-template-columns: 4rem 1fr;
