@@ -3,10 +3,12 @@
     <strong class="block titlebar">New {{ object_type }}</strong>
     <form method="post" action="{% block action %}{% url action %}{% endblock %}" {% if form.is_multipart %}enctype="multipart/form-data" {% endif %}>
         {% csrf_token %}
+        {% block all_fields %}
         {% block extra_fields %}
         {% endblock %}
         {{ form }}
         {{ form.errors }}
+        {% endblock %}
         <button type="submit">Submit</button>
     </form>
 </div>

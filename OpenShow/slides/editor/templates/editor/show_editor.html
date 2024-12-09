@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block main %}
-    <div id="view-container" class="sidebar-layout single">
+    <div id="view-container" class="sidebar-layout single" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
         <ul class="slides-sidebar show" id="slides-sidebar">
             {% for segment in show.segments.all %}
                 <li class="box show-segment">
