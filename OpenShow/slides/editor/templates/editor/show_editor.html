@@ -57,10 +57,23 @@
                 </button>
         </ul>
     {% block editor-right %}
-        <div id="editor-right" class="box show" data-show-pk="{{ show.pk }}">
-            <strong class="titlebar block">Show Editor</strong>
-            Current Theme: {{ show.theme }}
-            <button class=block hx-get="{% url 'set-theme' show.pk %}" hx-swap="outerHTML">Set Theme</button>
+        <div id="editor-right" class="double-box-container show" data-show-pk="{{ show.pk }}">
+            <div class="box">
+                <strong class="titlebar block">Theme Settings</strong>
+                Current Theme: {{ show.theme }}
+                <button class=block hx-get="{% url 'set-theme' show.pk %}" hx-swap="outerHTML">Set Theme</button>
+            </div>
+            <div class="box">
+                <strong class="titlebar block">Show Settings</strong>
+                <form method="post" action="{% url 'edit-show' show.pk %}">
+                    {% csrf_token %}
+                    <label class="block">Name: {{ form.name }}{{ form.name.errors }}</label>
+                    <label class="block">Advance past ends of decks and segments: {{ form.advance_between_segments }}{{ form.advance_between_segments.errors }}</label>
+                    <label class="block">Advance in a loop when reaching the end of a deck: {{ form.advance_loop }}{{ form.order.advance_loop }}</label>
+                    <label class="block">Send this show to these displays: {{ form.displays }}{{ form.displays.errors }}</label>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
         </div>
     {% endblock %}
 </div>

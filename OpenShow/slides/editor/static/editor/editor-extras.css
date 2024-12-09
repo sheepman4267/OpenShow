@@ -118,11 +118,15 @@ ul.slides:not(#specificity-hack) {
     margin-bottom: -0.5rem;
 }
 
-select {
+select:not([multiple]) {
     height: 1.5rem;
     line-height: 1.5rem;
     padding-block: 0;
     padding-inline: 0.5rem;
+}
+
+select[multiple] {
+    min-width: 9rem;
 }
 
 input {
