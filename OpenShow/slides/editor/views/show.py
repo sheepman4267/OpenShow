@@ -4,6 +4,7 @@ from django.shortcuts import render
 from slides.models import Show
 from slides.editor.forms import SetThemeForm
 
+
 class ShowEditorView(DetailView):
     queryset = Show.objects.all()
     template_name = 'editor/show_editor.html'
