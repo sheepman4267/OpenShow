@@ -117,3 +117,27 @@ ul.slides:not(#specificity-hack) {
 .titlebar {
     margin-bottom: -0.5rem;
 }
+
+select {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    padding-block: 0;
+    padding-inline: 0.5rem;
+}
+
+input {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    padding-block: 0;
+    padding-inline: 0.5rem;
+}
+
+input[type=checkbox] {
+    width: 1.25rem;
+    vertical-align: middle;
+    margin: 0;
+}
+
+label {
+    margin-block: 0.5rem;
+}
