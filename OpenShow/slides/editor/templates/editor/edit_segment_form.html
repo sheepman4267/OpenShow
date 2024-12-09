@@ -2,7 +2,9 @@
         <strong class="titlebar block">Segment Options for "{{ segment.name }}"</strong>
         <form method="post" action="{% url 'edit-segment' segment.pk %}">
             {% csrf_token %}
-            {{ form }}
+            <label class="block">Name: {{ form.name }}{{ form.name.errors }}</label>
+            <label class="block">Included Deck: {{ form.included_deck }}{{ form.included_deck.errors }}</label>
+            <label class="block">Order: {{ form.order }}{{ form.order.errors }}</label>
             <button type="submit">Submit Edits</button>
         </form>
 </div>
