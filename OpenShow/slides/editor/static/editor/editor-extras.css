@@ -1,5 +1,6 @@
 body {
-    --content-height: calc(100dvh - 7.5rem)
+    --content-height: calc(100dvh - 7.5rem);
+    --rhythm: 1rem;
 }
 
 .slides-sidebar {
@@ -16,7 +17,7 @@ body {
 ul.slides:not(#specificity-hack) {
     padding-left: 0;
     display: grid;
-    gap: 1rem;
+    gap: var(--rhythm);
     list-style: none;
 }
 
@@ -84,13 +85,13 @@ ul.slides:not(#specificity-hack) {
 }
 
 #editor-right.show {
-    margin-left: 1rem;
+    margin-left: var(--rhythm);
 }
 
 .double-box-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: var(--rhythm)
 }
 
 .double-box-container > *{
@@ -111,7 +112,7 @@ ul.slides:not(#specificity-hack) {
 .deck-form {
     display: grid;
     grid-template-rows: auto 1fr;
-    gap: 1rem;
+    gap: var(--rhythm);
 }
 
 .titlebar {
