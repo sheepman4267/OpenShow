@@ -1,6 +1,6 @@
 from django.views.generic import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
-from slides.models import Deck, Slide, SlideElement
+from slides.models import Deck, Slide, SlideElement, Image
 from django.db import transaction
 from django.shortcuts import get_object_or_404, HttpResponseRedirect
 import slides.aoml_parser as aoml
@@ -34,7 +34,6 @@ class DeckEditorView(UpdateView):
         'default_auto_advance',
         'default_auto_advance_duration',
         'advance_in_loop',
-        'script',
         'slide_text_markup',
     ]
     template_name = 'editor/deck_editor.html'
@@ -50,12 +49,6 @@ class DeckDeleteView(DeleteView):
     }
 
 
-def push_deck_cues(request, pk):
-    deck = get_object_or_404(Deck, pk=pk)
-    deck.push_cues()
-    return HttpResponseRedirect(deck.get_absolute_url())
-
-
 @transaction.atomic()
 def push_deck_slide_text(request, pk):
     deck = get_object_or_404(Deck, pk=pk)
@@ -64,9 +57,10 @@ def push_deck_slide_text(request, pk):
         for slide in existing_slides:  # TODO: Add some options here...
             slide.delete()
     for slide_markup in aoml.parse_markup(deck.slide_text_markup):
-        slide = Slide(deck=deck)
+        slide_intermediate = aoml.parse_slide(slide_markup)
+        slide = Slide(deck=deck, cue=slide_intermediate.cue)
         slide.save()
-        for element in aoml.parse_slide(slide_markup):
+        for element in slide_intermediate.elements:
             element.slide = slide
             element.save()
     return HttpResponseRedirect(deck.get_absolute_url())
@@ -96,11 +90,13 @@ class DeckFromImagesView(FormView):
         for image in files:
             new_slide = Slide(deck=form.instance)
             new_slide.save()
+            new_image_object = Image(file=image)
+            new_image_object.save()
             new_slide_element = SlideElement(
                 css_class=form.cleaned_data["image_css_class"],
                 order=0,
                 slide=new_slide,
-                image=image,
+                image_object=new_image_object,
                 body="",
             )
             new_slide_element.save()
@@ -134,11 +130,13 @@ class ImportImagesToExistingDeckView(FormView):
         for image in files:
             new_slide = Slide(deck=deck)
             new_slide.save()
+            new_image_object = Image(file=image)
+            new_image_object.save()
             new_slide_element = SlideElement(
                 css_class=form.cleaned_data["image_css_class"],
                 order=0,
                 slide=new_slide,
-                image=image,
+                image_object=new_image_object,
                 body="",
             )
             new_slide_element.save()

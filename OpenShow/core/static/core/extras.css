@@ -23,6 +23,12 @@ body > header {
     height: calc(100dvh - 7rem);
 }
 
+.sidebar-layout.single {
+    grid-template-columns: 18rem 1fr;
+    height: calc(100dvh - 7rem);
+    padding-inline: 1rem;
+}
+
 h2 {
     margin: 0;
 }
