@@ -3,6 +3,11 @@ body {
     --rhythm: 1rem;
 }
 
+button {
+    padding-block: 0.25rem;
+    padding-inline: 0.75rem;
+}
+
 .slides-sidebar {
     list-style: none;
     --rhythm: 0;
