@@ -3,6 +3,10 @@
 {% load static %}
 {% load icon %}
 
+{% block title %}
+    Editing {{ show.name }} - OpenShow
+{% endblock %}
+
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
     <link rel="stylesheet" href="{% static 'editor/editor-extras.css' %}">
