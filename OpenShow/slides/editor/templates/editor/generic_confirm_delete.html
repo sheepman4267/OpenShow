@@ -1,5 +1,9 @@
 {% extends 'core/base.html' %}
 
+{% block title %}
+    Delete {{ object.name }}? - OpenShow
+{% endblock %}
+
 {% block content %}
     <form method="post" action="{% url action pk=object.pk %}">
         {% csrf_token %}
