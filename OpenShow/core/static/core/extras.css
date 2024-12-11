@@ -43,6 +43,15 @@ h2 {
         flex-direction: column;
         max-height: calc(100dvh - 7rem);
     }
+
+    div[role=tablist] {
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+
+    div[role=tablist] > [aria-selected=true]:not(#specificity-hack) {
+        border-bottom: 1px solid var(--graphical-fg);
+    }
 }
 
 @media screen and (min-width: 1420px) {
