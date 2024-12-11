@@ -1,0 +1,40 @@
+#editor-right.slide {
+    display: block;
+    margin-left: 1rem;
+    width: min-content;
+}
+
+#editor-right.slide > .box:first-child {
+    margin-top: 0
+}
+
+#editor-right.slide > .box {
+    width: min-content;
+    height: min-content;
+}
+
+#editor-right.slide > .box.slide-options {
+    width: 100%;
+}
+
+#preview {
+    --display-size-divisor: 1.8;
+    height: calc(1080px / var(--display-size-divisor));
+    min-width: calc(1920px / var(--display-size-divisor));
+    overflow: clip;
+}
+
+#preview .slide {
+    pointer-events: all;
+}
+
+form.slide-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+form.slide-form > * {
+    margin-top: 0;
+    height: 100%;
+}

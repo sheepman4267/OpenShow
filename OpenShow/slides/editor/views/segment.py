@@ -6,6 +6,9 @@ class SegmentCreateView(CreateView):
     model = Segment
     fields = ['show', 'name', 'order']
     template_name = 'editor/new_segment_form.html'
+    extra_context = {
+        'object_type': 'Segment',
+    }
 
 
 class SegmentUpdateView(UpdateView):

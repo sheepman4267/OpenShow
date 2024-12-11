@@ -1,4 +1,4 @@
-from django.views.generic import CreateView, FormView, UpdateView, DeleteView
+from django.views.generic import CreateView, FormView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 from slides.models import Slide
 from slides.editor.forms import ChangeSlideOrderForm
@@ -13,11 +13,25 @@ class SlideCreateView(CreateView):
         return super().form_valid(form)
 
 
+class SlideTextEditView(DetailView):
+    model = Slide
+    template_name = 'editor/iframe-slide-preview.html'
+
+
 class SlideEditView(UpdateView):
     model = Slide
-    fields = ['transition', 'transition_duration', 'auto_advance', 'auto_advance_duration', 'order']
+    fields = ['transition', 'transition_duration', 'auto_advance', 'auto_advance_duration']
     template_name = 'editor/edit_slide.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        if self.object.deck:
+            context['edit_show_or_deck_template'] = 'editor/deck_editor.html'
+            context['deck'] = self.object.deck
+        elif self.object.segment:
+            context['edit_show_or_deck_template'] = 'editor/show_editor.html'
+            context['show'] = self.object.segment.show
+        return context
 
 class SlideDeleteView(DeleteView):
     model = Slide

@@ -23,6 +23,12 @@ body > header {
     height: calc(100dvh - 7rem);
 }
 
+.sidebar-layout.single {
+    grid-template-columns: 18rem 1fr;
+    height: calc(100dvh - 7rem);
+    padding-inline: 1rem;
+}
+
 h2 {
     margin: 0;
 }
@@ -36,6 +42,15 @@ h2 {
         display: flex;
         flex-direction: column;
         max-height: calc(100dvh - 7rem);
+    }
+
+    div[role=tablist] {
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+
+    div[role=tablist] > [aria-selected=true]:not(#specificity-hack) {
+        border-bottom: 1px solid var(--graphical-fg);
     }
 }
 
