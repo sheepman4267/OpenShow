@@ -18,7 +18,8 @@
 
 .editor-element {
     min-height: 2rem;
-    position: relative;
+    /*position: relative;*/
+    anchor-name: element;
 }
 
 .editor-element .hint {
@@ -57,7 +58,8 @@
 
 .element-action-button-container {
     width: fit-content;
-    position: absolute;
+    /*position: absolute;*/
+    position-anchor: element;
     top: 0;
     left: 10px;
     display: none;
