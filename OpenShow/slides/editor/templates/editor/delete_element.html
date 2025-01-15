@@ -1,5 +1,5 @@
 {% load icon %}
 <form method="post" action="{% url 'delete-element' object.pk %}">{% csrf_token %}
-    <input type="hidden" name="slide_pk" _="on load set my @value to @data-slide-pk of <#preview/>">
-    <button class="danger" hx-post="{% url 'delete-element' object.pk %}" hx-swap="outerHTML" hx-target="#editor" hx-select="#editor">{% icon 'trash-2' %}</button>
+    <input type="hidden" name="slide_pk" _="on load set my @value to @data-slide-pk of <#slide/>">
+    <button class="danger" hx-post="{% url 'delete-element' object.pk %}" hx-swap="outerHTML" hx-target="#slide" hx-select="#slide">{% icon 'trash-2' %}</button>
 </form>
