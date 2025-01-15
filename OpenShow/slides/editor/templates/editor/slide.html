@@ -1,5 +1,5 @@
 {% load icon %}
-<div id="slide" class="slide">
+<div id="slide" class="slide" data-slide-pk="{{ slide.pk }}">
     {% for element in slide.get_elements %}
         <form
             class="dragbox"
@@ -74,4 +74,7 @@
         {# don't sent next_slide as this is the end #}
         <input type="hidden" name="moved_element_pk" class="movedelement">
     </form>
+    <div class="element-action-button-container new">
+        <button hx-get="{% url 'new-element' %}" hx-swap="outerHTML">{% icon 'plus' %}</button>
+    </div>
 </div>

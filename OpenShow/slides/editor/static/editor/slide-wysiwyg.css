@@ -111,6 +111,15 @@
     width: 2rem;
 }
 
+.element-action-button-container.new {
+    position: absolute;
+    display: initial;
+    bottom: 1rem;
+    right: 1rem;
+    top: unset;
+    left: unset;
+}
+
 button.danger {
     background: #9C1A1C;
     color: white;
