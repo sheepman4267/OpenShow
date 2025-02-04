@@ -18,8 +18,7 @@
 
 .editor-element {
     min-height: 2rem;
-    /*position: relative;*/
-    anchor-name: element;
+    position: relative;
 }
 
 .editor-element .hint {
@@ -58,9 +57,8 @@
 
 .element-action-button-container {
     width: fit-content;
-    /*position: absolute;*/
-    position-anchor: element;
-    top: 0;
+    position: absolute;
+    top: 10px;
     left: 10px;
     display: none;
     height: min-content;
@@ -69,6 +67,7 @@
 
 .element-action-button-container > * {
     display: inline;
+    margin-bottom: 1rem;
 }
 
 .element-action-button-container:has(form),

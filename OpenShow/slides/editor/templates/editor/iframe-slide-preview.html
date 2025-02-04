@@ -9,12 +9,11 @@
         {{ slide.get_theme.css }}
     </style>
     <title>Slide {{ slide.pk }}</title>
-    <script type="module">
-      if (!("anchorName" in document.documentElement.style)) {
-        import("https://unpkg.com/@oddbird/css-anchor-positioning");
-      }
-    </script>
+    <style>
+        {# Force overflow:scroll in editor, regardless of theme (allows WYSIWYG to work better) #}
+        .slide {overflow: scroll; scroll-behavior: smooth;}
+    </style>
 </head>
 <body>
-    {% include 'editor/slide.html' with slide=slide %}
+    {% include 'editor/slide.html' with slide=slide %}\
 </body>
