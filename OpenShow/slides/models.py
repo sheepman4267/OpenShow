@@ -554,10 +554,10 @@ class Slide(models.Model):
                     self.auto_advance = self.deck.default_auto_advance
                 if self.deck.default_auto_advance_duration:
                     self.auto_advance_duration = self.deck.default_auto_advance_duration
-                if self.deck.slides.last():
+                if self.deck.slides.last() and not self.order:
                     self.order = self.deck.slides.last().order + 10
             else:  # as in, if self.segment:
-                if self.segment.slides.last():
+                if self.segment.slides.last() and not self.order:
                     self.order = self.segment.slides.last().order + 10
         super(Slide, self).save(*args, **kwargs)
 
