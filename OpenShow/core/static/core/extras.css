@@ -1,6 +1,6 @@
 body > header {
     display: grid;
-    grid-template-columns: 5rem 1fr 5rem;
+    grid-template-columns: 10rem 1fr 10rem;
     text-align: center;
     height: 6rem;
     padding: 0;
@@ -14,8 +14,22 @@ body > header {
     margin: auto;
 }
 
+.header-back-button {
+    text-align: left;
+}
+
+.header-right-button {
+    text-align: right;
+}
+
+.header-right-button a {
+    margin: 0;
+    margin-right: 2rem;
+}
+
 .header-back-button a {
     margin: 0;
+    margin-left: 2rem;
 }
 
 .sidebar-layout.double {
@@ -38,6 +52,27 @@ h2 {
 }
 
 @media screen and (max-width: 50rem) {
+    body > header {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 3rem 3rem;
+    }
+
+    .header-main {
+        grid-column: span 2;
+    }
+
+    .header-main h1 {
+        margin: 0;
+    }
+
+    .header-back-button {
+        grid-row: 2;
+    }
+
+    .header-right-button {
+        grid-row: 2;
+    }
+
     .sidebar-layout.double {
         display: flex;
         flex-direction: column;
