@@ -1,7 +1,9 @@
+from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, FormView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 from slides.models import Slide
 from slides.editor.forms import ChangeSlideOrderForm
+import slides.aoml_parser as aoml
 
 
 class SlideCreateView(CreateView):
@@ -81,3 +83,20 @@ class ChangeSlideOrderView(FormView):
 
     def get_success_url(self):
         return self.moved_slide.deck_or_segment().get_absolute_url()
+
+
+def duplicate_slide(request, pk):
+    existing_slide = Slide.objects.get(pk=pk)
+    slide_markup = existing_slide.pull_aoml()
+    slide_intermediate = aoml.parse_slide(slide_markup)
+    next_slide = existing_slide.next('forward')
+    if next_slide:
+        order = existing_slide.order + ((next_slide.order - existing_slide.order) / 2)
+    else:
+        order = existing_slide.order + 10
+    new_slide = Slide(deck=existing_slide.deck, segment=existing_slide.segment, cue=slide_intermediate.cue, order=order)
+    new_slide.save()
+    for element in slide_intermediate.elements:
+        element.slide = new_slide
+        element.save()
+    return HttpResponseRedirect(new_slide.get_absolute_url())

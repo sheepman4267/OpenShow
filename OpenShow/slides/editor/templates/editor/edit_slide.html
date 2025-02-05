@@ -23,6 +23,7 @@
 {% endblock %}
 
 {% block header_right_button %}
+    <a href="{% url 'duplicate-slide' slide.pk %}" class="icon-button" aria-label="Duplicate Slide {{ slide.pk }}">{% icon 'copy' %}</a>
     <a href="{% url 'delete-slide' slide.pk %}" class="icon-button" aria-label="Delete Slide {{ slide.pk }}">{% icon 'trash-2' %}</a>
 {% endblock %}
 

@@ -6,7 +6,7 @@ from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteV
     check_theme_compatibility
 from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView
 from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView, \
-    SlideTextEditView
+    SlideTextEditView, duplicate_slide
 from slides.editor.views.slide_element import SlideElementCreateView, SlideElementDeleteView, \
     SlideElementUpdateTextView, SlideElementUpdateCSSClassView, SlideElementUpdateImageView, \
     SlideElementUpdateVideoView, ChangeSlideElementOrderView, SlideElementUpdateMediaObjectView, \
@@ -32,6 +32,7 @@ urlpatterns = [
     path('slide/<int:pk>', SlideEditView.as_view(), name='edit-slide'),
     path('slide/<int:pk>/wysiwyg', SlideTextEditView.as_view(), name='slide-wysiwyg'),
     path('slide/<int:pk>/delete', SlideDeleteView.as_view(), name='delete-slide'),
+    path('slide/<int:pk>/duplicate', duplicate_slide, name='duplicate-slide'),
     path('slide/element/new', SlideElementCreateView.as_view(), name='new-element'),
     path('slide/element/delete/<int:pk>', SlideElementDeleteView.as_view(), name='delete-element'),
     path('slide/element/<int:pk>/text-edit', SlideElementUpdateTextView.as_view(), name='edit-element-text'),
