@@ -75,6 +75,6 @@
         <input type="hidden" name="moved_element_pk" class="movedelement">
     </form>
     <div class="element-action-button-container new">
-        <button hx-get="{% url 'new-element' %}" hx-swap="outerHTML">{% icon 'plus' %}</button>
+        <button hx-get="{% url 'new-element' %}" hx-target="#dialog" hx-swap="innerHTML">{% icon 'plus' %}</button>
     </div>
 </div>
