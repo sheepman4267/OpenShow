@@ -3,6 +3,10 @@ body {
     --rhythm: 1rem;
 }
 
+header {
+    --rhythm: 1.4rem;
+}
+
 button {
     padding-block: 0.25rem;
     padding-inline: 0.75rem;
