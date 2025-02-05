@@ -50,11 +50,11 @@
                 <img src="{{ element.image_object.file.url }}">
             {% endif %}
             <nav class="element-action-button-container">
-                <button hx-get="{{ base_url }}{% url 'delete-element' pk=element.pk %}">{% icon 'trash-2' %}</button>
-                <button hx-get="{{ base_url }}{% url 'edit-element-css-class' pk=element.pk %}">{% icon 'pen-tool' %}</button>
-                <button hx-get="{{ base_url }}{% url 'edit-element-image_object' pk=element.pk %}" class="{% if element.image_object %}green{% endif %}">{% icon 'image' %}</button>
-                <button hx-get="{{ base_url }}{% url 'edit-element-video' pk=element.pk %}" class="{% if element.video %}green{% endif %}">{% icon 'video' %}</button>
-                <button hx-get="{{ base_url }}{% url 'edit-element-media_object' pk=element.pk %}" class="{% if element.media_object %}green{% endif %}">{% icon 'play' %}</button>
+                <button hx-get="{{ base_url }}{% url 'delete-element' pk=element.pk %}" hx-target="#dialog" hx-swap="innerHTML">{% icon 'trash-2' %}</button>
+                <button hx-get="{{ base_url }}{% url 'edit-element-css-class' pk=element.pk %}" hx-target="#dialog" hx-swap="innerHTML">{% icon 'pen-tool' %}</button>
+                <button hx-get="{{ base_url }}{% url 'edit-element-image_object' pk=element.pk %}" hx-target="#dialog" hx-swap="innerHTML" class="{% if element.image_object %}green{% endif %}">{% icon 'image' %}</button>
+                <button hx-get="{{ base_url }}{% url 'edit-element-video' pk=element.pk %}" hx-target="#dialog" hx-swap="innerHTML" class="{% if element.video %}green{% endif %}">{% icon 'video' %}</button>
+                <button hx-get="{{ base_url }}{% url 'edit-element-media_object' pk=element.pk %}" hx-target="#dialog" hx-swap="innerHTML" class="{% if element.media_object %}green{% endif %}">{% icon 'play' %}</button>
                 <button hx-get="{{ base_url }}{% url 'edit-element-text' pk=element.pk %}" hx-swap="outerHTML" hx-swap="outerHTML" hx-target="#element-{{ element.id }}">{% icon 'edit' %}</button>
             </nav>
         </div>

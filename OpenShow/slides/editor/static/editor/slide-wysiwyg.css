@@ -121,7 +121,113 @@
     left: unset;
 }
 
-button.danger {
+#dialog > .titlebar {
+    margin-inline: calc(0px - 1rem);
+    margin-block-end: calc(0px - 1rem);
+    padding-inline: 1rem;
+
+    font: inherit;
+    font-weight: bold;
+
+    translate: 0 calc(-1px - 1rem);
+
+    background: #979b9d;
+	text-shadow: 0 .1em .2em black;
+	border-bottom: 1px solid;
+	border-bottom-color: inherit;
+    display: block;
+    color: white;
+    padding-block: 0.25rem;
+    font-family: var(--main-font), sans-serif;
+}
+
+#dialog.box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%) scale(150%);
+    background: #f2f4f6;
+    padding: 1rem;
+    border-radius: .2rem;
+    border: 1px solid #979b9d;
+    min-width: 35rem;
+    margin: auto;
+    z-index: 1000;
+}
+
+#modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(0.2rem);
+}
+
+#modal-container:not(:has(#dialog > .titlebar)) {
+    display: none;
+}
+
+#dialog .button-group:not(#specificity-hack) {
+    margin-top: 1rem;
+    width: fit-content;
+    margin-inline: auto;
+}
+
+#dialog button {
+    padding: 0;
+    font-size: .8rem;
+    line-height: 1.125rem;
+    background: #d1d6d8;
+    border: 1px solid #3a3a37;
+    box-shadow: 0 2px 4px -2px #121210;
+    border-radius: .2rem;
+    padding-block: 0.25rem;
+    padding-inline: 0.75rem;
+    outline: none;
+}
+
+#dialog button:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 3px 6px -2px #121210;
+    text-decoration: none;
+}
+
+#dialog form {
+    margin-top: 1rem;
+}
+
+select:not([multiple]) {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    padding-block: 0;
+    padding-inline: 0.5rem;
+}
+
+select[multiple] {
+    min-width: 9rem;
+}
+
+input {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    padding-block: 0;
+    padding-inline: 0.5rem;
+}
+
+input[type=checkbox] {
+    width: 1.25rem;
+    vertical-align: middle;
+    margin: 0;
+}
+
+label {
+    margin-block: 0.5rem;
+}
+
+button.danger:not(#specificity-hack) {
     background: #9C1A1C;
     color: white;
 }
