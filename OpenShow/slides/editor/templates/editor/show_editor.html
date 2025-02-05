@@ -41,7 +41,7 @@
                     {% endif %}
                     <ul class="slides">
                         {% for slide in segment.slides.all %}
-                            <li class="slide-thumbnail">
+                            <li class="slide-thumbnail" data-slide-pk="{{ slide.pk }}">
                                 <a href="{% url 'edit-slide' slide.pk %}" title="Edit this slide">
                                     {% include "slides/slide-thumbnail.html" with slide=slide %}
                                 </a>
