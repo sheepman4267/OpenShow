@@ -15,29 +15,29 @@
 
 {% block content %}
     <div role="tablist" aria-label="Select shows or decks to browse">
-        <button role="tab" aria-controls="shows" aria-selected="true">
+        <button role="tab" aria-controls="shows" {% if selected_tab == 'shows' %}aria-selected="true"{% endif %}>
             Shows
         </button>
-        <button role="tab" aria-controls="decks">
+        <button role="tab" aria-controls="decks" {% if selected_tab == 'decks' %}aria-selected="true"{% endif %}>
             Decks
         </button>
-        <button role="tab" aria-controls="themes">
+        <button role="tab" aria-controls="themes" {% if selected_tab == 'themes' %}aria-selected="true"{% endif %}>
             Themes
         </button>
-        <button role="tab" aria-controls="displays">
+        <button role="tab" aria-controls="displays" {% if selected_tab == 'displays' %}aria-selected="true"{% endif %}>
             Displays
         </button>
-        <button role="tab" aria-controls="transitions">
+        <button role="tab" aria-controls="transitions" {% if selected_tab == 'transitions' %}aria-selected="true"{% endif %}>
             Transitions
         </button>
-        <button role="tab" aria-controls="mediaobjects">
+        <button role="tab" aria-controls="mediaobjects" {% if selected_tab == 'mediaobjects' %}aria-selected="true"{% endif %}>
             Media Objects
         </button>
-        <button role="tab" aria-controls="images">
+        <button role="tab" aria-controls="images" {% if selected_tab == 'images' %}aria-selected="true"{% endif %}>
             Images
         </button>
     </div>
-    <div id="shows" role="tabpanel">
+    <div id="shows" role="tabpanel" hidden>
         <h2>Shows</h2>
         <p>
             Shows are collections of slides which show up in the "presentation" view, and can be pushed to displays.

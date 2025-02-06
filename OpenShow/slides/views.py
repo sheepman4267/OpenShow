@@ -42,6 +42,26 @@ class IndexView(TemplateView):
         context['mediaobject_list'] = MediaObject.objects.all()
         context['image_list'] = Image.objects.all()
         context['previous_page'] = 'index'
+        referer = self.request.META.get("HTTP_REFERER")
+        if not referer:
+            selected_tab = "shows"
+        elif "shows" in referer:
+            selected_tab = "shows"
+        elif "deck" in referer:
+            selected_tab = "decks"
+        elif "theme" in referer:
+            selected_tab = "themes"
+        elif "display" in referer:
+            selected_tab = "displays"
+        elif "transition" in referer:
+            selected_tab = "transitions"
+        elif "mediaobject" in referer:
+            selected_tab = "mediaobjects"
+        elif "image" in referer:
+            selected_tab = "images"
+        else:
+            selected_tab = "shows"
+        context['selected_tab'] = selected_tab
         return context
 
 
