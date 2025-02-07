@@ -414,7 +414,7 @@ class Slide(models.Model):
     auto_advance = models.BooleanField(default=False, null=False)
     auto_advance_duration = models.FloatField(default=10)
     transition_duration = models.FloatField(default=1)
-    order = models.FloatField(default=1)
+    order = models.FloatField(null=True)
     cue = models.TextField(null=True, blank=True)
     segment = models.ForeignKey(
         to=Segment,
@@ -556,9 +556,13 @@ class Slide(models.Model):
                     self.auto_advance_duration = self.deck.default_auto_advance_duration
                 if self.deck.slides.last() and not self.order:
                     self.order = self.deck.slides.last().order + 10
+                else:
+                    self.order = 1
             else:  # as in, if self.segment:
                 if self.segment.slides.last() and not self.order:
                     self.order = self.segment.slides.last().order + 10
+                else:
+                    self.order = 1
         super(Slide, self).save(*args, **kwargs)
 
     def has_video(self):
