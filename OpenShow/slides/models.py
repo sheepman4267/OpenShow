@@ -769,6 +769,9 @@ class MediaObject(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ('-pk', )
+
 
 class Image(models.Model):
     file = models.ImageField(
@@ -790,3 +793,6 @@ class Image(models.Model):
 
     def __str__(self):
         return os.path.basename(self.file.name)
+
+    class Meta:
+        ordering = ('-pk', )
