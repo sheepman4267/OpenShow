@@ -25,7 +25,7 @@
     <h2>{% if object %}Edit {{object_verbose_name}}{% else %}Create {{object_verbose_name}}{% endif %}</h2>
     <div id="image_form_container" class="{% if not object %}box{% endif %}">
         {% if not object %}
-            <strong class="block titlebar">New Media Object</strong>
+            <strong class="block titlebar">New Image</strong>
         {% endif %}
         <form
                 method="POST"
@@ -33,7 +33,7 @@
                 action="{% if object %}{{ update_view_url }}{% else %}{{ create_view_url }}{% endif %}"
         >
         {% csrf_token %}
-            {{ form.file.as_field_groupr }}
+            {{ form.file.as_field_group }}
             <button type="submit">Submit</button>
         </form>
     </div>
