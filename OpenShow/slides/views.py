@@ -101,7 +101,7 @@ class DeckView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['decks'] = Deck.objects.all()
+        context['decks'] = natsorted(list(Deck.objects.all().order_by('name')), key=lambda deck: deck.name)
         context['display_list'] = Display.objects.all()
         context['previous_page'] = 'slides-index'
         return context
