@@ -178,7 +178,10 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
         return reverse('edit-deck', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Deck"
 
     def recompute_order(self):
         # TODO: recompute slide order occasionally
