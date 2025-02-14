@@ -8,6 +8,8 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.template import loader
 from .models import Slide, Display, Show, Deck, Transition, Theme, MediaObject, Image
 
+from natsort import natsorted
+
 from .forms import SlideDisplayForm, ShowDisplaySelectorForm
 
 # import htmlmin # Was for the old send slide to display stuff
@@ -35,7 +37,7 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         context['show_list'] = Show.objects.all()
-        context['deck_list'] = Deck.objects.all()
+        context['deck_list'] = natsorted(list(Deck.objects.all().order_by('name')), key=lambda deck: deck.name)
         context['theme_list'] = Theme.objects.all()
         context['display_list'] = Display.objects.all()
         context['transition_list'] = Transition.objects.all()
