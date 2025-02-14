@@ -48,7 +48,7 @@
         <ul>
             {% for show in show_list %}
                 <li>
-                    <a href="{% url 'show' show.pk %}">{{ show.name }}</a>
+                    <a href="{% url 'show' show.pk %}">{{ show }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -67,7 +67,7 @@
         <ul>
             {% for deck in deck_list %}
                 <li>
-                    <a href="{% url 'deck' deck.pk %}">{{ deck.name }}</a>
+                    <a href="{% url 'deck' deck.pk %}">{{ deck }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -83,7 +83,7 @@
         <ul>
             {% for theme in theme_list %}
                 <li>
-                    <a href="{% url 'edit-theme' theme.pk %}">{{ theme.name }}</a>
+                    <a href="{% url 'edit-theme' theme.pk %}">{{ theme }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -99,7 +99,7 @@
         <ul>
             {% for display in display_list %}
                 <li>
-                    <a href="{% url 'display-detail' display.pk %}">{{ display.name }}</a>
+                    <a href="{% url 'display-detail' display.pk %}">{{ display }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -115,7 +115,7 @@
         <ul>
             {% for transition in transition_list %}
                 <li>
-                    <a href="{% url 'edit-transition' transition.pk %}">{{ transition.name }}</a>
+                    <a href="{% url 'edit-transition' transition.pk %}">{{ transition }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -131,7 +131,7 @@
         <ul>
             {% for mediaobject in mediaobject_list %}
                 <li>
-                    <a href="{% url 'mediaobject-detail' mediaobject.pk %}">{{ mediaobject.title }}</a>
+                    <a href="{% url 'mediaobject-detail' mediaobject.pk %}">{{ mediaobject }}</a>
                 </li>
             {% endfor %}
         </ul>
