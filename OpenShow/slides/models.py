@@ -342,7 +342,7 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
 
 
 class SlideElement(models.Model):  # An individual piece of a slide (a block of text, a video, etc.). It's just HTML :)
-    css_class = models.CharField(max_length=100)
+    css_class = models.CharField(max_length=100, verbose_name="CSS Class")
     body = models.TextField(null=True, blank=True)
     order = models.FloatField()
     slide = models.ForeignKey(
