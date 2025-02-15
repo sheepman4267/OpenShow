@@ -139,7 +139,10 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
         return 0
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Display"
     # TODO: Make it possible to pause auto-advance on displays, configurable in the show view.
     # TODO: Make auto-advance pausing triggerable per segment
     # TODO: The Display should probably know the current segment, as well as the current show.
@@ -246,7 +249,10 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
         return missing
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Show"
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -296,8 +302,10 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
         ordering = ["order"]
 
     def __str__(self):
-        return self.name
-
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Segment"
     def next_with_slides(self, direction):
         siblings = self.show.segments.all()
         future_segments = []
@@ -615,7 +623,10 @@ class Transition(models.Model):
         return reverse('edit-transition', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Transition"
 
 
 class TransitionKeyframe(models.Model):
@@ -661,7 +672,10 @@ class Theme(models.Model):
         return classes
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Theme"
 
 
 class ThemeRule(models.Model):
@@ -770,7 +784,10 @@ class MediaObject(models.Model):
         return template_name
 
     def __str__(self):
-        return self.title
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Media Object"
 
     class Meta:
         ordering = ('-pk', )
