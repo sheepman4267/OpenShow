@@ -3,7 +3,7 @@
 A flexible, extensible, open-source presentation system. OpenShow is written in Python, using mostly Django and friends.
 
 ## Why?
-OpenShow is in development right now for use in worship services and other events at a Unitarian Universalist Church. We've tried paid software packages which claim to work, but never found one that was fully-featured and stable enough. OpenShow tries to use advanced code others have written already, as is the custom in Django-land.
+OpenShow is in use in worship services and other events at a Unitarian Universalist Church. We've tried paid software packages which claim to work, but never found one that was fully-featured and stable enough. OpenShow tries to use advanced code others have written already, as is the custom in Django-land.
 
 ## Concepts
 These are the core concepts used to make OpenShow work.
