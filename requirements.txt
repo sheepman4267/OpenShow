@@ -18,4 +18,4 @@ django-q2==1.7.2
 honcho==2.0.0
 python-ffmpeg==2.0.12
 pyyaml==6.0.2
-natsort==0.4.0
+natsort==8.4.0
