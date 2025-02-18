@@ -33,7 +33,7 @@ Transitions are CSS animations. The editor allows you to specify your keyframes 
 Displays are where slides get shown. This is a separate page to be opened in another broswer window, or used (for example) in an OBS Browser Source.
 
 ## Quickstart
-As of release v0.1.0, OpenShow now has an official Docker container. The container does not serve static files or media. Those will have to be on bind mounts or volumes, so they can be served by some other webserver. In my deployment, I use the official `nginx` container for this. Both that and the dynamic application are behind a Traefik reverse proxy. `docker-compose.yml.example` contains a very simplified version of my deployment.
+OpenShow offers an official docker container, which is the recommended method for deployment. The container does not serve static files or media. Those will have to be on bind mounts or volumes, so they can be served by some other webserver. In my deployment, I use the official `nginx` container for this. Both that and the dynamic application are behind a Traefik reverse proxy. `docker-compose.yml.example` contains a good starting point for a new deployment.
 
 This is just my method, and nothing about OpenShow requires that you use Traefik or NGINX. It's the way I'm familiar with, though, and it works well for me.
 
