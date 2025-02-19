@@ -784,8 +784,8 @@ class MediaObject(models.Model):
         return template_name
 
     def __str__(self):
-        if self.name:
-            return self.name
+        if self.title:
+            return self.title
         else:
             return "Untitled Media Object"
 
