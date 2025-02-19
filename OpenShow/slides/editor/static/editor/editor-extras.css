@@ -39,7 +39,9 @@ ul.slides:not(#specificity-hack) {
 
 .slides-sidebar li {
     margin-inline: auto;
-    --display-size-divisor: 8.2;
+    /*--display-size-divisor: 8.2;*/
+    /* Bring this back when the sidebar style can properly handle it */
+    --display-size-divisor: 10;
 }
 
 .sidebar-layout.single > * {
