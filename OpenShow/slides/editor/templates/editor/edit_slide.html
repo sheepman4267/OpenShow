@@ -1,35 +1,62 @@
-{% extends 'editor/base.html' %}
+{% extends edit_show_or_deck_template %}
+
+{% load static %}
+{% load srcdoc %}
 {% load icon %}
-{% block content %}
-    <div id="editor" data-slide-pk="{{ slide.pk }}">
-{#        <ul class="sidebar">#}
-{#            {% for slide in slide.segment.slides.all %}#}
-{#                <li>#}
-{#                    <a href="{% url 'edit-slide' pk=slide.pk %}">{{ slide.pk }}</a>#}
-{#                </li>#}
-{#            {% endfor %}#}
-{#        </ul>#}
-        <button hx-get="{% url 'new-element' %}" hx-swap="outerHTML">New Element</button>
-        <button hx-get="{% url 'delete-slide' pk=slide.pk %}" hx-swap="outerHTML">Delete Slide</button>
-        <form method="post" action="{% url 'edit-slide' slide.pk %}">
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'editor/slide-editor.css' %}">
+    <style>
+        .slide-thumbnail[data-slide-pk="{{ slide.pk }}"]:not(.no-hover) {
+            box-shadow: 0px 0px 15px 1px var(--info-graphical-fg);
+        }
+    </style>
+{% endblock %}
+
+{% block header_left_button %}
+    {% if deck %}
+        <a href="{% url 'edit-deck' deck.pk %}" class="icon-button" aria-label="Back to editing {{ deck.name }}">{% icon 'arrow-left' %}</a>
+    {% elif show %}
+        <a href="{% url 'edit-show' show.pk %}" class="icon-button" aria-label="Back to editing {{ show.name }}">{% icon 'arrow-left' %}</a>
+    {% endif %}
+{% endblock %}
+
+{% block header_right_button %}
+    <a href="{% url 'duplicate-slide' slide.pk %}" class="icon-button" aria-label="Duplicate Slide {{ slide.pk }}">{% icon 'copy' %}</a>
+    <a href="{% url 'delete-slide' slide.pk %}" class="icon-button" aria-label="Delete Slide {{ slide.pk }}">{% icon 'trash-2' %}</a>
+{% endblock %}
+
+{% block editor-right %}
+    <div id="editor-right" class="slide">
+        <div class="box">
+            <strong class="titlebar block">Slide Editor/Preview</strong>
+            <div id="preview" class="slide-thumbnail no-hover" data-slide-pk="{{ slide.pk }}">
+                <iframe scrolling="no" class="slide" src="{% url 'slide-wysiwyg' slide.pk %}"></iframe>
+            </div>
+        </div>
+        <form
+                hx-post="{% url 'edit-slide' slide.pk %}"
+                hx-trigger="change throttle:2s"
+                hx-swap="outerHTML"
+                hx-select="#view-container"
+                hx-target="#view-container"
+                class="slide-form"
+                method="post"
+        >
             {% csrf_token %}
-            {{ form.transition }}
-            {{ form.transition_duration }}
-            <fieldset>
-                <label>Auto Advance</label>
-                {{ form.auto_advance }}
-                <label>Auto Advance Duration</label>
-                {{ form.auto_advance_duration }}
+            <fieldset class="box">
+                <strong class="titlebar block">Transition Options</strong>
+                <label class="block">Transition: {{ form.transition }}</label>
+                <label class="block">Transition Duration: {{ form.transition_duration }}</label>
             </fieldset>
-            <fieldset>
-                <label>Order</label>
-                {{ form.order }}
+            <fieldset class="box">
+                <strong class="titlebar block">Auto Advance Options</strong>
+                <label class="block">Auto advance from this slide: {{ form.auto_advance }}</label>
+                <label class="block">Auto advance after: {{ form.auto_advance_duration }} (in seconds)</label>
             </fieldset>
-{#            <input type="submit">#}
-            <button hx-select="#editor" hx-target="#editor" hx-swap="outerHTML swap:0.1s" hx-post="{% url 'edit-slide' slide.pk %}">Submit</button>
         </form>
     </div>
-    <div id="preview" hx-swap-oob="true" data-slide-pk="{{ slide.pk }}">
-        {% include 'editor/slide.html' with slide=slide %}
-    </div>
 {% endblock %}
+
+{{ deck.pk }}

@@ -1,12 +1,21 @@
 {% load icon %}
+<span class="titlebar">New Element</span>
 <form>
     {% csrf_token %}
     {{ form.css_class.as_field_group }}
-    <input type="hidden" name="slide" _="on load set my @value to @data-slide-pk of #editor">
-    <button
-        hx-post="{% url 'new-element' %}"
-        hx-select="#editor"
-        hx-target="#editor"
-        hx-swap="outerHTML swap:0.1s"
-        >{% icon 'check' %}</button>
+    <input type="hidden" name="slide" _="on load set my @value to @data-slide-pk of #slide">
+    <div class="button-group">
+{#        <button _="on click remove <#dialog > */>">#}
+{#            Cancel#}
+{#        </button>#}
+        <button
+            hx-post="{% url 'new-element' %}"
+            hx-select="#slide"
+            hx-target="#slide"
+            hx-swap="outerHTML swap:0.1s"
+            _="on click remove <#dialog > */>"
+        >
+            Submit
+        </button>
+    </div>
 </form>

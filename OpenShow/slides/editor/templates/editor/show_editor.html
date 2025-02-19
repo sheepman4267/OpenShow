@@ -1,80 +1,84 @@
-{% extends 'editor/base.html' %}
+{% extends 'core/base.html' %}
 
 {% load static %}
 {% load icon %}
 
-{% block additional_css %}
-    <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
-    <link rel="stylesheet" href="{% static 'editor/editor.css' %}">
-    <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
-    <style>
-        {{ show.theme.css }}
-    </style>
+{% block title %}
+    Editing {{ show.name }} - OpenShow
 {% endblock %}
 
-{% block title %}Editing {{ show.name }} - OpenShow{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
+    <link rel="stylesheet" href="{% static 'editor/editor-extras.css' %}">
+{% endblock %}
 
-{% block content %}
-    <div id="show-editor" class="show-editor" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
-        <span class="navbar">
-            <a href="{% url 'show' show.pk %}"><button>{% icon 'arrow-left' %}</button></a>
-            <h1>{{ show.name }}</h1>
-{#            <span class="menu">#}
-{#                <button _="on click set menu to <#show-menu/> then js(menu) console.log(menu); menu.show(); end">Menu</button>#}
-{#                <dialog id="show-menu">#}
-{#                    <ul>#}
-{#                        <li>#}
-{#                            <button></button>#}
-{#                        </li>#}
-{#                    </ul>#}
-{#                </dialog>#}
-{#            </span>#}
-        </span>
-        <ul class="slides-sidebar" id="slides-sidebar">
+{% block header %}
+    <h1>{{ show.name }}</h1>
+{% endblock %}
+
+{% block header_right_button %}
+    <a href="{% url 'delete-show' show.pk %}" class="icon-button" aria-label="Edit {{ show.name }}">{% icon 'trash-2' %}</a>
+{% endblock %}
+
+{% block header_left_button %}
+    <a href="{% url 'show' show.pk %}" class="icon-button" aria-label="Back to {{ show.name }}">{% icon 'arrow-left' %}</a>
+{% endblock %}
+
+{% block main %}
+    <div id="view-container" class="sidebar-layout single" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
+        <ul class="slides-sidebar show" id="slides-sidebar">
             {% for segment in show.segments.all %}
-                <li class="show-segment">
-                    <span class="segment-title">{{ segment.name }}</span>
-                    <button hx-get="{% url 'edit-segment' segment.pk %}" hx-select="#editor" hx-target="#editor" hx-swap="outerHTML swap:0.1s">{% icon 'edit-3' %}</button>
+                <li class="box show-segment">
+                    <strong class="titlebar block">{{ segment.name }}</strong>
+                    <a href="htmx"
+                            hx-get="{% url 'edit-segment' segment.pk %}"
+                            hx-select="#editor-right"
+                            hx-target="#editor-right"
+                            hx-swap="outerHTML swap:0.1s"
+                    >Edit Segment Details</a>
                     {% if segment.included_deck %}
                         <h4>Deck: {{ segment.included_deck.name }}</h4>
                     {% endif %}
-                    <ul>
+                    <ul class="slides">
                         {% for slide in segment.slides.all %}
-                            <li class="slide-thumbnail"
-                                hx-get="{% url 'edit-slide' pk=slide.pk %}"
-                                hx-swap="outerHTML swap:0.1s"
-                                hx-select="#editor"
-                                hx-target="#editor">
-                                {% include "slides/slide.html" with slide=slide %}
+                            <li class="slide-thumbnail" data-slide-pk="{{ slide.pk }}">
+                                <a href="{% url 'edit-slide' slide.pk %}" title="Edit this slide">
+                                    {% include "slides/slide-thumbnail.html" with slide=slide %}
+                                </a>
                             </li>
                         {% endfor %}
-                        <li>
-                            <form method="post" action="{% url 'new-slide' %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="segment" value="{{ segment.pk }}">
-{#                                <input type="submit" value="+">#}
-                                <button hx-post="{% url 'new-slide' %}" hx-select="#slides-sidebar > *" hx-target="#slides-sidebar" hx-swap="innerHTML swap:0.1s">+</button>
-                            </form>
-                        </li>
                     </ul>
+                    <form method="post" action="{% url 'new-slide' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="segment" value="{{ segment.pk }}">
+{#                                <input type="submit" value="+">#}
+                        <button hx-post="{% url 'new-slide' %}" hx-select="#slides-sidebar > *" hx-target="#slides-sidebar" hx-swap="innerHTML swap:0.1s">New Slide</button>
+                    </form>
                 </li>
             {% endfor %}
-            <li>
                 <button class='add-button' hx-get="{% url 'new-segment' %}" hx-swap="outerHTML">
-                    +
+                    New Segment
                 </button>
-            </li>
         </ul>
-        <div class="slide-preview" id="preview">
-            <div id="slide" class="slide">
-                <div class="words">
-                    No Slide Loaded
-                </div>
+    {% block editor-right %}
+        <div id="editor-right" class="double-box-container show" data-show-pk="{{ show.pk }}">
+            <div class="box">
+                <strong class="titlebar block">Theme Settings</strong>
+                Current Theme: {{ show.theme }}
+                <button class=block hx-get="{% url 'set-theme' show.pk %}" hx-swap="outerHTML">Set Theme</button>
+            </div>
+            <div class="box">
+                <strong class="titlebar block">Show Settings</strong>
+                <form method="post" action="{% url 'edit-show' show.pk %}">
+                    {% csrf_token %}
+                    <label class="block">Name: {{ form.name }}{{ form.name.errors }}</label>
+                    <label class="block">Advance past ends of decks and segments: {{ form.advance_between_segments }}{{ form.advance_between_segments.errors }}</label>
+                    <label class="block">Advance in a loop when reaching the end of a deck: {{ form.advance_loop }}{{ form.order.advance_loop }}</label>
+                    <label class="block">Send this show to these displays: {{ form.displays }}{{ form.displays.errors }}</label>
+                    <button type="submit">Submit</button>
+                </form>
             </div>
         </div>
-        <div class="slide-editor" id="editor">
-            <button hx-get="{% url 'set-theme' show.pk %}" hx-swap="outerHTML">Set Theme</button>
-            <button hx-get="{% url 'delete-show' pk=show.pk %}" hx-swap="outerHTML">Delete Show</button>
-        </div>
-    </div>
+    {% endblock %}
+</div>
 {% endblock %}

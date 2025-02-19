@@ -2,7 +2,7 @@
 A flexible, extensible, open-source presentation system. OpenShow is written in Python, using mostly Django and friends.
 
 ## Why?
-OpenShow is in development right now for use in worship services and other events at a Unitarian Universalist Church. We've tried paid software packages which claim to work, but never found one that was fully-featured and stable enough. OpenShow tries to use advanced code others have written already, as is the custom in Django-land.
+OpenShow is in use in worship services and other events at a Unitarian Universalist Church. We've tried paid software packages which claim to work, but never found one that was fully-featured and stable enough. OpenShow tries to use advanced code others have written already, as is the custom in Django-land.
 
 ## Concepts
 These are the core concepts used to make OpenShow work.
@@ -32,7 +32,7 @@ Transitions are CSS animations. The editor allows you to specify your keyframes 
 Displays are where slides get shown. This is a separate page to be opened in another broswer window, or used (for example) in an OBS Browser Source.
 
 ## Quickstart
-As of release v0.1.0, OpenShow now has an official Docker container. The container does not serve static files or media. Those will have to be on bind mounts or volumes, so they can be served by some other webserver. In my deployment, I use the official `nginx` container for this. Both that and the dynamic application are behind a Traefik reverse proxy. `docker-compose.yml.example` contains a very simplified version of my deployment.
+OpenShow offers an official docker container, which is the recommended method for deployment. The container does not serve static files or media. Those will have to be on bind mounts or volumes, so they can be served by some other webserver. In my deployment, I use the official `nginx` container for this. Both that and the dynamic application are behind a Traefik reverse proxy. `docker-compose.yml.example` contains a good starting point for a new deployment.
 
 This is just my method, and nothing about OpenShow requires that you use Traefik or NGINX. It's the way I'm familiar with, though, and it works well for me.
 
@@ -58,18 +58,18 @@ Refer to the "Concepts" section above for explanation of terminology such as "Sh
 3. The unlabeled text box below the preview winodw is where you put CSS rules which make up your theme. If you're not experienced with CSS, or if you just want a somewhat sane place to start, copy the contents of `example-theme.css` from this repository into that text box and click "Submit".
 4. Next, you'll need a display. Click the back button on the left side of the header to return to the slides index, select the "Displays" tab, and click "New Display". Enter a name for your display and submit it.
 5. Click the link to open that display in a new tab, then move that tab to a new window. Put it somewhere that you can get to it easily.
-4. Click the back button to return to the slides index. You'll automatically be on the Show page. Click "New Show", enter a name, and submit it.
+4. Click the back button to return to the slides index, then click on the "Shows" tab. Click "New Show", enter a name, and submit it.
 5. Welcome to the show editor! Now, you'll want to select the theme you just created. Click on "Set Theme", select your theme in the resulting dropdown, and click "Submit".
-6. Next, create a segment using the plus button in the left sidebar. Enter a name and click the checkbox. 
-7. You'll see a box in the sidebar labeled with the name of your segment. Click on the smaller plus button near the bottom of the segment to add a slide.
+6. Next, click "New Segment" on the left. Enter a name and click "Submit". 
+7. You'll see a box in the sidebar labeled with the name of your segment. Click "New Slide" inside your segment.
 8. Click on the slide. This will open your new slide for editing. 
-9. The bottom left panel of the editor contains options for changing the properties of the entire slide. You can leave all of that alone for now and click "New Element".
-10. Enter the CSS class which you would like to apply to your new element. This should be a class (or set of classes) which is defined in the CSS you placed in the theme in step three. Click the checkmark button.
+9. Click the plus button in the lower right corner of the slide editor to add a new element.
+10. Enter the CSS class which you would like to apply to your new element. This should be a class (or set of classes) which is defined in the CSS you placed in the theme in step three. Click "Submit".
 11. You should see placeholder text appear in the preview area saying "Double-click to edit". Follow that direction and add some text to your slide element. Press ctrl+enter or click the checkmark to save the content.
-12. Click the back button again, which this time will take you to the presenter view for your show. In the right sidebar, there's a gear button. Click that, select your display in the list, and click the checkmark. That sets this Show object to send slides to your display.
+12. Click the back button twice (once to go back to editing show properties, then again to reach the presenter view for your show). In the right sidebar, there's a gear button. Click that, select your display in the list, and click the checkmark. That sets this Show object to send slides to your display.
 13. In the main body of the presenter view, you'll see a thumbnail for the slide you just created. Click on it! The slide you created should appear in the browser window where you opened your display.
 
-Congratulations! You've just displayed your first slide using OpenShow! Hopefully that gives you an idea of the UI. Many pieces of the editor have function descriptions built in - otherwise, more documentation will be forthcoming. Feel free to file an issue if you have any question, even if it's probably not a bug.
+Congratulations! You've just displayed your first slide using OpenShow! Hopefully that gives you an idea of the UI. Many pieces of the editor have function descriptions built in - otherwise, more documentation will be forthcoming. Feel free to file an issue if you have a question, even if it's probably not a bug.
 
 ## Development Setup
 

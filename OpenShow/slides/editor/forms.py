@@ -1,6 +1,8 @@
-from django.forms import Form, ModelForm, IntegerField, ChoiceField, Select, ClearableFileInput, FileField, CharField
+from django.forms import Form, ModelForm, IntegerField, ChoiceField, Select, ClearableFileInput, FileField, CharField, ModelChoiceField
+from django.forms.models import ModelChoiceIterator
 from django.urls import reverse_lazy
-from ..models import Show, Theme, SlideElement, Deck
+from ..models import Show, Theme, SlideElement, Deck, Segment
+from natsort import natsorted
 
 
 # class SimpleShowForm(ModelForm):
@@ -9,6 +11,23 @@ from ..models import Show, Theme, SlideElement, Deck
 #         fields = [
 #             'name'
 #         ]
+
+
+class NatsortedChoiceIterator(ModelChoiceIterator):
+    def __iter__(self):
+        if self.field.empty_label is not None:
+            yield ("", self.field.empty_label)
+        queryset = self.queryset
+        # Can't use iterator() when queryset uses prefetch_related()
+        if not queryset._prefetch_related_lookups:
+            queryset = queryset.iterator()
+        choices = natsorted(list(queryset), key=lambda deck: deck.name)
+        for obj in choices:
+            yield self.choice(obj)
+
+
+class NatsortedModelChoiceField(ModelChoiceField):
+    iterator = NatsortedChoiceIterator
 
 
 class DeleteSlideElementForm(Form):
@@ -101,3 +120,14 @@ class ImportImagesForm(Form):
     mode = ChoiceField(
         choices=IMPORT_MODE_CHOICES,
     )
+
+
+class UpdateSegmentForm(ModelForm):
+    included_deck = NatsortedModelChoiceField(queryset=Deck.objects.all())
+    class Meta:
+        model = Segment
+        fields = [
+            'name',
+            'order',
+            'included_deck',
+        ]

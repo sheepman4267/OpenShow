@@ -1,3 +1,4 @@
+import hashlib
 from django.db import models
 from django_eventstream import send_event
 from collections.abc import Iterable
@@ -5,6 +6,8 @@ from django.shortcuts import reverse
 from django.utils import timezone
 from datetime import timedelta, datetime
 from django_q.models import Schedule
+import yaml
+import os
 
 import tinycss2
 
@@ -136,7 +139,10 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
         return 0
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Display"
     # TODO: Make it possible to pause auto-advance on displays, configurable in the show view.
     # TODO: Make auto-advance pausing triggerable per segment
     # TODO: The Display should probably know the current segment, as well as the current show.
@@ -169,27 +175,20 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
     default_auto_advance = models.BooleanField(default=False, null=False)
     advance_in_loop = models.BooleanField(default=False, null=False)
     default_auto_advance_duration = models.FloatField(default=10)
-    script = models.TextField(null=True, blank=True)
     slide_text_markup = models.TextField(null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('edit-deck', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Deck"
 
     def recompute_order(self):
         # TODO: recompute slide order occasionally
         pass
-
-    def push_cues(self):
-        slides = list(self.slides.all())
-        cues = self.script.split('~~')
-        if len(slides) != len(cues):
-            raise InvalidArgumentException('You have a mismatched number of cues and slides')
-        for slide, cue in zip(slides, cues):
-            slide.cue = cue
-            slide.save()
 
     def pull_aoml(self):
         aoml_str = ''
@@ -243,16 +242,17 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
     def check_compatibility(self, theme):
         missing = []
         show_classes = self.get_css_classes()
-        print(show_classes)
         theme_classes = theme.get_css_classes()
-        print(theme_classes)
         for css_class in show_classes:
             if css_class not in theme_classes:
                 missing.append(css_class)
         return missing
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Show"
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -302,8 +302,10 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
         ordering = ["order"]
 
     def __str__(self):
-        return self.name
-
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Segment"
     def next_with_slides(self, direction):
         siblings = self.show.segments.all()
         future_segments = []
@@ -313,7 +315,6 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
             if segment == self:
                 future_segments = siblings[idx + 1:]
         for segment in future_segments:
-            print(segment)
             if segment.slides.first() or segment.included_deck:
                 return segment
 
@@ -341,7 +342,7 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
 
 
 class SlideElement(models.Model):  # An individual piece of a slide (a block of text, a video, etc.). It's just HTML :)
-    css_class = models.CharField(max_length=100)
+    css_class = models.CharField(max_length=100, verbose_name="CSS Class")
     body = models.TextField(null=True, blank=True)
     order = models.FloatField()
     slide = models.ForeignKey(
@@ -352,16 +353,20 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         related_name='elements',
         on_delete=models.CASCADE,
     )
-    image = models.ImageField(
+    image_object = models.ForeignKey(
+        to='Image',
         blank=True,
         null=True,
-        upload_to='element_images/'
+        related_name='elements',
+        on_delete=models.SET_NULL,
     )
+    missing_image_object = models.BooleanField(default=False)
     video = models.FileField(
         blank=True,
         null=True,
         upload_to='element_videos/'
     )
+    missing_media_object = models.BooleanField(default=False)
     media_object = models.ForeignKey(
         to='MediaObject',
         blank=True,
@@ -371,7 +376,7 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
     )
 
     def get_absolute_url(self):
-        return reverse('edit-slide', kwargs={'pk': self.slide.pk})
+        return reverse('slide-wysiwyg', kwargs={'pk': self.slide.pk})
 
     def __str__(self):
         if self.slide.segment:
@@ -385,7 +390,10 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         ordering = ["-order"]
 
     def save(self, *args, **kwargs):
-        print(f'MEDIA{self.media_object}')
+        if self.missing_image_object and self.image_object:
+            self.missing_image_object = False
+        if self.missing_media_object and self.media_object:
+            self.missing_media_object = False
         if not self.pk:
             if self.slide.elements.last():
                 self.order = self.slide.elements.last().order + 10
@@ -398,6 +406,16 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
             self.body = self.body.replace('<br>', '\n')
         return self.body
 
+    def pull_aoml(self):
+        aoml_str = f'>>{self.css_class}||\r'
+        if self.image_object:
+            aoml_str += f'image:{self.image_object.file_hash}||\r'
+        if self.media_object:
+            aoml_str += f'media:{self.media_object.file_hash}||\r'
+        aoml_str += f'{self.body}\r'.replace('<br>', '\\')
+
+        return aoml_str
+
 
 class QRCodeElement(SlideElement):
     link = models.TextField()
@@ -407,7 +425,7 @@ class Slide(models.Model):
     auto_advance = models.BooleanField(default=False, null=False)
     auto_advance_duration = models.FloatField(default=10)
     transition_duration = models.FloatField(default=1)
-    order = models.FloatField(default=1)
+    order = models.FloatField(null=True)
     cue = models.TextField(null=True, blank=True)
     segment = models.ForeignKey(
         to=Segment,
@@ -547,17 +565,20 @@ class Slide(models.Model):
                     self.auto_advance = self.deck.default_auto_advance
                 if self.deck.default_auto_advance_duration:
                     self.auto_advance_duration = self.deck.default_auto_advance_duration
-                if self.deck.slides.last():
+                if self.deck.slides.last() and not self.order:
                     self.order = self.deck.slides.last().order + 10
+                else:
+                    self.order = 1
             else:  # as in, if self.segment:
-                if self.segment.slides.last():
+                if self.segment.slides.last() and not self.order:
                     self.order = self.segment.slides.last().order + 10
+                else:
+                    self.order = 1
         super(Slide, self).save(*args, **kwargs)
 
     def has_video(self):
         result = False
         for element in self.elements.all():
-            # print(bool(element.video))
             if element.video:
                 result = True
         return result
@@ -570,10 +591,14 @@ class Slide(models.Model):
         return result
 
     def pull_aoml(self):
-        aoml_str = ''
+        metadata = yaml.safe_dump(
+            {
+                'cue': self.cue,
+            }
+        )
+        aoml_str = f'{metadata}##\n'
         for element in self.elements.all().order_by('order'):
-            aoml_str += f'>>{element.css_class}||\r{element.body}\r'.replace('<br>', '\\')
-            # TODO: Handle video/image once the AOML spec supports media
+            aoml_str += element.pull_aoml()
         return aoml_str
 
 
@@ -598,7 +623,10 @@ class Transition(models.Model):
         return reverse('edit-transition', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Transition"
 
 
 class TransitionKeyframe(models.Model):
@@ -640,12 +668,14 @@ class Theme(models.Model):
                     if type(token) == IdentToken:
                         class_list.append(token.value)
                 class_string = ' '.join(class_list)
-                print(class_string)
                 classes.append(class_string)
         return classes
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        else:
+            return "Untitled Theme"
 
 
 class ThemeRule(models.Model):
@@ -724,6 +754,8 @@ class MediaObject(models.Model):
     file_hash = models.CharField(max_length=256, null=True, blank=True)
 
     def save(self, *args, **kwargs):
+        if self.embed_url:
+            self.file_hash = hashlib.sha256(self.embed_url.encode("utf-8")).hexdigest()
         super().save(*args, **kwargs)
         if self.media_type == VIDEO and not self.final_file:
             Schedule.objects.create(
@@ -732,7 +764,6 @@ class MediaObject(models.Model):
                 schedule_type=Schedule.ONCE,
                 next_run=datetime.utcnow(),
             )
-            print('scheduled video')
         elif self.media_type == AUDIO and not self.final_file:
             Schedule.objects.create(
                 func='slides.editor.tasks.transcode_audio',
@@ -740,7 +771,6 @@ class MediaObject(models.Model):
                 schedule_type=Schedule.ONCE,
                 next_run=datetime.utcnow(),
             )
-            print('scheduled audio')
 
     def get_slide_element_template(self):
         template_name = None
@@ -754,4 +784,35 @@ class MediaObject(models.Model):
         return template_name
 
     def __str__(self):
-        return self.title
+        if self.title:
+            return self.title
+        else:
+            return "Untitled Media Object"
+
+    class Meta:
+        ordering = ('-pk', )
+
+
+class Image(models.Model):
+    file = models.ImageField(
+        blank=False,
+        null=False,
+        upload_to='images/',
+    )
+    file_hash = models.CharField(max_length=256, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            super(self.__class__, self).save(*args, **kwargs)
+        hash_func = hashlib.new('sha256')
+        with open(self.file.path, 'rb') as file:
+            while chunk := file.read(65536):
+                hash_func.update(chunk)
+        self.file_hash = hash_func.hexdigest()
+        super(self.__class__, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return os.path.basename(self.file.name)
+
+    class Meta:
+        ordering = ('-pk', )

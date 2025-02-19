@@ -1,0 +1,23 @@
+{% load static %}
+{% load icon %}
+<head>
+    <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
+    <link rel="stylesheet" href="{% static 'editor/slide-wysiwyg.css' %}">
+    <script src="{% static 'js/hyperscript.js' %}"></script>
+    <script src="{% static 'js/htmx.js' %}"></script>
+    <style>
+        {{ slide.get_theme.css }}
+    </style>
+    <title>Slide {{ slide.pk }}</title>
+    <style>
+        {# Force overflow:scroll in editor, regardless of theme (allows WYSIWYG to work better) #}
+        .slide {overflow: scroll; scroll-behavior: smooth;}
+    </style>
+</head>
+<body>
+    {% include 'editor/slide.html' with slide=slide %}
+    <div id="modal-container">
+        <div class="box dialog" id="dialog">
+        </div>
+    </div>
+</body>

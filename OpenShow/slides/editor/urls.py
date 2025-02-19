@@ -1,14 +1,17 @@
 from django.urls import path
 
+from slides.editor.views.image import ImageCRUDView
 from slides.editor.views.index import IndexView
 from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView, SetThemeView, \
     check_theme_compatibility
 from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView
-from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView
+from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView, \
+    SlideTextEditView, duplicate_slide
 from slides.editor.views.slide_element import SlideElementCreateView, SlideElementDeleteView, \
     SlideElementUpdateTextView, SlideElementUpdateCSSClassView, SlideElementUpdateImageView, \
-    SlideElementUpdateVideoView, ChangeSlideElementOrderView, SlideElementUpdateMediaObjectView
-from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteView, push_deck_cues, \
+    SlideElementUpdateVideoView, ChangeSlideElementOrderView, SlideElementUpdateMediaObjectView, \
+    SlideElementUpdateImageObjectView
+from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteView, \
     push_deck_slide_text, pull_aoml_text, DeckFromImagesView, ImportImagesToExistingDeckView
 from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDeleteView
 from slides.editor.views.utils import generate_lorem
@@ -27,12 +30,15 @@ urlpatterns = [
     path('segment/new', SegmentCreateView.as_view(), name='new-segment'),
     path('slide/new', SlideCreateView.as_view(), name='new-slide'),
     path('slide/<int:pk>', SlideEditView.as_view(), name='edit-slide'),
+    path('slide/<int:pk>/wysiwyg', SlideTextEditView.as_view(), name='slide-wysiwyg'),
     path('slide/<int:pk>/delete', SlideDeleteView.as_view(), name='delete-slide'),
+    path('slide/<int:pk>/duplicate', duplicate_slide, name='duplicate-slide'),
     path('slide/element/new', SlideElementCreateView.as_view(), name='new-element'),
     path('slide/element/delete/<int:pk>', SlideElementDeleteView.as_view(), name='delete-element'),
     path('slide/element/<int:pk>/text-edit', SlideElementUpdateTextView.as_view(), name='edit-element-text'),
     path('slide/element/<int:pk>/css-class', SlideElementUpdateCSSClassView.as_view(), name='edit-element-css-class'),
     path('slide/element/<int:pk>/image', SlideElementUpdateImageView.as_view(), name='edit-element-image'),
+    path('slide/element/<int:pk>/image_object', SlideElementUpdateImageObjectView.as_view(), name='edit-element-image_object'),
     path('slide/element/<int:pk>/video', SlideElementUpdateVideoView.as_view(), name='edit-element-video'),
     path('slide/element/<int:pk>/media_object', SlideElementUpdateMediaObjectView.as_view(), name='edit-element-media_object'),
     path('slide/element/reorder', ChangeSlideElementOrderView.as_view(), name='reorder-element'),
@@ -40,7 +46,6 @@ urlpatterns = [
     path('deck/new', DeckCreateView.as_view(), name='new-deck'),
     path('deck/<int:pk>', DeckEditorView.as_view(), name='edit-deck'),
     path('deck/<int:pk>/delete', DeckDeleteView.as_view(), name='delete-deck'),
-    path('deck/<int:pk>/push-cues', push_deck_cues, name='push-deck-cues'),
     path('deck/<int:pk>/push-text', push_deck_slide_text, name='push-deck-text'),
     path('deck/<int:pk>/pull-aoml', pull_aoml_text, name='pull-aoml-text'),
     path('deck/<int:pk>/import-images', ImportImagesToExistingDeckView.as_view(), name='import-images-to-deck'),
@@ -61,4 +66,5 @@ urlpatterns = [
     path('display/<int:pk>/update', DisplayUpdateView.as_view(), name='update-display'),
     path('display/<int:pk>/delete', DisplayDeleteView.as_view(), name='delete-display'),
     *MediaObjectCRUDView.get_urls(),
+    *ImageCRUDView.get_urls(),
 ]

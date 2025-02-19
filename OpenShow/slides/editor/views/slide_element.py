@@ -17,7 +17,7 @@ class SlideElementDeleteView(DeleteView):
     form_class = DeleteSlideElementForm
 
     def form_valid(self, form):
-        self.success_url = reverse('edit-slide', kwargs={"pk": form.cleaned_data["slide_pk"]})
+        self.success_url = reverse('slide-wysiwyg', kwargs={"pk": form.cleaned_data["slide_pk"]})
         return super().form_valid(form)
 
 
@@ -71,6 +71,13 @@ class SlideElementUpdateMediaObjectView(UpdateView):
     def get_success_url(self):
         return self.object.get_absolute_url()
 
+class SlideElementUpdateImageObjectView(UpdateView):
+    model = SlideElement
+    fields = ['image_object']
+    template_name = 'editor/element_image_object_edit.html'
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 class ChangeSlideElementOrderView(FormView):
     form_class = ChangeSlideElementOrderForm

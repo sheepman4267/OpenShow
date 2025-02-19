@@ -4,10 +4,16 @@ from django.shortcuts import render
 from slides.models import Show
 from slides.editor.forms import SetThemeForm
 
-class ShowEditorView(DetailView):
-    queryset = Show.objects.all()
+
+class ShowEditorView(UpdateView):
+    model = Show
+    fields = [
+        'name',
+        'displays',
+        'advance_between_segments',
+        'advance_loop',
+    ]
     template_name = 'editor/show_editor.html'
-    # extra_context = {'display': Display.objects.all().first()}
 
 
 class ShowCreateView(CreateView):

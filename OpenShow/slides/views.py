@@ -6,7 +6,9 @@ from django.views.generic import DetailView, FormView, ListView, UpdateView, Tem
 from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.template import loader
-from .models import Slide, Display, Show, Deck, Transition, Theme, MediaObject
+from .models import Slide, Display, Show, Deck, Transition, Theme, MediaObject, Image
+
+from natsort import natsorted
 
 from .forms import SlideDisplayForm, ShowDisplaySelectorForm
 
@@ -35,12 +37,33 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         context['show_list'] = Show.objects.all()
-        context['deck_list'] = Deck.objects.all()
+        context['deck_list'] = natsorted(list(Deck.objects.all().order_by('name')), key=lambda deck: deck.name)
         context['theme_list'] = Theme.objects.all()
         context['display_list'] = Display.objects.all()
         context['transition_list'] = Transition.objects.all()
         context['mediaobject_list'] = MediaObject.objects.all()
+        context['image_list'] = Image.objects.all()
         context['previous_page'] = 'index'
+        referer = self.request.META.get("HTTP_REFERER")
+        if not referer:
+            selected_tab = "shows"
+        elif "shows" in referer:
+            selected_tab = "shows"
+        elif "deck" in referer:
+            selected_tab = "decks"
+        elif "theme" in referer:
+            selected_tab = "themes"
+        elif "display" in referer:
+            selected_tab = "displays"
+        elif "transition" in referer:
+            selected_tab = "transitions"
+        elif "mediaobject" in referer:
+            selected_tab = "mediaobjects"
+        elif "image" in referer:
+            selected_tab = "images"
+        else:
+            selected_tab = "shows"
+        context['selected_tab'] = selected_tab
         return context
 
 
@@ -78,7 +101,7 @@ class DeckView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['decks'] = Deck.objects.all()
+        context['decks'] = natsorted(list(Deck.objects.all().order_by('name')), key=lambda deck: deck.name)
         context['display_list'] = Display.objects.all()
         context['previous_page'] = 'slides-index'
         return context

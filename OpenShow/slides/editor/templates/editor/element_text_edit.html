@@ -5,7 +5,7 @@
         <textarea
                 id="edit-element-{{ object.pk }}"
                 name="body"
-                class="editor-editable"
+                class="editor-editable {{ element.css_class }}"
                 _="
                 on input or load
                 set <.grow-wrap/>'s @data-replicated-value to me.value

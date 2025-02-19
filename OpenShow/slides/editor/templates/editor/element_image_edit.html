@@ -1,14 +1,21 @@
 {% load icon %}
-<form _="on dblclick halt" class="element-form-box">  {# Halt doubleclick events so selecting text in our fields isn't super frustrating #}
+<span class="titlebar">Editing Element Image</span>
+<form _="on dblclick halt">  {# Halt doubleclick events so selecting text in our fields isn't super frustrating #}
     {% csrf_token %}
-    {{ form.image }}
-    <button
-        hx-post="{% url 'edit-element-image' object.pk %}"
-        hx-select="#element-{{ object.pk }}"
-        hx-target="#element-{{ object.pk }}"
-        hx-swap="outerHTML swap:0.1s"
-        hx-encoding="multipart/form-data"
-    >
-        {% icon 'check' %}
-    </button>
+    {{ form.image.as_field_group }}
+    <div class="button-group">
+        <button _="on click remove <#dialog > */>">
+            Cancel
+        </button>
+        <button
+            hx-post="{% url 'edit-element-image' object.pk %}"
+            hx-select="#element-{{ object.pk }}"
+            hx-target="#element-{{ object.pk }}"
+            hx-swap="outerHTML swap:0.1s"
+            hx-encoding="multipart/form-data"
+            _="on click remove <#dialog > */>"
+        >
+            {% icon 'check' %}
+        </button>
+    </div>
 </form>

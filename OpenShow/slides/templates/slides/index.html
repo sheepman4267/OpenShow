@@ -4,7 +4,7 @@
 
 {% block extra_js %}
     {{ block.super }}
-    <script type="module" src="https://unpkg.com/missing.css@1.1.1/dist/js/tabs.js"></script>
+    <script type="module" src="{% static 'js/tabs.js' %}"></script>
 {% endblock %}
 
 {% block title %}OpenShow Slides{% endblock %}
@@ -15,26 +15,29 @@
 
 {% block content %}
     <div role="tablist" aria-label="Select shows or decks to browse">
-        <button role="tab" aria-controls="shows" aria-selected="true">
+        <button role="tab" aria-controls="shows" {% if selected_tab == 'shows' %}aria-selected="true"{% endif %}>
             Shows
         </button>
-        <button role="tab" aria-controls="decks">
+        <button role="tab" aria-controls="decks" {% if selected_tab == 'decks' %}aria-selected="true"{% endif %}>
             Decks
         </button>
-        <button role="tab" aria-controls="themes">
+        <button role="tab" aria-controls="themes" {% if selected_tab == 'themes' %}aria-selected="true"{% endif %}>
             Themes
         </button>
-        <button role="tab" aria-controls="displays">
+        <button role="tab" aria-controls="displays" {% if selected_tab == 'displays' %}aria-selected="true"{% endif %}>
             Displays
         </button>
-        <button role="tab" aria-controls="transitions">
+        <button role="tab" aria-controls="transitions" {% if selected_tab == 'transitions' %}aria-selected="true"{% endif %}>
             Transitions
         </button>
-        <button role="tab" aria-controls="mediaobjects">
+        <button role="tab" aria-controls="mediaobjects" {% if selected_tab == 'mediaobjects' %}aria-selected="true"{% endif %}>
             Media Objects
         </button>
+        <button role="tab" aria-controls="images" {% if selected_tab == 'images' %}aria-selected="true"{% endif %}>
+            Images
+        </button>
     </div>
-    <div id="shows" role="tabpanel">
+    <div id="shows" role="tabpanel" hidden>
         <h2>Shows</h2>
         <p>
             Shows are collections of slides which show up in the "presentation" view, and can be pushed to displays.
@@ -45,7 +48,7 @@
         <ul>
             {% for show in show_list %}
                 <li>
-                    <a href="{% url 'show' show.pk %}">{{ show.name }}</a>
+                    <a href="{% url 'show' show.pk %}">{{ show }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -64,7 +67,7 @@
         <ul>
             {% for deck in deck_list %}
                 <li>
-                    <a href="{% url 'deck' deck.pk %}">{{ deck.name }}</a>
+                    <a href="{% url 'deck' deck.pk %}">{{ deck }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -80,7 +83,7 @@
         <ul>
             {% for theme in theme_list %}
                 <li>
-                    <a href="{% url 'edit-theme' theme.pk %}">{{ theme.name }}</a>
+                    <a href="{% url 'edit-theme' theme.pk %}">{{ theme }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -96,7 +99,7 @@
         <ul>
             {% for display in display_list %}
                 <li>
-                    <a href="{% url 'display-detail' display.pk %}">{{ display.name }}</a>
+                    <a href="{% url 'display-detail' display.pk %}">{{ display }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -112,7 +115,7 @@
         <ul>
             {% for transition in transition_list %}
                 <li>
-                    <a href="{% url 'edit-transition' transition.pk %}">{{ transition.name }}</a>
+                    <a href="{% url 'edit-transition' transition.pk %}">{{ transition }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -128,9 +131,26 @@
         <ul>
             {% for mediaobject in mediaobject_list %}
                 <li>
-                    <a href="{% url 'mediaobject-detail' mediaobject.pk %}">{{ mediaobject.title }}</a>
+                    <a href="{% url 'mediaobject-detail' mediaobject.pk %}">{{ mediaobject }}</a>
                 </li>
             {% endfor %}
         </ul>
     </div>
+    <div id="images" role="tabpanel" hidden>
+        <h2>Images</h2>
+        <p>
+            Images which can be added to slide elements.
+        </p>
+        <button hx-get="{% url 'image-create' %}" hx-swap="outerHTML" hx-select="#image_form_container">
+            New Image
+        </button>
+        <ul>
+            {% for image in image_list %}
+                <li>
+                    <a href="{% url 'image-detail' image.pk %}">{{ image }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
 {% endblock %}
