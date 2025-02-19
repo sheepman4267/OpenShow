@@ -33,3 +33,20 @@ image:933ab3936b18eb2372306f2e039966c6aa5c7571652aca4658ed34327e8ead4d||
 None
 ```
 That AOML will produce two slides when parsed. Slide one will be text only, while slide two will contain an image referenced by the provided hash. If that image exists in the database, it will be added to the slide. Otherwise, that element will show a "missing image" error in the editor, and can be updated. Media objects can be referenced the same way, using `media:hash` rather than `image:hash`.
+
+Lastly, each slide can include a YAML-formatted preamble containing slide attributes (as opposed to slide *element* attributes). Currently, this is only used to set the slide's `cue` attribute, but will be expanded in the future to cover transition settings. Here is an example of the format:
+```
+cue: null
+##
+>>lyrics||
+Lyrics to a song go here.
+>>subtitle||
+Here is a subtitle to be projected on a slide.
+~~
+cue: null
+##
+>>fit-image-height||
+image:933ab3936b18eb2372306f2e039966c6aa5c7571652aca4658ed34327e8ead4d||
+None
+```
+This YAML preamble is emitted by the slide > AOML process, but is ***not*** required. Manually-written AOML does not need to contain this part of the format, though it is easy to use if you want to set cues on your slides.
