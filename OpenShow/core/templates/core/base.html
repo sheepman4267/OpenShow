@@ -11,13 +11,15 @@
     <link rel="icon" href="{% static 'favicon.svg' %}">
     <script src="{% static 'js/htmx.js' %}"></script>
     <script src="{% static 'js/hyperscript.js' %}"></script>
+    <script src="{% static 'js/idiomorph.js' %}"></script>
+    <script src="{% static 'js/idiomorph-ext.min.js' %}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {% block extra_js %}
     {% endblock %}
     {% block extra_css %}
     {% endblock %}
 </head>
-<body>
+<body hx-ext="morph">
     <header>
         <div class="header-back-button">
             {% if previous_page %}
