@@ -45,6 +45,10 @@
             <form method="post" action="{% url "edit-theme" theme.pk %}">
                 {% csrf_token %}
                 {{ form.name }}
+                <div>
+                    {{ form.default.as_field_group }}
+                    <p>Current Default: {{ theme.get_default }}</p>
+                </div>
                 {{ form.css }}
                 <input type="submit">
             </form>

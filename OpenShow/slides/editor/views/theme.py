@@ -1,5 +1,6 @@
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+
 from slides.models import Theme
 
 
@@ -16,7 +17,7 @@ class ThemeCreateView(CreateView):
 class ThemeUpdateView(UpdateView):
     model = Theme
     template_name = 'editor/edit_theme.html'
-    fields = ['name', 'css']
+    fields = ['name', 'css', 'default']
     extra_context = {
         'theme_list': Theme.objects.all
     }

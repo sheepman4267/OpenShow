@@ -198,6 +198,10 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
                 aoml_str += '~~\r'
         return aoml_str
 
+    def save(self, *args, **kwargs):
+        self.theme = Theme.get_default()
+        super(Deck, self).save(*args, **kwargs)
+
     class Meta:
         ordering = ('name',)
 
@@ -259,6 +263,7 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
             set_defaults = True
         else:
             set_defaults = False
+        self.theme = Theme.get_default()
         super(self.__class__, self).save(*args, **kwargs)
         if set_defaults:
             for display in Display.objects.filter(default=True):
@@ -667,6 +672,7 @@ class TransitionKeyframe(models.Model):
 class Theme(models.Model):
     name = models.CharField(max_length=50)
     css = models.TextField()
+    default = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('edit-theme', kwargs={'pk': self.pk})
@@ -691,6 +697,17 @@ class Theme(models.Model):
             return self.name
         else:
             return "Untitled Theme"
+
+    def save(self, *args, **kwargs):
+        if self.default:
+            for theme in Theme.objects.filter(default=True):
+                theme.default = False
+                theme.save()
+        super(Theme, self).save(*args, **kwargs)
+
+    @staticmethod
+    def get_default():
+        return Theme.objects.filter(default=True).first()
 
 
 class ThemeRule(models.Model):
