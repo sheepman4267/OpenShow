@@ -21,19 +21,19 @@
 </head>
 <body hx-ext="morph">
     <header>
-        <div class="header-back-button">
+        <div class="header-back-button" id="header-left" hx-swap-oob="true">
             {% if previous_page %}
                 <a class=inline href="{% url previous_page %}">{% icon 'arrow-left' %}</a>
             {% endif %}
             {% block header_left_button %}
             {% endblock %}
         </div>
-        <div class="header-main">
+        <div class="header-main" id="header-main" hx-swap-oob="true">
             {% block header %}
                 <h1>OpenShow</h1>
             {% endblock %}
         </div>
-        <div class="header-right-button">
+        <div class="header-right-button" id="header-right" hx-swap-oob="true">
             {% block header_right_button %}
             {% endblock %}
         </div>
