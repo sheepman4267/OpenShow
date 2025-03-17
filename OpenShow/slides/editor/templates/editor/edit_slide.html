@@ -49,7 +49,7 @@
         <form
                 hx-post="{% url 'edit-slide' slide.pk %}"
                 hx-trigger="change throttle:2s"
-                hx-swap="outerHTML"
+                hx-swap="morph:outerHTML"
                 hx-select="#view-container"
                 hx-target="#view-container"
                 class="slide-form"
