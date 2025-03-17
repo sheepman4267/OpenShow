@@ -556,6 +556,9 @@ class Slide(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
+            self.transition = Transition.get_default()
+            # Getting the system-wide default transition first ensures that deck defaults will be used instead if they
+            # are set.
             if self.deck:
                 if self.deck.default_transition:
                     self.transition = self.deck.default_transition
@@ -605,6 +608,7 @@ class Slide(models.Model):
 class Transition(models.Model):
     name = models.CharField(max_length=30)
     default_time = models.FloatField(help_text="Default total time for transition, in seconds", default=1)
+    default = models.BooleanField(default=False)
 
     def get_keyframes_in(self):
         return self.keyframes.filter(out=False)
@@ -627,6 +631,17 @@ class Transition(models.Model):
             return self.name
         else:
             return "Untitled Transition"
+
+    def save(self, *args, **kwargs):
+        if self.default:
+            for transition in Transition.objects.filter(default=True):
+                transition.default = False
+                transition.save()
+        super(Transition, self).save(*args, **kwargs)
+
+    @staticmethod
+    def get_default():
+        return Transition.objects.filter(default=True).first()
 
 
 class TransitionKeyframe(models.Model):

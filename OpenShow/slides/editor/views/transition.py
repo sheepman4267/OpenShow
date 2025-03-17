@@ -10,9 +10,10 @@ class TransitionEditorIndexView(ListView):
     }
 
 
-class TransitionEditorView(DetailView):
+class TransitionEditorView(UpdateView):
     model = Transition
     template_name = 'editor/transition_editor.html'
+    fields = ["name", "default"]
     extra_context = {
         'transition_list': Transition.objects.all
     }

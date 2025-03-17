@@ -30,7 +30,12 @@
             </button>
         </ul>
         <div id="preview">
-            Not Yet Implemented
+            <form method="post" action="{% url 'edit-transition' transition.pk %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                Current Default Transition: {{ transition.get_default }}
+                <button type="submit">Submit</button>
+            </form>
         </div>
         <div id="editor" class="editor keyframes">
             <ul data-keyframe-out="">
