@@ -23,7 +23,18 @@
 {% endblock %}
 
 {% block header_right_button %}
-    <a href="{% url 'duplicate-slide' slide.pk %}" class="icon-button" aria-label="Duplicate Slide {{ slide.pk }}">{% icon 'copy' %}</a>
+    <a
+            href="{% url 'duplicate-slide' slide.pk %}"
+            class="icon-button"
+            aria-label="Duplicate Slide {{ slide.pk }}"
+            title="Duplicate this slide"
+            hx-ext="morph"
+            hx-get="{% url 'duplicate-slide' slide.pk %}"
+            hx-swap="morph:outerHTML"
+            hx-select="#view-container"
+            hx-target="#view-container"
+            hx-push-url="true"
+    >{% icon 'copy' %}</a>
     <a href="{% url 'delete-slide' slide.pk %}" class="icon-button" aria-label="Delete Slide {{ slide.pk }}">{% icon 'trash-2' %}</a>
 {% endblock %}
 
