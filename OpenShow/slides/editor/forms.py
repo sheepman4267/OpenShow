@@ -123,7 +123,7 @@ class ImportImagesForm(Form):
 
 
 class UpdateSegmentForm(ModelForm):
-    included_deck = NatsortedModelChoiceField(queryset=Deck.objects.all())
+    included_deck = NatsortedModelChoiceField(queryset=Deck.objects.all(), required=False)
     class Meta:
         model = Segment
         fields = [
