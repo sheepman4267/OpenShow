@@ -51,8 +51,15 @@
                     <form method="post" action="{% url 'new-slide' %}">
                         {% csrf_token %}
                         <input type="hidden" name="segment" value="{{ segment.pk }}">
-{#                                <input type="submit" value="+">#}
-                        <button hx-post="{% url 'new-slide' %}" hx-select="#slides-sidebar > *" hx-target="#slides-sidebar" hx-swap="innerHTML swap:0.1s">New Slide</button>
+                        <button
+                                hx-post="{% url 'new-slide' %}"
+                                hx-swap="morph:outerHTML"
+                                hx-select="#view-container"
+                                hx-target="#view-container"
+                                hx-push-url="true"
+                        >
+                            New Slide
+                        </button>
                     </form>
                 </li>
             {% endfor %}
