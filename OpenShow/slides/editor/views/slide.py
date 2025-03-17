@@ -10,10 +10,6 @@ class SlideCreateView(CreateView):
     model = Slide
     fields = ['segment', 'deck']
 
-    def form_valid(self, form):
-        self.success_url = self.request.META['HTTP_REFERER']
-        return super().form_valid(form)
-
 
 class SlideTextEditView(DetailView):
     model = Slide
