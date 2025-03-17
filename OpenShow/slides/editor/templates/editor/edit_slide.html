@@ -7,11 +7,6 @@
 {% block extra_css %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'editor/slide-editor.css' %}">
-    <style>
-        .slide-thumbnail[data-slide-pk="{{ slide.pk }}"]:not(.no-hover) {
-            box-shadow: 0px 0px 15px 1px var(--info-graphical-fg);
-        }
-    </style>
 {% endblock %}
 
 {% block header_left_button %}
@@ -36,6 +31,11 @@
             hx-push-url="true"
     >{% icon 'copy' %}</a>
     <a href="{% url 'delete-slide' slide.pk %}" class="icon-button" aria-label="Delete Slide {{ slide.pk }}">{% icon 'trash-2' %}</a>
+    <script type="text/hyperscript">
+        on load
+            remove .selected from <.slide-thumbnail/>
+            then add .selected to <.slide-thumbnail[data-slide-pk='{{ slide.pk }}']:not(.no-hover)/>
+    </script>
 {% endblock %}
 
 {% block editor-right %}
@@ -68,6 +68,15 @@
             </fieldset>
         </form>
     </div>
+{# Revisit this _hyperscript block if we ever figure out a way to dynamically alter a CSS query literal #}
+{#    <script type="text/hyperscript">#}
+{#        on load or htmx:afterSwap#}
+{#            remove .selected from <.slide-thumbnail/>#}
+{#            then set selectedslide to @data-slide-pk of #preview#}
+{#            then log <.slide-thumbnail[data-slide-pk=`selectedslide`]/>#}
+{#            then add .selected to <.slide-thumbnail[data-slide-pk=`selectedslide`]/>#}
+{#        end#}
+{#    </script>#}
 {% endblock %}
 
 {{ deck.pk }}
