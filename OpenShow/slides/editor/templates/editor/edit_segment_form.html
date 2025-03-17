@@ -5,7 +5,16 @@
             <label class="block">Name: {{ form.name }}{{ form.name.errors }}</label>
             <label class="block">Included Deck: {{ form.included_deck }}{{ form.included_deck.errors }}</label>
             <label class="block">Order: {{ form.order }}{{ form.order.errors }}</label>
-            <button type="submit">Submit Edits</button>
+            <button
+                    type="submit"
+                    hx-post="{% url 'edit-segment' segment.pk %}"
+                    hx-swap="morph:outerHTML"
+                    hx-select="#view-container"
+                    hx-target="#view-container"
+                    hx-push-url="true"
+            >
+                Submit Edits
+            </button>
         </form>
 </div>
 
