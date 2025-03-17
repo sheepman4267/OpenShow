@@ -200,6 +200,7 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
 
     def save(self, *args, **kwargs):
         self.theme = Theme.get_default()
+        self.default_transition = Transition.get_default()
         super(Deck, self).save(*args, **kwargs)
 
     class Meta:
