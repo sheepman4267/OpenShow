@@ -42,7 +42,15 @@
                     <ul class="slides">
                         {% for slide in segment.slides.all %}
                             <li class="slide-thumbnail" data-slide-pk="{{ slide.pk }}">
-                                <a href="{% url 'edit-slide' slide.pk %}" title="Edit this slide">
+                                <a
+                                        href="{% url 'edit-slide' slide.pk %}"
+                                        title="Edit this slide"
+                                        hx-get="{% url 'edit-slide' pk=slide.pk %}"
+                                        hx-swap="morph:outerHTML"
+                                        hx-select="#view-container"
+                                        hx-target="#view-container"
+                                        hx-push-url="true"
+                                >
                                     {% include "slides/slide-thumbnail.html" with slide=slide %}
                                 </a>
                             </li>
