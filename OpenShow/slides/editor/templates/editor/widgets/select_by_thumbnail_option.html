@@ -1,0 +1,18 @@
+{% load icon %}
+<a
+        class="selection-thumbnail{% if option.attrs.selected %} selected{% endif %}"
+        _="
+        on click set @value of <.thumbnail-select-input[name='{{ widget.name }}'/> to my @data-selection-value
+        then remove .selected from <.selection-thumbnail/>
+        then add .selected to me
+        "
+        data-selection-value="{{ option.value|stringformat:'s' }}"
+>
+    {% if option.value %}
+        <img src="{{ option.value.instance.thumbnail.url }}">
+        <div>{{ option.value.instance }}</div>
+    {% else %}
+        {% icon 'slash' %}
+        <div>Clear Selection</div>
+    {% endif %}
+</a>

@@ -236,3 +236,62 @@ button.danger:not(#specificity-hack) {
 button.green {
     background-color: #bedfb8;
 }
+
+.selection-thumbnail {
+    display: block;
+    width: 12rem;
+    height: 13rem;
+    border: 3px solid darkgrey;
+    border-radius: .5rem;
+    text-align: center;
+    background: darkgrey;
+    overflow: clip;
+}
+
+.selection-thumbnail svg {
+    width: 10rem;
+    height: 10rem;
+    color: #666666;
+}
+
+.selection-thumbnail img {
+    max-width: 12rem;
+    max-height: 10rem;
+    height: auto;
+    width: auto;
+    margin-inline: auto;
+}
+
+.selection-thumbnail div {
+    background: #f2f4f6;
+    height: 100%;
+    width: 100%;
+    overflow-wrap: anywhere;
+    margin-top: auto;
+    margin-bottom: 0;
+    padding-block: 0.25rem;
+    padding-inline: 0.5rem;
+}
+
+.selection-thumbnail.selected {
+    box-shadow: 0px 0px 15px 1px #228be6;
+}
+
+.selection-thumbnail:hover {
+    box-shadow: 0px 0px 15px 1px #48c057;
+}
+
+.selection-thumbnail-area {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    max-height: 30rem;
+    max-width: 53rem;
+    overflow: scroll;
+    margin-inline: -1rem;
+    padding: 1rem;
+}
+
+.element-form-box:has(.selection-thumbnail-area):not(#specificity-hack) {
+    margin: 0;
+}

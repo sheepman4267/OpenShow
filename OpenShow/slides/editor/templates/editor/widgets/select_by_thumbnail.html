@@ -1,0 +1,9 @@
+<input type="hidden" class="thumbnail-select-input" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %}>
+<div class="selection-thumbnail-area">
+    {% for group_name, group_choices, group_index in widget.optgroups %}
+        {% if group_name %}<h2>{{ group_name }}"</h2>{% endif %}
+        {% for option in group_choices %}
+            {% include option.template_name with widget=widget option=option %}
+        {% endfor %}
+    {% endfor %}
+</div>

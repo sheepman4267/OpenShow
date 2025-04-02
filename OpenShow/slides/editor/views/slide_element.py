@@ -1,7 +1,7 @@
 from django.views.generic import CreateView, DeleteView, UpdateView, FormView
 from django.urls import reverse
 from slides.models import SlideElement, Slide
-from slides.editor.forms import DeleteSlideElementForm, EditSlideElementTextForm
+from slides.editor.forms import DeleteSlideElementForm, EditSlideElementTextForm, SlideElementUpdateImageObjectForm
 from slides.editor.forms import ChangeSlideElementOrderForm
 
 
@@ -73,7 +73,7 @@ class SlideElementUpdateMediaObjectView(UpdateView):
 
 class SlideElementUpdateImageObjectView(UpdateView):
     model = SlideElement
-    fields = ['image_object']
+    form_class = SlideElementUpdateImageObjectForm
     template_name = 'editor/element_image_object_edit.html'
 
     def get_success_url(self):

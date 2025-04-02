@@ -847,5 +847,8 @@ class Image(models.Model):
     def __str__(self):
         return os.path.basename(self.file.name)
 
+    def thumbnail(self):
+        return self.file
+
     class Meta:
         ordering = ('-pk', )

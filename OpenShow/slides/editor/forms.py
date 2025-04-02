@@ -2,6 +2,7 @@ from django.forms import Form, ModelForm, IntegerField, ChoiceField, Select, Cle
 from django.forms.models import ModelChoiceIterator
 from django.urls import reverse_lazy
 from ..models import Show, Theme, SlideElement, Deck, Segment
+from .widgets import SelectByThumbnailWidget
 from natsort import natsorted
 
 
@@ -131,3 +132,13 @@ class UpdateSegmentForm(ModelForm):
             'order',
             'included_deck',
         ]
+
+class SlideElementUpdateImageObjectForm(ModelForm):
+    class Meta:
+        model = SlideElement
+        fields = [
+            'image_object',
+        ]
+        widgets = {
+            'image_object': SelectByThumbnailWidget(),
+        }

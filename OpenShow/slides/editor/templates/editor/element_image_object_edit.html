@@ -2,7 +2,7 @@
 <span class="titlebar">Choose Image</span>
 <form _="on dblclick halt" class="element-form-box">  {# Halt doubleclick events so selecting text in our fields isn't super frustrating #}
     {% csrf_token %}
-    {{ form.image_object.as_field_group }}
+    {{ form.image_object }}
     <div class="button-group">
         <button _="on click remove <#dialog > */>">
             Cancel
