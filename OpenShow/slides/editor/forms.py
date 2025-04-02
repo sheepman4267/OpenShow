@@ -133,6 +133,7 @@ class UpdateSegmentForm(ModelForm):
             'included_deck',
         ]
 
+
 class SlideElementUpdateImageObjectForm(ModelForm):
     class Meta:
         model = SlideElement
