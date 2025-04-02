@@ -1,4 +1,16 @@
 <input type="hidden" class="thumbnail-select-input" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %}>
+<input type="text" placeholder="Search"
+       _="
+       on keyup
+         if the event's key is 'Escape'
+           set my value to ''
+           trigger keyup
+         else if my value.length > 0
+           then add .show to <.selection-thumbnail/> when its textContent.toLowerCase() contains my value.toLowerCase()
+         else
+           remove .show from <.selection-thumbnail/>
+"
+>
 <div class="selection-thumbnail-area">
     {% for group_name, group_choices, group_index in widget.optgroups %}
         {% if group_name %}<h2>{{ group_name }}"</h2>{% endif %}

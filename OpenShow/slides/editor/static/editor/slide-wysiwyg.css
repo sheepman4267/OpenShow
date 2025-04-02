@@ -292,6 +292,6 @@ button.green {
     padding: 1rem;
 }
 
-.element-form-box:has(.selection-thumbnail-area):not(#specificity-hack) {
-    margin: 0;
+.selection-thumbnail-area:has(.selection-thumbnail.show) > .selection-thumbnail:not(.show) {
+    display: none;
 }
