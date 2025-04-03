@@ -1,0 +1,22 @@
+{% load icon %}
+<span class="titlebar">Choose Image</span>
+<form _="on dblclick halt" type="multipart/form-data" class="element-form-box">  {# Halt doubleclick events so selecting text in our fields isn't super frustrating #}
+    {% csrf_token %}
+    {{ form.file.as_field_group }}
+    <input type="hidden" name="element_pk" _="on load set my @value to @data-element-pk of #dialog">
+    <div class="button-group">
+        <button _="on click remove <#dialog > */>">
+            Cancel
+        </button>
+        <button
+            hx-post="{% url 'element-upload-image' %}"
+            hx-select="#slide"
+            hx-target="#slide"
+            hx-swap="outerHTML swap:0.1s"
+            hx-encoding="multipart/form-data"
+            _="on click remove <#dialog > */>"
+        >
+            Submit
+        </button>
+    </div>
+</form>

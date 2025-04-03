@@ -1,7 +1,7 @@
 from django.forms import Form, ModelForm, IntegerField, ChoiceField, Select, ClearableFileInput, FileField, CharField, ModelChoiceField
 from django.forms.models import ModelChoiceIterator
 from django.urls import reverse_lazy
-from ..models import Show, Theme, SlideElement, Deck, Segment
+from ..models import Show, Theme, SlideElement, Deck, Segment, Image
 from .widgets import SelectByThumbnailWidget
 from natsort import natsorted
 
@@ -143,3 +143,19 @@ class SlideElementUpdateImageObjectForm(ModelForm):
         widgets = {
             'image_object': SelectByThumbnailWidget(),
         }
+
+
+class ImageUploadToElementForm(ModelForm):
+    element_pk = IntegerField()
+    class Meta:
+        model = Image
+        fields = [
+            'file',
+        ]
+
+    def save(self, commit=True):
+        image = super(self.__class__, self).save(commit)
+        element = SlideElement.objects.get(pk=self.cleaned_data["element_pk"])
+        element.image_object = image
+        element.save()
+        return image

@@ -4,6 +4,14 @@
     {% csrf_token %}
     {{ form.image_object }}
     <div class="button-group">
+        <button
+            hx-get="{% url 'element-upload-image' %}"
+            hx-target="#dialog"
+            hx-swap="innerHTML"
+            _="on load set #dialog's @data-element-pk to {{ object.pk }}"
+        >
+            Upload New Image
+        </button>
         <button _="on click remove <#dialog > */>">
             Cancel
         </button>

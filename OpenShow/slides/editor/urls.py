@@ -1,6 +1,6 @@
 from django.urls import path
 
-from slides.editor.views.image import ImageCRUDView
+from slides.editor.views.image import ImageCRUDView, ImageUploadToElementView
 from slides.editor.views.index import IndexView
 from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView, SetThemeView, \
     check_theme_compatibility
@@ -42,6 +42,7 @@ urlpatterns = [
     path('slide/element/<int:pk>/video', SlideElementUpdateVideoView.as_view(), name='edit-element-video'),
     path('slide/element/<int:pk>/media_object', SlideElementUpdateMediaObjectView.as_view(), name='edit-element-media_object'),
     path('slide/element/reorder', ChangeSlideElementOrderView.as_view(), name='reorder-element'),
+    path('slide/element/image_upload', ImageUploadToElementView.as_view(), name='element-upload-image'),
     path('slide/reorder', ChangeSlideOrderView.as_view(), name='reorder-slide'),
     path('deck/new', DeckCreateView.as_view(), name='new-deck'),
     path('deck/<int:pk>', DeckEditorView.as_view(), name='edit-deck'),

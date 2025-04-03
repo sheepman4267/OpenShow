@@ -1,8 +1,10 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse
+from django.views.generic import CreateView
 from neapolitan.views import CRUDView, Role
 
-from slides.models import Image
+from slides.editor.forms import ImageUploadToElementForm
+from slides.models import Image, SlideElement
 
 
 class ImageCRUDView(CRUDView):
@@ -50,3 +52,14 @@ class ImageCRUDView(CRUDView):
             "'template_name_suffix', or override 'get_template_names()'"
         )
         raise ImproperlyConfigured(msg % self.__class__.__name__)
+
+
+class ImageUploadToElementView(CreateView):
+    model = Image
+    form_class = ImageUploadToElementForm
+    template_name = "editor/element_image_object_upload.html"
+
+    def form_valid(self, form):
+        element = SlideElement.objects.get(pk=form.cleaned_data['element_pk'])
+        self.success_url = element.get_absolute_url()
+        return super(self.__class__, self).form_valid(form)
