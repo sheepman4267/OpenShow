@@ -52,6 +52,23 @@ def transcode_video(media_object_pk: int) -> None:
     media_object.save()
 
 
+def thumbnail_video(media_object_pk: int) -> None:
+    media_object = MediaObject.objects.get(pk=media_object_pk)
+    final_file_name = slugify(media_object.title) + '.jpg'
+    full_output_path = settings.MEDIA_ROOT + 'media_final/thumbnail/' + final_file_name
+    try:
+        result = subprocess.check_output(
+            f"ffmpeg -y -i {media_object.raw_file.path} -vf \"select=eq(n\,0)\" -q:v 1 {full_output_path}",
+            shell=True,
+        )
+    except subprocess.CalledProcessError as e:
+        print(f'Failed to create thumbnail for media object {media_object}: {e}')
+    else:
+        print(f'Created thumbnail for media object: {media_object}')
+    media_object.thumbnail = full_output_path
+    media_object.save()
+
+
 def transcode_audio(media_object_pk: int) -> None:
     media_object = MediaObject.objects.get(pk=media_object_pk)
     final_file_name = slugify(media_object.title) + '.mp3'

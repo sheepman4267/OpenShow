@@ -775,6 +775,11 @@ class MediaObject(models.Model):
         null=True,
         upload_to='media_final/'
     )
+    thumbnail = models.FileField(
+        blank=True,
+        null=True,
+        upload_to='media_final/thumbnail/'
+    )
     embed_url = models.URLField(
         blank=True,
         null=True,
@@ -784,26 +789,39 @@ class MediaObject(models.Model):
         # Currently, there would be no mechanism to manually start a non-autoplaying media object, so this will just sit
         # until more features are implemented, but let's leave the bones of it here for the future.
     )
+    needs_transcode = models.BooleanField(
+        default=True,
+    )
     file_hash = models.CharField(max_length=256, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.embed_url:
             self.file_hash = hashlib.sha256(self.embed_url.encode("utf-8")).hexdigest()
-        super().save(*args, **kwargs)
-        if self.media_type == VIDEO and not self.final_file:
+        if self.media_type == VIDEO and self.needs_transcode:
+            super().save(*args, **kwargs)
             Schedule.objects.create(
                 func='slides.editor.tasks.transcode_video',
                 args=self.pk,
                 schedule_type=Schedule.ONCE,
                 next_run=datetime.utcnow(),
             )
-        elif self.media_type == AUDIO and not self.final_file:
+            Schedule.objects.create(
+                func='slides.editor.tasks.thumbnail_video',
+                args=self.pk,
+                schedule_type=Schedule.ONCE,
+                next_run=datetime.utcnow(),
+            )
+            self.needs_transcode = False
+        elif self.media_type == AUDIO and self.needs_transcode:
+            super().save(*args, **kwargs)
             Schedule.objects.create(
                 func='slides.editor.tasks.transcode_audio',
                 args=self.pk,
                 schedule_type=Schedule.ONCE,
                 next_run=datetime.utcnow(),
             )
+            self.needs_transcode = False
+        super().save(*args, **kwargs)
 
     def get_slide_element_template(self):
         template_name = None
