@@ -13,8 +13,17 @@ class MediaObjectCRUDView(CRUDView):
         'media_type',
         'raw_file',
         'embed_url',
+        'needs_transcode',
         #'autoplay',  # Uncomment this once it will be useful for something
     ]
+
+    def form_valid(self, form):
+        success_url = super(MediaObjectCRUDView, self).form_valid(form)
+        if 'raw_file' in form.changed_data:
+            self.object.needs_transcode = True
+            self.object.save()
+        return success_url
+
 
     def get_success_url(self):
         if self.role is Role.DELETE:
