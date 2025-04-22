@@ -775,7 +775,7 @@ class MediaObject(models.Model):
         null=True,
         upload_to='media_final/'
     )
-    thumbnail = models.FileField(
+    thumbnail_image = models.FileField(
         blank=True,
         null=True,
         upload_to='media_final/thumbnail/'

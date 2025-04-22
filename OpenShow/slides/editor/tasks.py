@@ -70,11 +70,11 @@ def thumbnail_video(media_object_pk: int) -> None:
             (retval, image) = video.read()
             if not retval:  # If we've made it to the end, save the last frame regardless of threshold.
                 cv2.imwrite(full_output_path, previous_image)
-                media_object.thumbnail = 'media_final/thumbnail/' + final_file_name
+                media_object.thumbnail_image = 'media_final/thumbnail/' + final_file_name
                 break
             if image.mean() >= 80:  # If the current frame is brighter than our threshold, save it as the thumbnail.
                 cv2.imwrite(full_output_path, image)
-                media_object.thumbnail = 'media_final/thumbnail/' + final_file_name
+                media_object.thumbnail_image = 'media_final/thumbnail/' + final_file_name
                 break
             previous_image = image
     video.release()
