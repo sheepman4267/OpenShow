@@ -19,3 +19,4 @@ honcho==2.0.0
 python-ffmpeg==2.0.12
 pyyaml==6.0.2
 natsort==8.4.0
+opencv-python>4.11.0,<4.12.0

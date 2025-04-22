@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from slides.models import MediaObject
 from ffmpeg import FFmpeg, Progress
 import hashlib
+import cv2
 
 def get_file_hash(file):
     hash_func = hashlib.new('sha256')
@@ -47,6 +48,8 @@ def transcode_video(media_object_pk: int) -> None:
         # TODO: Implement an (optional) Redis/Valkey backend for Eventstream so we can send progress back to the editor
 
     ffmpeg.execute()
+    # Before saving, ensure that we incorporate any changes made to other fields during the transcode operation
+    media_object.refresh_from_db()
     media_object.final_file = 'media_final/video/' + final_file_name
     media_object.file_hash = get_file_hash(media_object.final_file.path)
     media_object.save()
@@ -56,16 +59,27 @@ def thumbnail_video(media_object_pk: int) -> None:
     media_object = MediaObject.objects.get(pk=media_object_pk)
     final_file_name = slugify(media_object.title) + '.jpg'
     full_output_path = settings.MEDIA_ROOT + 'media_final/thumbnail/' + final_file_name
-    try:
-        result = subprocess.check_output(
-            f"ffmpeg -y -i {media_object.raw_file.path} -vf \"select=eq(n\,0)\" -q:v 1 {full_output_path}",
-            shell=True,
-        )
-    except subprocess.CalledProcessError as e:
-        print(f'Failed to create thumbnail for media object {media_object}: {e}')
+    video = cv2.VideoCapture()
+    video.open(media_object.raw_file.path)
+    if not video.isOpened():
+        raise RuntimeError(f'Failed to open original video file to make thumbnail for {media_object}')
     else:
-        print(f'Created thumbnail for media object: {media_object}')
-    media_object.thumbnail = full_output_path
+        (retval, image) = video.read()
+        previous_image = image
+        while True:
+            (retval, image) = video.read()
+            if not retval:  # If we've made it to the end, save the last frame regardless of threshold.
+                cv2.imwrite(full_output_path, previous_image)
+                media_object.thumbnail = 'media_final/thumbnail/' + final_file_name
+                break
+            if image.mean() >= 80:  # If the current frame is brighter than our threshold, save it as the thumbnail.
+                cv2.imwrite(full_output_path, image)
+                media_object.thumbnail = 'media_final/thumbnail/' + final_file_name
+                break
+            previous_image = image
+    video.release()
+    # Before saving, ensure that we incorporate any changes made to other fields during the thumbnail operation
+    media_object.refresh_from_db()
     media_object.save()
 
 
