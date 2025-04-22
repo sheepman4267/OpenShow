@@ -1,0 +1,48 @@
+{% load icon %}
+<span class="titlebar">Create Media Object</span>
+<script type="text/hyperscript">
+    def configure_form
+        if #id_media_type.value == "VIMEO_LIVE_EMBED"
+            add .hidden to #file_upload
+            remove .hidden from #embed
+        else
+            add .hidden to #embed
+            remove .hidden from #file_upload
+        end
+    end
+    on change from #id_media_type
+        configure_form()
+    end
+    on load
+        configure_form()
+    end
+</script>
+<form _="on dblclick halt" type="multipart/form-data" class="element-form-box">  {# Halt doubleclick events so selecting text in our fields isn't super frustrating #}
+    {% csrf_token %}
+    <input type="hidden" name="element_pk" _="on load set my @value to @data-element-pk of #dialog">
+    {{ form.title.as_field_group }}
+    <p class="{% if object %}hidden{% endif %}">
+        {{ form.media_type.as_field_group }}
+    </p>
+    <p id="embed">
+        {{ form.embed_url.as_field_group }}
+    </p>
+    <p id="file_upload">
+        {{ form.raw_file.as_field_group }}
+    </p>
+    <div class="button-group">
+        <button _="on click remove <#dialog > */>">
+            Cancel
+        </button>
+        <button
+            hx-post="{% url 'element-create-media' %}"
+            hx-select="#slide"
+            hx-target="#slide"
+            hx-swap="outerHTML swap:0.1s"
+            hx-encoding="multipart/form-data"
+            _="on click remove <#dialog > */>"
+        >
+            Submit
+        </button>
+    </div>
+</form>

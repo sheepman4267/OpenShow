@@ -200,6 +200,14 @@
     margin-top: 1rem;
 }
 
+#dialog form .hidden {
+    display: none;
+}
+
+#dialog form p {
+    margin-top: 0.75rem;
+}
+
 select:not([multiple]) {
     height: 1.5rem;
     line-height: 1.5rem;

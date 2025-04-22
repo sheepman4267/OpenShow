@@ -1,7 +1,7 @@
 from django.forms import Form, ModelForm, IntegerField, ChoiceField, Select, ClearableFileInput, FileField, CharField, ModelChoiceField
 from django.forms.models import ModelChoiceIterator
 from django.urls import reverse_lazy
-from ..models import Show, Theme, SlideElement, Deck, Segment, Image
+from ..models import Show, Theme, SlideElement, Deck, Segment, Image, MediaObject
 from .widgets import SelectByThumbnailWidget
 from natsort import natsorted
 
@@ -145,6 +145,17 @@ class SlideElementUpdateImageObjectForm(ModelForm):
         }
 
 
+class SlideElementUpdateMediaObjectForm(ModelForm):
+    class Meta:
+        model = SlideElement
+        fields = [
+            'media_object',
+        ]
+        widgets = {
+            'media_object': SelectByThumbnailWidget(),
+        }
+
+
 class ImageUploadToElementForm(ModelForm):
     element_pk = IntegerField()
     class Meta:
@@ -159,3 +170,22 @@ class ImageUploadToElementForm(ModelForm):
         element.image_object = image
         element.save()
         return image
+
+class MediaObjectUploadToElementForm(ModelForm):
+    element_pk = IntegerField()
+
+    class Meta:
+        model = MediaObject
+        fields = [
+            'title',
+            'media_type',
+            'raw_file',
+            'embed_url',
+        ]
+
+    def save(self, commit=True):
+        media_object = super(self.__class__, self).save(commit)
+        element = SlideElement.objects.get(pk=self.cleaned_data["element_pk"])
+        element.media_object = media_object
+        element.save()
+        return media_object

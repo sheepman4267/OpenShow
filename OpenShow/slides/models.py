@@ -840,6 +840,10 @@ class MediaObject(models.Model):
         else:
             return "Untitled Media Object"
 
+    def thumbnail(self):
+        if self.thumbnail_image:
+            return self.thumbnail_image
+
     class Meta:
         ordering = ('-pk', )
 

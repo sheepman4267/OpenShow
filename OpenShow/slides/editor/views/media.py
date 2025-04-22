@@ -1,9 +1,11 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.generic import CreateView
 from neapolitan.views import CRUDView, Role
 
-from slides.models import MediaObject
+from slides.editor.forms import MediaObjectUploadToElementForm
+from slides.models import MediaObject, Image, SlideElement
 
 
 class MediaObjectCRUDView(CRUDView):
@@ -63,3 +65,14 @@ class MediaObjectCRUDView(CRUDView):
             "'template_name_suffix', or override 'get_template_names()'"
         )
         raise ImproperlyConfigured(msg % self.__class__.__name__)
+
+
+class MediaObjectUploadToElementView(CreateView):
+    model = MediaObject
+    form_class = MediaObjectUploadToElementForm
+    template_name = "editor/element_media_object_upload.html"
+
+    def form_valid(self, form):
+        element = SlideElement.objects.get(pk=form.cleaned_data['element_pk'])
+        self.success_url = element.get_absolute_url()
+        return super(self.__class__, self).form_valid(form)
