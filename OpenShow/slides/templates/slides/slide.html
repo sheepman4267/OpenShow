@@ -5,6 +5,9 @@
             {% if element.image_object %}
                 <img src="{{ element.image_object.file.url }}">
             {% endif %}
+            {% if element.media_object %}
+                <img src="{{ element.media_object.thumbnail }}">
+            {% endif %}
         </div>
     {% endfor %}
 </div>
