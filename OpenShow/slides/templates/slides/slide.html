@@ -1,7 +1,7 @@
 <div id="slide" class="slide">
     {% for element in slide.get_elements %}
         <div class="{{ element.css_class }}">
-            {{ element.body|safe }}
+            {% if element.body %}{{ element.body|safe }}{% endif %}
             {% if element.image_object %}
                 <img src="{{ element.image_object.file.url }}">
             {% endif %}
