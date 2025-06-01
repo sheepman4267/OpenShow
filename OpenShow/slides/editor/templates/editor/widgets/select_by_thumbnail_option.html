@@ -9,7 +9,7 @@
         data-selection-value="{{ option.value|stringformat:'s' }}"
 >
     {% if option.value %}
-        <img src="{{ option.value.instance.thumbnail.url }}">
+        <img src="{{ option.value.instance.thumbnail }}">
         <div>{{ option.value.instance }}</div>
     {% else %}
         {% icon 'slash' %}

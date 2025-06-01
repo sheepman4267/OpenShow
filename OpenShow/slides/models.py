@@ -1,6 +1,7 @@
 import hashlib
 from django.db import models
 from django_eventstream import send_event
+from django.templatetags.static import static
 from collections.abc import Iterable
 from django.shortcuts import reverse
 from django.utils import timezone
@@ -841,8 +842,18 @@ class MediaObject(models.Model):
             return "Untitled Media Object"
 
     def thumbnail(self):
-        if self.thumbnail_image:
-            return self.thumbnail_image
+        thumbnail = None
+        match self.media_type:
+            case 'VIDEO':
+                if self.thumbnail_image:
+                    thumbnail = self.thumbnail_image.url
+                else:
+                    thumbnail = static('media_object_thumbnails/video-thumbnail-error.png')
+            case 'AUDIO':
+                thumbnail = static('media_object_thumbnails/audio-mediaobject-thumbnail.png')
+            case 'VIMEO_LIVE_EMBED':
+                thumbnail = static('media_object_thumbnails/vimeo-live-embed-thumbnail.png')
+        return thumbnail
 
     class Meta:
         ordering = ('-pk', )
@@ -870,7 +881,7 @@ class Image(models.Model):
         return os.path.basename(self.file.name)
 
     def thumbnail(self):
-        return self.file
+        return self.file.url
 
     class Meta:
         ordering = ('-pk', )
