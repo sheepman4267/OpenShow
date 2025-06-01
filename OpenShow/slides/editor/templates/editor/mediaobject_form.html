@@ -60,6 +60,9 @@
             <p id="file_upload" class="{% if object and object.media_type == 'VIMEO_LIVE_EMBED' %}hidden{% endif %}">
                 {{ form.raw_file.as_field_group }}
             </p>
+            {% if object and not object.media_type == 'VIMEO_LIVE_EMBED' %}
+                {{ form.needs_transcode.as_field_group }}
+            {% endif %}
             <button type="submit">Submit</button>
         </form>
     </div>
