@@ -12,7 +12,7 @@
 {% block content %}
     {% if object.media_type == "VIDEO" and object.final_file or object.media_type == "AUDIO" and object.final_file %}
         {% if object.media_type == "VIDEO" %}
-            <video controls poster="{% if object.thumbnail_image %}{{ object.thumbnail_image.url }}{% endif %}">
+            <video controls poster="{{ object.thumbnail }}">
                 <source src="{{ object.final_file.url }}">
             </video>
         {% elif object.media_type == "AUDIO" %}
