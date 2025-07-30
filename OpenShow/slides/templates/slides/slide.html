@@ -5,7 +5,10 @@
             {% if element.image_object %}
                 <img src="{{ element.image_object.file.url }}">
             {% endif %}
-            {% if element.media_object %}
+            {% if element.media_object and element.media_object.media_type != 'AUDIO' %}
+                <img src="{{ element.media_object.thumbnail }}">
+            {% endif %}
+            {% if element.media_object.media_type == "AUDIO" and not element.body %}
                 <img src="{{ element.media_object.thumbnail }}">
             {% endif %}
         </div>
