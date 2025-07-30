@@ -1,4 +1,6 @@
 {% load icon %}
+{% load static %}
+{% load base64_string %}
 <a
         class="selection-thumbnail{% if option.attrs.selected %} selected{% endif %}"
         _="
@@ -9,7 +11,12 @@
         data-selection-value="{{ option.value|stringformat:'s' }}"
 >
     {% if option.value %}
-        <img src="{{ option.value.instance.thumbnail }}">
+        <img
+                src="{% static 'image_thumbnails/image-loading-thumbnail.png' %}"
+                hx-get="/slides/editor/lazy_load_image/{{ option.value.instance.thumbnail|base64_string }}"
+                hx-trigger="intersect"
+                hx-swap="outerHTML"
+        >
         <div>{{ option.value.instance }}</div>
     {% else %}
         {% icon 'slash' %}

@@ -15,7 +15,7 @@ from slides.editor.views.slide_element import SlideElementCreateView, SlideEleme
 from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteView, \
     push_deck_slide_text, pull_aoml_text, DeckFromImagesView, ImportImagesToExistingDeckView
 from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDeleteView
-from slides.editor.views.utils import generate_lorem
+from slides.editor.views.utils import generate_lorem, lazy_load_image
 from slides.editor.views.transition import TransitionEditorView, TransitionCreateView, TransitionKeyframeCreateView, \
     TransitionKeyframeUpdateView, TransitionEditorIndexView
 from slides.editor.views.display import DisplayCreateView, DisplayDeleteView, DisplayUpdateView, DisplayDetailView
@@ -70,4 +70,5 @@ urlpatterns = [
     path('display/<int:pk>/delete', DisplayDeleteView.as_view(), name='delete-display'),
     *MediaObjectCRUDView.get_urls(),
     *ImageCRUDView.get_urls(),
+    path('lazy_load_image/<str:image_url>', lazy_load_image, name='lazy-load-image'),
 ]
