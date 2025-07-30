@@ -792,7 +792,8 @@ class MediaObject(models.Model):
     )
     needs_transcode = models.BooleanField(
         default=True,
-        verbose_name='Transcode this Media Object'
+        blank=True,
+        verbose_name='Transcode this Media Object',
     )
     file_hash = models.CharField(max_length=256, null=True, blank=True)
 
