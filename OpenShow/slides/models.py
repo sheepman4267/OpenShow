@@ -200,8 +200,10 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
         return aoml_str
 
     def save(self, *args, **kwargs):
-        self.theme = Theme.get_default()
-        self.default_transition = Transition.get_default()
+        if not self.theme:
+            self.theme = Theme.get_default()
+        if not self.default_transition:
+            self.default_transition = Transition.get_default()
         super(Deck, self).save(*args, **kwargs)
 
     class Meta:
