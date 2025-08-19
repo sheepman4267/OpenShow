@@ -1,9 +1,9 @@
-from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
+from django.views.generic import DetailView, CreateView, DeleteView, UpdateView, FormView
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from slides.models import Show
 from slides.editor.forms import SetThemeForm
-
+from ..forms import ShowRemoteImportForm, ShowJSONImportForm
 
 class ShowEditorView(UpdateView):
     model = Show
@@ -39,6 +39,28 @@ class SetThemeView(UpdateView):
     model = Show
     form_class = SetThemeForm
     template_name = 'editor/set_theme.html'
+
+
+class ShowJSONImportView(FormView):
+    form_class = ShowJSONImportForm
+    template_name = 'editor/snippets/hx-simple_create_form.html'
+
+    def form_valid(self, form):
+        Show.import_json(form.cleaned_data.get('name_prefix'), form.cleaned_data.get('json_string'))
+
+    def get_context_data(self, **kwargs):
+        context = super(ShowJSONImportView, self).get_context_data(**kwargs)
+        context['action'] = 'show-import-json'
+        return context
+
+
+class ShowRemoteImportView(FormView):
+    form_class = ShowRemoteImportForm
+    template_name = 'editor/snippets/hx-simple_create_form.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_form()
+
 
 
 def check_theme_compatibility(request):

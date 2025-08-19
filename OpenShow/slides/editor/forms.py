@@ -189,3 +189,12 @@ class MediaObjectUploadToElementForm(ModelForm):
         element.media_object = media_object
         element.save()
         return media_object
+
+
+class ShowRemoteImportForm(Form):
+    url = CharField()
+
+
+class ShowJSONImportForm(Form):
+    name_prefix = CharField()
+    json_string = CharField()

@@ -45,6 +45,9 @@
         <button hx-get="{% url 'new-show' %}" hx-swap="outerHTML">
             New Show
         </button>
+        <button hx-get="{% url 'show-import-json' %}" hx-swap="outerHTML">
+            Import Show from JSON
+        </button>
         <ul>
             {% for show in show_list %}
                 <li>

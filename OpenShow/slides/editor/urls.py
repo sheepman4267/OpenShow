@@ -4,7 +4,7 @@ from slides.editor.forms import MediaObjectUploadToElementForm
 from slides.editor.views.image import ImageCRUDView, ImageUploadToElementView
 from slides.editor.views.index import IndexView
 from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView, SetThemeView, \
-    check_theme_compatibility
+    check_theme_compatibility, ShowJSONImportView
 from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView
 from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView, \
     SlideTextEditView, duplicate_slide
@@ -59,6 +59,7 @@ urlpatterns = [
     path('lorem/<int:words>/<str:css_class>', generate_lorem, name='lorem'),
     path('show/<int:pk>/set-theme/', SetThemeView.as_view(), name='set-theme'),
     path('show/check-theme-compatibility', check_theme_compatibility, name='check-theme-compatibility'),
+    path('show/import/json', ShowJSONImportView.as_view(), name='show-import-json'),
     path('transition', TransitionEditorIndexView.as_view(), name='transition-editor'),
     path('transition/<int:pk>', TransitionEditorView.as_view(), name='edit-transition'),
     path('transition/new', TransitionCreateView.as_view(), name='new-transition'),

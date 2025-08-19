@@ -1,4 +1,6 @@
 import hashlib
+import json
+
 from django.db import models
 from django_eventstream import send_event
 from django.templatetags.static import static
@@ -226,6 +228,7 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
     )
     advance_between_segments = models.BooleanField(default=False, null=False)
     advance_loop = models.BooleanField(default=False, null=False)
+    import_id = models.CharField(max_length=100, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('edit-show', kwargs={'pk': self.pk})
@@ -273,6 +276,45 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
             for display in Display.objects.filter(default=True):
                 self.displays.add(display.pk)
             self.save()
+
+    def import_json(self, json_string:str, title_prefix:str or None = None):
+        """
+        :param json_string:
+        JSON string representing a show
+        :param title_prefix:
+        Prefix for the title of the show
+        :return:
+        Show object as described by the provided JSON
+        """
+        from_json = json.loads(json_string)
+        new_show = Show(
+            name=f"{title_prefix}{from_json.get('name')}",
+            # advance_between_segments=from_json.get('advance_between_segments'),
+            # advance_loop=from_json.get('advance_loop'),
+            theme=from_json.get('theme'),
+            # displays=from_json.get('displays'),
+            import_id=from_json.get('import_id'),
+        )
+        new_show.save()
+        # and now, we add the segments
+        # def resolve_deck(search_string):
+        #     deck = None
+        #     try:
+        #         deck = Deck.objects.get(pk=int(search_string))
+        #     except:
+        #         # yes, a bare except is fine here- this parameter could be anything
+        #         # TODO: Better search system, please
+        #         deck = Deck.objects.filter(name__contains=search_string).first()
+        #     return deck
+        for segment in from_json.get('segments', []):
+            new_segment = Segment(
+                name=segment.get('name'),
+                show=new_show,
+                order=new_show.next_segment_order(),
+                # included_deck=resolve_deck(from_json.get('deck')  # This is half-baked, take a stab at implementation later
+            )
+            new_segment.save()
+        return new_show
 
 
     class Meta:
