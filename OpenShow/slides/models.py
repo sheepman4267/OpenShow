@@ -287,15 +287,13 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
         Show object as described by the provided JSON
         """
         from_json = json.loads(json_string)
-        new_show = Show(
-            name=f"{title_prefix}{from_json.get('name')}",
-            # advance_between_segments=from_json.get('advance_between_segments'),
-            # advance_loop=from_json.get('advance_loop'),
-            theme=from_json.get('theme'),
-            # displays=from_json.get('displays'),
-            import_id=from_json.get('import_id'),
-        )
-        new_show.save()
+        self.name=f"{title_prefix}{from_json.get('name')}",
+        # advance_between_segments=from_json.get('advance_between_segments'),
+        # advance_loop=from_json.get('advance_loop'),
+        self.theme=from_json.get('theme'),
+        # displays=from_json.get('displays'),
+        self.import_id=from_json.get('import_id'),
+        self.save()
         # and now, we add the segments
         # def resolve_deck(search_string):
         #     deck = None
@@ -309,12 +307,12 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
         for segment in from_json.get('segments', []):
             new_segment = Segment(
                 name=segment.get('name'),
-                show=new_show,
-                order=new_show.next_segment_order(),
+                show=self,
+                order=self.next_segment_order(),
                 # included_deck=resolve_deck(from_json.get('deck')  # This is half-baked, take a stab at implementation later
             )
             new_segment.save()
-        return new_show
+        return self
 
 
     class Meta:

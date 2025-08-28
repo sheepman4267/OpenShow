@@ -1,6 +1,6 @@
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView, FormView
 from django.urls import reverse_lazy
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from slides.models import Show
 from slides.editor.forms import SetThemeForm
 from ..forms import ShowRemoteImportForm, ShowJSONImportForm
@@ -46,7 +46,9 @@ class ShowJSONImportView(FormView):
     template_name = 'editor/snippets/hx-simple_create_form.html'
 
     def form_valid(self, form):
-        Show.import_json(form.cleaned_data.get('name_prefix'), form.cleaned_data.get('json_string'))
+        print(form.cleaned_data)
+        new_show = Show().import_json(title_prefix=form.cleaned_data.get('name_prefix'), json_string=form.cleaned_data.get('json_string'))
+        return redirect(reverse('show', kwargs={'pk': new_show.pk}))
 
     def get_context_data(self, **kwargs):
         context = super(ShowJSONImportView, self).get_context_data(**kwargs)
