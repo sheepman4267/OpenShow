@@ -333,16 +333,6 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
         null=True,
         on_delete=models.CASCADE,
     )
-    local_slides_pre = models.ManyToManyField(
-        to='Slide',
-        blank=True,
-        related_name='pre_slides',
-    )
-    local_slides_post = models.ManyToManyField(
-        to='Slide',
-        blank=True,
-        related_name='post_slides',
-    )
 
     def get_absolute_url(self):
         return reverse('edit-show', kwargs={'pk': self.show.pk})
