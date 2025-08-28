@@ -288,10 +288,10 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
         """
         from_json = json.loads(json_string)
         self.name=f"{title_prefix}{from_json.get('name')}"
-        # advance_between_segments=from_json.get('advance_between_segments'),
-        # advance_loop=from_json.get('advance_loop'),
+        self.advance_between_segments=from_json.get('advance_between_segments')
+        self.advance_loop=from_json.get('advance_loop')
         self.theme=from_json.get('theme')
-        # displays=from_json.get('displays'),
+        # displays=from_json.get('displays')  # Implement this later; not sure exactly how to represent displays in JSON
         self.import_id=from_json.get('import_id')
         self.save()
         # and now, we add the segments
