@@ -307,12 +307,15 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
         #         deck = Deck.objects.filter(name__contains=search_string).first()
         #     return deck
         for segment in from_json.get('segments', []):
-            details = BeautifulSoup(segment.get('details'), 'html.parser')
+            if details_html := segment.get('details'):
+                details_text = BeautifulSoup(details_html, 'html.parser').get_text()
+            else:
+                details_text = None
             new_segment = Segment(
                 name=segment.get('name'),
                 show=self,
                 order=self.next_segment_order(),
-                details=details.get_text(),
+                details=details_text,
                 # included_deck=resolve_deck(from_json.get('deck')  # This is half-baked, take a stab at implementation later
             )
             new_segment.save()
