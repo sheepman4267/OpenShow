@@ -131,6 +131,7 @@ class UpdateSegmentForm(ModelForm):
             'name',
             'order',
             'included_deck',
+            'details',
         ]
 
 
