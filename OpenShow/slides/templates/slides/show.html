@@ -40,7 +40,9 @@
                 {% for segment in show.segments.all %}
                     <li>
                         <h2>{{ segment.name }}</h2>
-                        <p>{{ segment.details }}</p>
+                        {% if segment.details %}
+                            <p class="segment-details">{{ segment.details }}</p>
+                        {% endif %}
                         {% if segment.included_deck %}
                             <h3>{{ segment.included_deck.name }}</h3>
                             <ul

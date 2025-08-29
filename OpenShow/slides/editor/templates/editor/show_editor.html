@@ -36,7 +36,9 @@
                             hx-target="#editor-right"
                             hx-swap="outerHTML swap:0.1s"
                     >Edit Segment Details</a>
-                    <p>{{ segment.details }}</p>
+                    {% if segment.details %}
+                        <p>{{ segment.details }}</p>
+                    {% endif %}
                     {% if segment.included_deck %}
                         <h4>Deck: {{ segment.included_deck.name }}</h4>
                     {% endif %}

@@ -124,6 +124,14 @@ body:not(#specificity-hack){
     display: none;
 }
 
+li:has(.segment-details) h3 {
+    margin-top: var(--gap);
+}
+
+.segment-details {
+    margin-top: calc(var(--gap) / 4);
+}
+
 @media screen and (max-width: 50rem) {
     body {
         grid-template-columns: 1fr;
