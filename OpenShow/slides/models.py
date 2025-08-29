@@ -26,6 +26,11 @@ class InvalidArgumentException(Exception):
 class NotSupportedException(Exception):
     pass
 
+class ShowAlreadyExistsException(NotSupportedException):
+    def __init__(self, message, show,):
+        self.show = show
+        super().__init__(message)
+
 
 class Display(models.Model):  # A set of characteristics used to modify slide appearance for different displays
     name = models.CharField(max_length=100)
@@ -289,6 +294,12 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
         Show object as described by the provided JSON
         """
         from_json = json.loads(json_string)
+        if import_id := from_json.get('import_id'):
+            if self.import_id != import_id:
+                if conflicting_show := Show.objects.filter(import_id=import_id).first():
+                    raise ShowAlreadyExistsException(message=f'Cannot import duplicate of show "{conflicting_show}"', show=conflicting_show)
+            else:  # as in, if self.import_id == import_id:
+                raise NotImplementedError("Updating an existing show from JSON is not yet supported.")
         self.name=f"{title_prefix}{from_json.get('name')}"
         self.advance_between_segments=from_json.get('advance_between_segments')
         self.advance_loop=from_json.get('advance_loop')
