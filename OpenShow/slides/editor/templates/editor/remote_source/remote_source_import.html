@@ -1,0 +1,14 @@
+{% load icon %}
+<div class="box">
+    <strong class="block titlebar">Import {{ object_type }}</strong>
+    <form method="post" action="{% url action pk=remote_source.pk %}" {% if form.is_multipart %}enctype="multipart/form-data" {% endif %}>
+        {% csrf_token %}
+        {% block all_fields %}
+        {% block extra_fields %}
+        {% endblock %}
+        {{ form }}
+        {{ form.errors }}
+        {% endblock %}
+        <button type="submit">Submit</button>
+    </form>
+</div>

@@ -6,7 +6,7 @@ from django.views.generic import DetailView, FormView, ListView, UpdateView, Tem
 from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.template import loader
-from .models import Slide, Display, Show, Deck, Transition, Theme, MediaObject, Image
+from .models import Slide, Display, Show, Deck, Transition, Theme, MediaObject, Image, RemoteSource
 
 from natsort import natsorted
 
@@ -43,6 +43,7 @@ class IndexView(TemplateView):
         context['transition_list'] = Transition.objects.all()
         context['mediaobject_list'] = MediaObject.objects.all()
         context['image_list'] = Image.objects.all()
+        context['remote_source_list'] = RemoteSource.objects.all()
         context['previous_page'] = 'index'
         referer = self.request.META.get("HTTP_REFERER")
         if not referer:
@@ -61,6 +62,8 @@ class IndexView(TemplateView):
             selected_tab = "mediaobjects"
         elif "image" in referer:
             selected_tab = "images"
+        elif "remote_source" in referer:
+            selected_tab = "remote_sources"
         else:
             selected_tab = "shows"
         context['selected_tab'] = selected_tab

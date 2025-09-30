@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+{% load neapolitan %}
+{% load icon %}
+
+{% block title %}{{ object }} - OpenShow Editor{% endblock %}
+{% block header %}<h1>{{ object }}</h1>{% endblock %}
+
+{% block header_right_button %}
+        <a href="{% url 'remotesource-update' object.pk %}" class="icon-button" aria-label="Edit {{ object.title }}">{% icon 'edit-2' %}</a>
+{% endblock %}
+
+{% block content %}
+    <h1>Remote Source: {{ object.name }}</h1>
+    This source provides:
+    <ul>
+        {% if object.shows_url %}
+            <li>Shows</li>
+        {% endif %}
+        {% if object.themes_url %}
+            <li>Themes</li>
+        {% endif %}
+        {% if object.decks_url %}
+            <li>Decks</li>
+        {% endif %}
+        {% if object.images_url %}
+            <li>Images</li>
+        {% endif %}
+        {% if object.media_url %}
+            <li>Media</li>
+        {% endif %}
+        {% if object.transitions_url %}
+            <li>Transitions</li>
+        {% endif %}
+        {% if object.displays_url %}
+            <li>Displays</li>
+        {% endif %}
+    </ul>
+    <a href="{% url 'remotesource-refresh' pk=object.pk %}">Refresh</a>
+{% endblock %}

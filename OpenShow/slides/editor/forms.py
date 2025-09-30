@@ -193,7 +193,7 @@ class MediaObjectUploadToElementForm(ModelForm):
 
 
 class ShowRemoteImportForm(Form):
-    url = CharField()
+    url = ChoiceField()
 
 
 class ShowJSONImportForm(Form):

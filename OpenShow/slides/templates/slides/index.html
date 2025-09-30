@@ -36,6 +36,9 @@
         <button role="tab" aria-controls="images" {% if selected_tab == 'images' %}aria-selected="true"{% endif %}>
             Images
         </button>
+        <button role="tab" aria-controls="remote_sources" {% if selected_tab == 'remote_sources' %}aria-selected="true"{% endif %}>
+            Remote Sources
+        </button>
     </div>
     <div id="shows" role="tabpanel" hidden>
         <h2>Shows</h2>
@@ -48,6 +51,13 @@
         <button hx-get="{% url 'show-import-json' %}" hx-swap="outerHTML">
             Import Show from JSON
         </button>
+        {% for remote_source in remote_source_list %}
+            {% if remote_source.shows_url %}
+                <button hx-get="{% url 'remotesource-import-show' pk=remote_source.pk %}" hx-swap="outerHTML">
+                    Import Show from {{ remote_source.name }}
+                </button>
+            {% endif %}
+        {% endfor %}
         <ul>
             {% for show in show_list %}
                 <li>
@@ -151,6 +161,22 @@
             {% for image in image_list %}
                 <li>
                     <a href="{% url 'image-detail' image.pk %}">{{ image }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+        <div id="remote_sources" role="tabpanel" hidden>
+        <h2>Remote Sources</h2>
+        <p>
+            Remote sources which publish reusable OpenShow content.
+        </p>
+        <button hx-get="{% url 'remotesource-create' %}" hx-swap="outerHTML" hx-select="#remote_source-form-container">
+            New Remote Source
+        </button>
+        <ul>
+            {% for remote_source in remote_source_list %}
+                <li>
+                    <a href="{% url 'remotesource-detail' remote_source.pk %}">{{ remote_source }}</a>
                 </li>
             {% endfor %}
         </ul>

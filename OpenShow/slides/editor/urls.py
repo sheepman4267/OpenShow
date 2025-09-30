@@ -4,7 +4,7 @@ from slides.editor.forms import MediaObjectUploadToElementForm
 from slides.editor.views.image import ImageCRUDView, ImageUploadToElementView
 from slides.editor.views.index import IndexView
 from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView, SetThemeView, \
-    check_theme_compatibility, ShowJSONImportView
+    check_theme_compatibility, ShowJSONImportView, ShowRemoteImportView
 from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView
 from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView, \
     SlideTextEditView, duplicate_slide
@@ -20,7 +20,7 @@ from slides.editor.views.transition import TransitionEditorView, TransitionCreat
     TransitionKeyframeUpdateView, TransitionEditorIndexView
 from slides.editor.views.display import DisplayCreateView, DisplayDeleteView, DisplayUpdateView, DisplayDetailView
 from slides.editor.views.media import MediaObjectCRUDView, MediaObjectUploadToElementView
-
+from slides.editor.views.remote_source import RemoteSourceCRUDView, refresh_source
 
 urlpatterns = [
     path('', IndexView.as_view(), name='editor_index'),
@@ -71,5 +71,8 @@ urlpatterns = [
     path('display/<int:pk>/delete', DisplayDeleteView.as_view(), name='delete-display'),
     *MediaObjectCRUDView.get_urls(),
     *ImageCRUDView.get_urls(),
+    *RemoteSourceCRUDView.get_urls(),
+    path('remotesource/<int:pk>/refresh', refresh_source, name='remotesource-refresh'),
+    path('remotesource/<int:pk>/import_show', ShowRemoteImportView.as_view(), name='remotesource-import-show'),
     path('lazy_load_image/<str:image_url>', lazy_load_image, name='lazy-load-image'),
 ]

@@ -7,10 +7,11 @@ from django.templatetags.static import static
 from collections.abc import Iterable
 from django.shortcuts import reverse
 from django.utils import timezone
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, UTC
 from django_q.models import Schedule
 import yaml
 import os
+import requests
 
 import tinycss2
 
@@ -301,8 +302,8 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
             else:  # as in, if self.import_id == import_id:
                 raise NotImplementedError("Updating an existing show from JSON is not yet supported.")
         self.name=f"{title_prefix}{from_json.get('name')}"
-        self.advance_between_segments=from_json.get('advance_between_segments')
-        self.advance_loop=from_json.get('advance_loop')
+        self.advance_between_segments=from_json.get('advance_between_segments', False)
+        self.advance_loop=from_json.get('advance_loop', False)
         self.theme=from_json.get('theme')
         # displays=from_json.get('displays')  # Implement this later; not sure exactly how to represent displays in JSON
         self.import_id=from_json.get('import_id')
@@ -938,3 +939,73 @@ class Image(models.Model):
 
     class Meta:
         ordering = ('-pk', )
+
+
+class RemoteSource(models.Model):
+    """
+    Implements connection to a remote data source which can publish useful pre-made objects such as shows, decks, themes, etc.
+    """
+    source_url = models.URLField(help_text="URL of the remote source. This should be a JSON endpoint which returns an index of available content.")
+    name = models.CharField(help_text="Local name of the remote source.", max_length=200)
+    refresh_every = models.IntegerField(help_text="How often to refresh this remote source, in minutes")
+    metadata_last_fetched = models.DateTimeField(default=datetime.now)
+    shows_url = models.URLField(blank=True, null=True)
+    themes_url = models.URLField(blank=True, null=True)
+    decks_url = models.URLField(blank=True, null=True)
+    images_url = models.URLField(blank=True, null=True)
+    media_url = models.URLField(blank=True, null=True)
+    transitions_url = models.URLField(blank=True, null=True)
+    displays_url = models.URLField(blank=True, null=True)
+    index_data = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_metadata(self) -> None:
+        """
+        Refreshes source metadata from the server.
+        """
+        index_data = requests.get(self.source_url).json()
+        self.shows_url = index_data.get('shows_url', None)
+        self.themes_url = index_data.get('themes_url', None)
+        self.decks_url = index_data.get('decks_url', None)
+        self.images_url = index_data.get('images_url', None)
+        self.media_url = index_data.get('media_url', None)
+        self.transitions_url = index_data.get('transitions_url', None)
+        self.displays_url = index_data.get('displays_url', None)
+        self.index_data = index_data
+        self.metadata_last_fetched = datetime.now(UTC)
+        self.save()
+
+    def get_metadata_if_needed(self) -> None:
+        if datetime.now(UTC) - self.metadata_last_fetched > timedelta(minutes=self.refresh_every):
+            self.get_metadata()
+            self.refresh_from_db()
+
+    def get_shows(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.shows_url).json()
+
+    def get_themes(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.themes_url).json()
+
+    def get_decks(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.decks_url).json()
+
+    def get_images(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.images_url).json()
+
+    def get_media(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.media_url).json()
+
+    def get_transitions(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.transitions_url).json()
+
+    def get_displays(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.displays_url).json()
