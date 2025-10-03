@@ -1,18 +1,23 @@
 import hashlib
+import json
+
 from django.db import models
 from django_eventstream import send_event
 from django.templatetags.static import static
 from collections.abc import Iterable
 from django.shortcuts import reverse
 from django.utils import timezone
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, UTC
 from django_q.models import Schedule
 import yaml
 import os
+import requests
 
 import tinycss2
 
 from tinycss2.ast import IdentToken, QualifiedRule
+
+from bs4 import BeautifulSoup
 
 
 class InvalidArgumentException(Exception):
@@ -21,6 +26,11 @@ class InvalidArgumentException(Exception):
 
 class NotSupportedException(Exception):
     pass
+
+class ShowAlreadyExistsException(NotSupportedException):
+    def __init__(self, message, show,):
+        self.show = show
+        super().__init__(message)
 
 
 class Display(models.Model):  # A set of characteristics used to modify slide appearance for different displays
@@ -226,6 +236,7 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
     )
     advance_between_segments = models.BooleanField(default=False, null=False)
     advance_loop = models.BooleanField(default=False, null=False)
+    import_id = models.CharField(max_length=100, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('edit-show', kwargs={'pk': self.pk})
@@ -274,6 +285,54 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
                 self.displays.add(display.pk)
             self.save()
 
+    def import_json(self, json_string:str, title_prefix:str or None = None):
+        """
+        :param json_string:
+        JSON string representing a show
+        :param title_prefix:
+        Prefix for the title of the show
+        :return:
+        Show object as described by the provided JSON
+        """
+        from_json = json.loads(json_string)
+        if import_id := from_json.get('import_id'):
+            if self.import_id != import_id:
+                if conflicting_show := Show.objects.filter(import_id=import_id).first():
+                    raise ShowAlreadyExistsException(message=f'Cannot import duplicate of show "{conflicting_show}"', show=conflicting_show)
+            else:  # as in, if self.import_id == import_id:
+                raise NotImplementedError("Updating an existing show from JSON is not yet supported.")
+        self.name=f"{title_prefix}{from_json.get('name')}"
+        self.advance_between_segments=from_json.get('advance_between_segments', False)
+        self.advance_loop=from_json.get('advance_loop', False)
+        self.theme=from_json.get('theme')
+        # displays=from_json.get('displays')  # Implement this later; not sure exactly how to represent displays in JSON
+        self.import_id=from_json.get('import_id')
+        self.save()
+        # and now, we add the segments
+        # def resolve_deck(search_string):
+        #     deck = None
+        #     try:
+        #         deck = Deck.objects.get(pk=int(search_string))
+        #     except:
+        #         # yes, a bare except is fine here- this parameter could be anything
+        #         # TODO: Better search system, please
+        #         deck = Deck.objects.filter(name__contains=search_string).first()
+        #     return deck
+        for segment in from_json.get('segments', []):
+            if details_html := segment.get('details'):
+                details_text = BeautifulSoup(details_html, 'html.parser').get_text()
+            else:
+                details_text = None
+            new_segment = Segment(
+                name=segment.get('name'),
+                show=self,
+                order=self.next_segment_order(),
+                details=details_text,
+                # included_deck=resolve_deck(from_json.get('deck')  # This is half-baked, take a stab at implementation later
+            )
+            new_segment.save()
+        return self
+
 
     class Meta:
         ordering = ('name',)
@@ -281,6 +340,7 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
 
 class Segment(models.Model):  # A collection of slides which will be part of a Show
     name = models.CharField(max_length=100)
+    details = models.TextField(null=True, blank=True)
     order = models.IntegerField()
     show = models.ForeignKey(
         to=Show,
@@ -292,16 +352,6 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
         blank=True,
         null=True,
         on_delete=models.CASCADE,
-    )
-    local_slides_pre = models.ManyToManyField(
-        to='Slide',
-        blank=True,
-        related_name='pre_slides',
-    )
-    local_slides_post = models.ManyToManyField(
-        to='Slide',
-        blank=True,
-        related_name='post_slides',
     )
 
     def get_absolute_url(self):
@@ -889,3 +939,73 @@ class Image(models.Model):
 
     class Meta:
         ordering = ('-pk', )
+
+
+class RemoteSource(models.Model):
+    """
+    Implements connection to a remote data source which can publish useful pre-made objects such as shows, decks, themes, etc.
+    """
+    source_url = models.URLField(help_text="URL of the remote source. This should be a JSON endpoint which returns an index of available content.")
+    name = models.CharField(help_text="Local name of the remote source.", max_length=200)
+    refresh_every = models.IntegerField(help_text="How often to refresh this remote source, in minutes")
+    metadata_last_fetched = models.DateTimeField(default=datetime.now)
+    shows_url = models.URLField(blank=True, null=True)
+    themes_url = models.URLField(blank=True, null=True)
+    decks_url = models.URLField(blank=True, null=True)
+    images_url = models.URLField(blank=True, null=True)
+    media_url = models.URLField(blank=True, null=True)
+    transitions_url = models.URLField(blank=True, null=True)
+    displays_url = models.URLField(blank=True, null=True)
+    index_data = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_metadata(self) -> None:
+        """
+        Refreshes source metadata from the server.
+        """
+        index_data = requests.get(self.source_url).json()
+        self.shows_url = index_data.get('shows_url', None)
+        self.themes_url = index_data.get('themes_url', None)
+        self.decks_url = index_data.get('decks_url', None)
+        self.images_url = index_data.get('images_url', None)
+        self.media_url = index_data.get('media_url', None)
+        self.transitions_url = index_data.get('transitions_url', None)
+        self.displays_url = index_data.get('displays_url', None)
+        self.index_data = index_data
+        self.metadata_last_fetched = datetime.now(UTC)
+        self.save()
+
+    def get_metadata_if_needed(self) -> None:
+        if datetime.now(UTC) - self.metadata_last_fetched > timedelta(minutes=self.refresh_every):
+            self.get_metadata()
+            self.refresh_from_db()
+
+    def get_shows(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.shows_url).json()
+
+    def get_themes(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.themes_url).json()
+
+    def get_decks(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.decks_url).json()
+
+    def get_images(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.images_url).json()
+
+    def get_media(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.media_url).json()
+
+    def get_transitions(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.transitions_url).json()
+
+    def get_displays(self) -> dict:
+        self.get_metadata_if_needed()
+        return requests.get(self.displays_url).json()

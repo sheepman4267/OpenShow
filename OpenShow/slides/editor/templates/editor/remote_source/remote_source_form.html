@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+{% load icon %}
+
+{% block header %}
+    {% if object %}
+        <h1>{{ object.title }}</h1>
+    {% else %}
+        <h1>New Remote Source</h1>
+    {% endif %}
+{% endblock %}
+
+{% block header_right_button %}
+    {% if object %}
+        <a href="{% url 'remotesource-delete' object.pk %}" class="icon-button" aria-label="Delete {{ object.title }}">{% icon 'trash-2' %}</a>
+    {% endif %}
+{% endblock %}
+
+{% block header_left_button %}
+    {% if object %}
+        <a class=inline href="{% url 'remotesource-detail' object.pk %}">{% icon 'arrow-left' %}</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h2>{% if object %}Edit {{object_verbose_name}}{% else %}Create {{object_verbose_name}}{% endif %}</h2>
+    <div id="remote_source-form-container" class="{% if not object %}box{% endif %}">
+        {% if not object %}
+            <strong class="block titlebar">New Remote Source</strong>
+        {% endif %}
+        <form
+                method="POST"
+                {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}
+                action="{% if object %}{{ update_view_url }}{% else %}{{ create_view_url }}{% endif %}"
+        >
+        {% csrf_token %}
+            {{ form.name.as_field_group }}
+            {{ form.source_url.as_field_group }}
+            {{ form.refresh_every.as_field_group }}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+{% endblock %}

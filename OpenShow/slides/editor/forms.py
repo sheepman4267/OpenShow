@@ -131,6 +131,7 @@ class UpdateSegmentForm(ModelForm):
             'name',
             'order',
             'included_deck',
+            'details',
         ]
 
 
@@ -189,3 +190,12 @@ class MediaObjectUploadToElementForm(ModelForm):
         element.media_object = media_object
         element.save()
         return media_object
+
+
+class ShowRemoteImportForm(Form):
+    url = ChoiceField()
+
+
+class ShowJSONImportForm(Form):
+    name_prefix = CharField()
+    json_string = CharField()
