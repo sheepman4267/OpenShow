@@ -202,3 +202,86 @@ form.slide-form > * {
 .selected {
     box-shadow: 0px 0px 15px 1px var(--info-graphical-fg);
 }
+
+@keyframes spinner-done-out {
+    from {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    95% {
+        opacity: 0;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes spinner-out {
+    from {
+        transform: translateX(0);
+    }
+    92% {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(20rem);
+    }
+}
+
+.spinner {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    align-self: flex-start;
+    display: block;
+    width: fit-content;
+    transform: translateX(20rem);
+    background-color: #0ca67822;
+    padding: 1rem 2rem 1rem 1.25rem;
+    border-top-left-radius: 1rem;
+    backdrop-filter: blur(2px);
+    box-shadow: 0 0 5px 5px #0ca67822;
+}
+
+.spinner .active,
+.spinner .done {
+    opacity: 0;
+}
+
+.spinner .active {
+    display: none;
+}
+
+body:has(.htmx-request) .spinner {
+    transform: translateX(0);
+    background-color: #fa525222;
+    box-shadow: 0 0 5px 5px #fa525222
+}
+
+body:not(:has(.htmx-request)) .spinner {
+    transform: translateX(20rem);
+    animation-name: spinner-out;
+    animation-duration: 2s;
+    animation-direction: normal;
+}
+
+body:has(.htmx-request) .spinner .active {
+    opacity: 1;
+    display: block;
+}
+
+body:has(.htmx-request) .spinner .done {
+    display: none;
+}
+
+body:has(.htmx-swapping) .spinner .done {
+    opacity: 0;
+}
+
+body:not(:has(.htmx-swapping)) .spinner .done {
+    animation-name: spinner-done-out;
+    animation-direction: normal;
+    animation-duration: 2s;
+}
