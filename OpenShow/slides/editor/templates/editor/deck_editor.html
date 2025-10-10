@@ -196,12 +196,24 @@
     {% block editor-right %}
         <div id="editor-right" class="deck">
             <div id="aoml-buttons">
-                <a href="{% url 'push-deck-text' deck.pk %}" title="Push AOML to slides">
-                    <button>{% icon 'arrow-left' %}</button>
-                </a>
-                <a href="{% url 'pull-aoml-text' deck.pk %}" title="Pull AOML from slides">
-                    <button>{% icon 'arrow-right' %}</button>
-                </a>
+                <button
+                        hx-get="{% url 'push-deck-text' deck.pk %}"
+                        hx-select="#view-container"
+                        hx-target="#view-container"
+                        hx-swap="outerHTML"
+                        title="Push AOML to slides"
+                >
+                    {% icon 'arrow-left' %}
+                </button>
+                <button
+                        hx-get="{% url 'pull-aoml-text' deck.pk %}"
+                        hx-select="#view-container"
+                        hx-target="#view-container"
+                        hx-swap="outerHTML"
+                        title="Push AOML to slides"
+                >
+                    {% icon 'arrow-right' %}
+                </button>
             </div>
             <form
                     hx-trigger="change throttle:2s"
@@ -236,4 +248,5 @@
         </div>
     {% endblock %}
 </div>
+{% include 'editor/spinner.html' %}
 {% endblock %}
