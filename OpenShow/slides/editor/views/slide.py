@@ -13,13 +13,13 @@ class SlideCreateView(CreateView):
 
 class SlideTextEditView(DetailView):
     model = Slide
-    template_name = 'editor/iframe-slide-preview.html'
+    template_name = 'editor/slide/wysiwyg/iframe-slide-preview.html'
 
 
 class SlideEditView(UpdateView):
     model = Slide
     fields = ['transition', 'transition_duration', 'auto_advance', 'auto_advance_duration']
-    template_name = 'editor/edit_slide.html'
+    template_name = 'editor/slide/edit_slide.html'
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
