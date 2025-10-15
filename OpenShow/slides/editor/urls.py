@@ -2,7 +2,6 @@ from django.urls import path
 
 from slides.editor.forms import MediaObjectUploadToElementForm
 from slides.editor.views.image import ImageCRUDView, ImageUploadToElementView
-from slides.editor.views.index import IndexView
 from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView, SetThemeView, \
     check_theme_compatibility, ShowJSONImportView, ShowRemoteImportView
 from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView
@@ -23,7 +22,6 @@ from slides.editor.views.media import MediaObjectCRUDView, MediaObjectUploadToEl
 from slides.editor.views.remote_source import RemoteSourceCRUDView, refresh_source
 
 urlpatterns = [
-    path('', IndexView.as_view(), name='editor_index'),
     path('show/<int:pk>', ShowEditorView.as_view(), name='edit-show'),
     path('show/new', ShowCreateView.as_view(), name='new-show'),
     path('show/<int:pk>/delete', ShowDeleteView.as_view(), name='delete-show'),
