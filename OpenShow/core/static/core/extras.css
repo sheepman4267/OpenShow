@@ -69,6 +69,14 @@ select {
     gap: 0.25rem 0.3rem;
 }
 
+.action-button-container .box {
+    width: 100%;
+}
+
+.box {
+    max-width: 100%;
+}
+
 @media screen and (max-width: 50rem) {
     body > header {
         grid-template-columns: 1fr 1fr;
