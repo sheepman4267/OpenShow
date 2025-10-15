@@ -55,7 +55,7 @@ class MediaObjectCRUDView(CRUDView):
 
         if self.model is not None and self.template_name_suffix is not None:
             return [
-                f"editor/"
+                f"editor/media_object/"
                 f"{self.model._meta.object_name.lower()}"
                 f"{self.template_name_suffix}.html",
                 f"neapolitan/object{self.template_name_suffix}.html",
