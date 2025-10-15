@@ -17,7 +17,7 @@ class ShowEditorView(UpdateView):
         'advance_between_segments',
         'advance_loop',
     ]
-    template_name = 'editor/show_editor.html'
+    template_name = 'editor/show/show_editor.html'
 
 
 class ShowCreateView(CreateView):
@@ -42,7 +42,7 @@ class ShowDeleteView(DeleteView):
 class SetThemeView(UpdateView):
     model = Show
     form_class = SetThemeForm
-    template_name = 'editor/set_theme.html'
+    template_name = 'editor/show/set_theme.html'
 
 
 class ShowJSONImportView(FormView):
@@ -101,6 +101,6 @@ def check_theme_compatibility(request):
         missing = show.check_compatibility(theme)
         if len(missing) == 0:
             missing = None
-        return render(request, 'editor/show_compatibility_snippet.html', {
+        return render(request, 'editor/show/show_compatibility_snippet.html', {
             'missing': missing,
         })
