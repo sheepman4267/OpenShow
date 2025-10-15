@@ -278,9 +278,9 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
             set_defaults = True
         else:
             set_defaults = False
-        self.theme = Theme.get_default()
         super(self.__class__, self).save(*args, **kwargs)
         if set_defaults:
+            self.theme = Theme.get_default()
             for display in Display.objects.filter(default=True):
                 self.displays.add(display.pk)
             self.save()
