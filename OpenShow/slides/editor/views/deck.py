@@ -36,7 +36,7 @@ class DeckEditorView(UpdateView):
         'advance_in_loop',
         'slide_text_markup',
     ]
-    template_name = 'editor/deck_editor.html'
+    template_name = 'editor/deck/deck_editor.html'
     # extra_context = {'display': Display.objects.all().first()}
 
 
@@ -106,7 +106,7 @@ class DeckFromImagesView(FormView):
 class ImportImagesToExistingDeckView(FormView):
     model = Deck
     form_class = ImportImagesForm
-    template_name = 'editor/import_images_to_deck.html'
+    template_name = 'editor/deck/import_images_to_deck.html'
 
     def get_object(self):
         db_object = get_object_or_404(self.model, pk=self.kwargs['pk'])
