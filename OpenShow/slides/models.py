@@ -320,7 +320,7 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
         #     return deck
         for segment in from_json.get('segments', []):
             if details_html := segment.get('details'):
-                details_text = BeautifulSoup(details_html, 'html.parser').get_text()
+                details_text = BeautifulSoup(details_html, 'html.parser').get_text(separator=' ')
             else:
                 details_text = None
             new_segment = Segment(

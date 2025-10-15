@@ -37,7 +37,7 @@
                             hx-swap="outerHTML swap:0.1s"
                     >Edit Segment Details</a>
                     {% if segment.details %}
-                        <p>{{ segment.details }}</p>
+                        <p class="segment-details">{{ segment.details }}</p>
                     {% endif %}
                     {% if segment.included_deck %}
                         <h4>Deck: {{ segment.included_deck.name }}</h4>

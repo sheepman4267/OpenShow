@@ -55,6 +55,14 @@ select {
     max-width: 100%;
 }
 
+.segment-details {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    border: 1px solid var(--graphical-fg);
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    max-width: fit-content;
+}
+
 @media screen and (max-width: 50rem) {
     body > header {
         grid-template-columns: 1fr 1fr;
