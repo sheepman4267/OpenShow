@@ -45,19 +45,21 @@
         <p>
             Shows are collections of slides which show up in the "presentation" view, and can be pushed to displays.
         </p>
-        <button hx-get="{% url 'new-show' %}" hx-swap="outerHTML">
-            New Show
-        </button>
-        <button hx-get="{% url 'show-import-json' %}" hx-swap="outerHTML">
-            Import Show from JSON
-        </button>
-        {% for remote_source in remote_source_list %}
-            {% if remote_source.shows_url %}
-                <button hx-get="{% url 'remotesource-import-show' pk=remote_source.pk %}" hx-swap="outerHTML">
-                    Import Show from {{ remote_source.name }}
-                </button>
-            {% endif %}
-        {% endfor %}
+        <div class="action-button-container">
+            <button hx-get="{% url 'new-show' %}" hx-swap="outerHTML">
+                New Show
+            </button>
+            <button hx-get="{% url 'show-import-json' %}" hx-swap="outerHTML">
+                Import Show from JSON
+            </button>
+            {% for remote_source in remote_source_list %}
+                {% if remote_source.shows_url %}
+                    <button hx-get="{% url 'remotesource-import-show' pk=remote_source.pk %}" hx-swap="outerHTML">
+                        Import Show from {{ remote_source.name }}
+                    </button>
+                {% endif %}
+            {% endfor %}
+        </div>
         <ul>
             {% for show in show_list %}
                 <li>
@@ -71,12 +73,14 @@
         <p>
             Decks are small, reusable collections of slides, which can be linked to segments in Shows.
         </p>
-        <button hx-get="{% url 'new-deck' %}" hx-swap="outerHTML">
-            New Deck
-        </button>
-        <button hx-get="{% url 'import-deck-from-images' %}" hx-swap="outerHTML">
-            Import Images
-        </button>
+        <div class="action-button-container">
+            <button hx-get="{% url 'new-deck' %}" hx-swap="outerHTML">
+                New Deck
+            </button>
+            <button hx-get="{% url 'import-deck-from-images' %}" hx-swap="outerHTML">
+                Import Images
+            </button>
+        </div>
         <ul>
             {% for deck in deck_list %}
                 <li>
@@ -90,9 +94,11 @@
         <p>
             Themes are styles which can be applied for shows, decks, or individual slides.
         </p>
-        <button hx-get="{% url 'new-theme' %}" hx-swap="outerHTML">
-            New Theme
-        </button>
+        <div class="action-button-container">
+            <button hx-get="{% url 'new-theme' %}" hx-swap="outerHTML">
+                New Theme
+            </button>
+        </div>
         <ul>
             {% for theme in theme_list %}
                 <li>
@@ -106,9 +112,11 @@
         <p>
             Displays can be configured to have the correct resolution, and set custom CSS.
         </p>
-        <button hx-get="{% url 'new-display' %}" hx-swap="outerHTML">
-            New Display
-        </button>
+        <div class="action-button-container">
+            <button hx-get="{% url 'new-display' %}" hx-swap="outerHTML">
+                New Display
+            </button>
+        </div>
         <ul>
             {% for display in display_list %}
                 <li>
@@ -122,9 +130,11 @@
         <p>
             CSS keyframes to define the transition from one slide to the next.
         </p>
-        <button hx-get="{% url 'new-transition' %}" hx-swap="outerHTML">
-            New Transition
-        </button>
+        <div class="action-button-container">
+            <button hx-get="{% url 'new-transition' %}" hx-swap="outerHTML">
+                New Transition
+            </button>
+        </div>
         <ul>
             {% for transition in transition_list %}
                 <li>
@@ -138,9 +148,11 @@
         <p>
             Media (video, audio, or embedded content) which can be added to slide elements.
         </p>
-        <button hx-get="{% url 'mediaobject-create' %}" hx-swap="outerHTML" hx-select="#mediaobject_form_container">
-            New Media Object
-        </button>
+        <div class="action-button-container">
+            <button hx-get="{% url 'mediaobject-create' %}" hx-swap="outerHTML" hx-select="#mediaobject_form_container">
+                New Media Object
+            </button>
+        </div>
         <ul>
             {% for mediaobject in mediaobject_list %}
                 <li>
@@ -154,9 +166,11 @@
         <p>
             Images which can be added to slide elements.
         </p>
-        <button hx-get="{% url 'image-create' %}" hx-swap="outerHTML" hx-select="#image_form_container">
-            New Image
-        </button>
+        <div class="action-button-container">
+            <button hx-get="{% url 'image-create' %}" hx-swap="outerHTML" hx-select="#image_form_container">
+                New Image
+            </button>
+        </div>
         <ul>
             {% for image in image_list %}
                 <li>
@@ -170,9 +184,11 @@
         <p>
             Remote sources which publish reusable OpenShow content.
         </p>
-        <button hx-get="{% url 'remotesource-create' %}" hx-swap="outerHTML" hx-select="#remote_source-form-container">
-            New Remote Source
-        </button>
+        <div class="action-button-container">
+            <button hx-get="{% url 'remotesource-create' %}" hx-swap="outerHTML" hx-select="#remote_source-form-container">
+                New Remote Source
+            </button>
+        </div>
         <ul>
             {% for remote_source in remote_source_list %}
                 <li>

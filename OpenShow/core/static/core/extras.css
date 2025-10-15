@@ -63,6 +63,12 @@ select {
     max-width: fit-content;
 }
 
+.action-button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.3rem;
+}
+
 @media screen and (max-width: 50rem) {
     body > header {
         grid-template-columns: 1fr 1fr;
