@@ -6,7 +6,7 @@ from slides.editor.forms import UpdateSegmentForm
 class SegmentCreateView(CreateView):
     model = Segment
     fields = ['show', 'name', 'order']
-    template_name = 'editor/new_segment_form.html'
+    template_name = 'editor/segment/new_segment_form.html'
     extra_context = {
         'object_type': 'Segment',
     }
@@ -14,5 +14,5 @@ class SegmentCreateView(CreateView):
 
 class SegmentUpdateView(UpdateView):
     model = Segment
-    template_name = 'editor/edit_segment_form.html'
+    template_name = 'editor/segment/edit_segment_form.html'
     form_class = UpdateSegmentForm
