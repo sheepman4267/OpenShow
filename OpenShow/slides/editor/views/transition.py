@@ -1,15 +1,6 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from slides.models import Transition, TransitionKeyframe
 
-
-class TransitionEditorIndexView(ListView):
-    queryset = Transition.objects.all()
-    template_name = 'editor/transition_editor.html'
-    extra_context = {
-        'transition_list': Transition.objects.all()
-    }
-
-
 class TransitionEditorView(UpdateView):
     model = Transition
     template_name = 'editor/transition_editor.html'
