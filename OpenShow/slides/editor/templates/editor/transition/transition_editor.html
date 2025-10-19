@@ -1,0 +1,75 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load icon %}
+
+{% block title %}
+    Editing {{ transition.name }} - OpenShow
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
+    <link rel="stylesheet" href="{% static 'editor/editor-extras.css' %}">
+{% endblock %}
+
+{% block header %}
+    <h1>{{ transition.name }}</h1>
+{% endblock %}
+
+{% block header_right_button %}
+    <a href="{% url 'delete-transition' transition.pk %}" class="icon-button" aria-label="Delete {{ transition.name }}">{% icon 'trash-2' %}</a>
+{% endblock %}
+
+{% block main %}
+    <main id="view-container">
+        <div class="box">
+            <strong class="titlebar block">Metadata</strong>
+            <form
+                    hx-post="{% url 'edit-transition' transition.pk %}"
+                    hx-trigger="change throttle:2s"
+                    hx-swap="outerHTML"
+                    hx-select="#view-container"
+                    hx-target="#view-container"
+            >
+                {% csrf_token %}
+                Current default transition: {{ transition.get_default }}
+                <label class="block">Transition Name: {{ form.name }}{{ form.name.errors }}</label>
+                <label class="block">Default: {{ form.default }}{{ form.default.errors }}</label>
+            </form>
+        </div>
+        <div class="box">
+            <strong class="titlebar block">Preview</strong>
+            Not yet implemented.
+        </div>
+        <div class="box">
+            <strong class="titlebar block">Keyframes (Incoming Slide)</strong>
+            CSS Keyframes used to animate the incoming slide.
+            <ul class="list-no-indent" data-keyframe-out="" data-transition-pk="{{ transition.pk }}">
+                {% for keyframe in transition.get_keyframes_in %}
+                    <li class="box">
+                        <strong class="titlebar block">{{ keyframe.marker }}</strong>
+                        <pre>{{ keyframe.css }}</pre>
+                        <button hx-swap="outerHTML" hx-get="{% url 'edit-keyframe' keyframe.pk %}" hx-target="closest li">Edit</button>
+                        <a href="{% url 'delete-keyframe' keyframe.pk %}"><button>Delete</button></a>
+                    </li>
+                {% endfor %}
+                <button hx-get="{% url 'new-keyframe' %}" hx-swap="outerHTML">New Keyframe</button>
+            </ul>
+        </div>
+        <div class="box">
+            <strong class="titlebar block">Keyframes (Outgoing Slide)</strong>
+            If omitted, the outgoing slide will be animated with the reverse of the incoming slide's keyframes.
+            <ul class="list-no-indent" data-keyframe-out="" data-transition-pk="{{ transition.pk }}">
+                {% for keyframe in transition.get_keyframes_out %}
+                    <li class="box">
+                        <strong class="titlebar block">{{ keyframe.marker }}</strong>
+                        <pre>{{ keyframe.css }}</pre>
+                        <button hx-swap="outerHTML" hx-get="{% url 'edit-keyframe' keyframe.pk %}" hx-target="closest li">Edit</button>
+                    </li>
+                {% endfor %}
+                <button hx-get="{% url 'new-keyframe' %}" hx-swap="outerHTML">New Keyframe</button>
+            </ul>
+        </div>
+    </main>
+{% include 'editor/spinner.html' %}
+{% endblock %}

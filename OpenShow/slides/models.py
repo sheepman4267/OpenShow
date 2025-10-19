@@ -712,7 +712,7 @@ class TransitionKeyframe(models.Model):
         related_name='keyframes',
         on_delete=models.CASCADE,
     )
-    marker = models.CharField(max_length=30, help_text="CSS Keyframe Marker (from, 2%, 50%, to, etc.)")
+    marker = models.CharField(max_length=30, help_text="from, 2%, 50%, to, etc.")
     css = models.TextField(help_text="CSS to apply at this keyframe marker")
     out = models.BooleanField(default=False)
 
@@ -721,6 +721,9 @@ class TransitionKeyframe(models.Model):
 
     def get_absolute_url(self):
         return reverse('edit-transition', kwargs={'pk': self.transition.pk})
+
+    def __str__(self):
+        return f'Keyframe: {self.transition}/{self.marker}'
 
 
 class Theme(models.Model):

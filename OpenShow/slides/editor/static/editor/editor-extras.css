@@ -285,3 +285,23 @@ body:not(:has(.htmx-swapping)) .spinner .done {
     animation-direction: normal;
     animation-duration: 2s;
 }
+
+textarea:not(#specificity-hack)::placeholder,
+input:not(#specificity-hack)::placeholder {
+    text-align: left;
+    color: var(--faded-fg);
+    font-style: italic;
+}
+
+.keyframe-form textarea {
+    font-family: monospace;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    height: 5rem;
+    margin-bottom: 0.5rem;
+}
+
+.list-no-indent:not(#specificity-hack) {
+    padding-left: 0;
+}
