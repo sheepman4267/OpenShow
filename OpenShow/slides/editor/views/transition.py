@@ -31,6 +31,11 @@ class TransitionDeleteView(DeleteView):
     }
 
 
+class TransitionPreviewCSSView(DetailView):
+    model = Transition
+    template_name = 'slides/transition.css'
+
+
 class TransitionKeyframeCreateView(CreateView):
     model = TransitionKeyframe
     fields = ["transition", "marker", "css", "out"]

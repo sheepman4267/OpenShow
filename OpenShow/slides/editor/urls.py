@@ -16,7 +16,7 @@ from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteV
 from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDeleteView
 from slides.editor.views.utils import generate_lorem, lazy_load_image
 from slides.editor.views.transition import TransitionEditorView, TransitionCreateView, TransitionKeyframeCreateView, \
-    TransitionKeyframeUpdateView, TransitionDeleteView, TransitionKeyframeDeleteView
+    TransitionKeyframeUpdateView, TransitionDeleteView, TransitionKeyframeDeleteView, TransitionPreviewCSSView
 from slides.editor.views.display import DisplayCreateView, DisplayDeleteView, DisplayUpdateView, DisplayDetailView
 from slides.editor.views.media import MediaObjectCRUDView, MediaObjectUploadToElementView
 from slides.editor.views.remote_source import RemoteSourceCRUDView, refresh_source
@@ -60,6 +60,7 @@ urlpatterns = [
     path('show/import/json', ShowJSONImportView.as_view(), name='show-import-json'),
     path('transition/<int:pk>', TransitionEditorView.as_view(), name='edit-transition'),
     path('transition/<int:pk>/delete', TransitionDeleteView.as_view(), name='delete-transition'),
+    path('transition/<int:pk>/css_preview', TransitionPreviewCSSView.as_view(), name='css-preview'),
     path('transition/new', TransitionCreateView.as_view(), name='new-transition'),
     path('transition/keyframe/new', TransitionKeyframeCreateView.as_view(), name='new-keyframe'),
     path('transition/keyframe/<int:pk>', TransitionKeyframeUpdateView.as_view(), name='edit-keyframe'),
