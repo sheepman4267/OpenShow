@@ -24,10 +24,10 @@ class SlideEditView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         if self.object.deck:
-            context['edit_show_or_deck_template'] = 'editor/deck_editor.html'
+            context['edit_show_or_deck_template'] = 'editor/deck/deck_editor.html'
             context['deck'] = self.object.deck
         elif self.object.segment:
-            context['edit_show_or_deck_template'] = 'editor/show_editor.html'
+            context['edit_show_or_deck_template'] = 'editor/show/show_editor.html'
             context['show'] = self.object.segment.show
         return context
 
