@@ -71,8 +71,10 @@ class TransitionKeyframeUpdateView(UpdateView):
 
 class TransitionKeyframeDeleteView(DeleteView):
     model = TransitionKeyframe
-    success_url = reverse_lazy('slides-index')
     template_name = 'editor/generic_confirm_delete.html'
     extra_context = {
         'action': 'delete-keyframe',
     }
+
+    def get_success_url(self):
+        return reverse_lazy('edit-transition', kwargs={'pk': self.object.transition.pk})
