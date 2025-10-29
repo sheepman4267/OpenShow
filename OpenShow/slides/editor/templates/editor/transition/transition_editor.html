@@ -61,7 +61,7 @@
         <div class="box">
             <strong class="titlebar block">Keyframes (Outgoing Slide)</strong>
             If omitted, the outgoing slide will be animated with the reverse of the incoming slide's keyframes.
-            <ul class="list-no-indent" data-keyframe-out="" data-transition-pk="{{ transition.pk }}">
+            <ul class="list-no-indent" data-keyframe-out="true" data-transition-pk="{{ transition.pk }}">
                 {% for keyframe in transition.get_keyframes_out %}
                     <li class="box">
                         <strong class="titlebar block">{{ keyframe.marker }}</strong>
