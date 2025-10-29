@@ -67,6 +67,7 @@
                         <strong class="titlebar block">{{ keyframe.marker }}</strong>
                         <pre>{{ keyframe.css }}</pre>
                         <button hx-swap="outerHTML" hx-get="{% url 'edit-keyframe' keyframe.pk %}" hx-target="closest li">Edit</button>
+                        <a href="{% url 'delete-keyframe' keyframe.pk %}"><button>Delete</button></a>
                     </li>
                 {% endfor %}
                 <button hx-get="{% url 'new-keyframe' %}" hx-swap="outerHTML">New Keyframe</button>
