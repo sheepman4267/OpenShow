@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1920"
+   height="1080"
+   viewBox="0 0 508 285.75"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   sodipodi:docname="transition-demo-1.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.66593552"
+     inkscape:cx="991.08694"
+     inkscape:cy="517.31735"
+     inkscape:window-width="2560"
+     inkscape:window-height="1368"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#a5d5ff;fill-opacity:1;stroke-width:0.264583"
+       d="m -33.771414,23.441333 c 0,0 65.953584,-44.101491 280.501374,10.72739 214.54779,54.828881 -23.44133,159.321607 292.4207,222.891317 315.86204,63.56971 -578.087111,37.74453 -578.087111,37.74453 z"
+       id="path2" />
+    <path
+       id="path1"
+       style="fill:#ffd585;fill-opacity:1;stroke-width:0.264583"
+       d="M 21.455021 -54.43182 L -10.727511 1.9864421 L -3.1786174 19.070671 C -3.1786174 19.070671 200.24445 3.5756768 280.50122 110.84956 C 360.75799 218.12346 407.64101 264.60875 535.57506 270.17111 C 663.50912 275.73345 548.28901 -18.276404 548.28901 -18.276404 L 21.455021 -54.43182 z " />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:44.454px;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffd585;fill-opacity:1;stroke:#000000;stroke-width:0.231531"
+       x="158.1405"
+       y="195.35706"
+       id="text2"><tspan
+         sodipodi:role="line"
+         id="tspan2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:44.454px;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;fill:#ffd585;fill-opacity:1;stroke:#000000;stroke-width:0.231531"
+         x="158.1405"
+         y="195.35706">Click Me</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:44.454px;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#a5d5ff;fill-opacity:1;stroke:#000000;stroke-width:0.231531"
+       x="347.19653"
+       y="195.35706"
+       id="text2-5"><tspan
+         sodipodi:role="line"
+         id="tspan2-9"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:44.454px;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;stroke:#000000;stroke-width:0.231531"
+         x="347.19653"
+         y="195.35706">To Test!</tspan></text>
+  </g>
+</svg>
