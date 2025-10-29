@@ -16,7 +16,8 @@ from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteV
 from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDeleteView
 from slides.editor.views.utils import generate_lorem, lazy_load_image
 from slides.editor.views.transition import TransitionEditorView, TransitionCreateView, TransitionKeyframeCreateView, \
-    TransitionKeyframeUpdateView, TransitionDeleteView, TransitionKeyframeDeleteView, TransitionPreviewCSSView
+    TransitionKeyframeUpdateView, TransitionDeleteView, TransitionKeyframeDeleteView, TransitionPreviewCSSView, \
+    TransitionDemoView
 from slides.editor.views.display import DisplayCreateView, DisplayDeleteView, DisplayUpdateView, DisplayDetailView
 from slides.editor.views.media import MediaObjectCRUDView, MediaObjectUploadToElementView
 from slides.editor.views.remote_source import RemoteSourceCRUDView, refresh_source
@@ -65,6 +66,7 @@ urlpatterns = [
     path('transition/keyframe/new', TransitionKeyframeCreateView.as_view(), name='new-keyframe'),
     path('transition/keyframe/<int:pk>', TransitionKeyframeUpdateView.as_view(), name='edit-keyframe'),
     path('transition/keyframe/<int:pk>/delete', TransitionKeyframeDeleteView.as_view(), name='delete-keyframe'),
+    path('transition/<int:pk>/demo', TransitionDemoView.as_view(), name='transition-demo'),
     path('display/new', DisplayCreateView.as_view(), name='new-display'),
     path('display/<int:pk>', DisplayDetailView.as_view(), name='display-detail'),
     path('display/<int:pk>/update', DisplayUpdateView.as_view(), name='update-display'),

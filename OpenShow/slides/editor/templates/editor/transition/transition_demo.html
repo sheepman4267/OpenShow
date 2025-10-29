@@ -1,0 +1,20 @@
+{% load static %}
+<head>
+    <title>OpenShow Transition Demo Page: {{ transition }}</title>
+    <link rel="stylesheet" href="{% url 'css-preview' pk=transition.pk %}">
+    <link rel="stylesheet" href="{% static 'slides/slide.css' %}">
+    <script src="{% static 'js/hyperscript.js' %}"></script>
+    <script src="{% static 'js/htmx.js' %}"></script>
+</head>
+<body id="body">
+    <div id="slide2" class="slide" hx-get="{{ base_url }}{% url 'transition-demo' pk=transition.pk %}" hx-swap="beforeend" hx-select="#slide1" hx-target="#body" _="on click remove <.slide:not(:last-child)/>">
+        <div class="element">
+            <img src="{% static 'editor/transition-demo-2.svg' %}">
+        </div>
+    </div>
+    <div id="slide1" class="slide" hx-get="{{ base_url }}{% url 'transition-demo' pk=transition.pk %}" hx-swap="beforeend" hx-select="#slide2" hx-target="#body" _="on click remove <.slide:not(:last-child)/>">
+        <div class="element">
+            <img src="{% static 'editor/transition-demo-1.svg' %}">
+        </div>
+    </div>
+</body>

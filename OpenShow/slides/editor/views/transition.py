@@ -1,5 +1,6 @@
+from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from slides.models import Transition, TransitionKeyframe
 
 class TransitionEditorView(UpdateView):
@@ -33,7 +34,21 @@ class TransitionDeleteView(DeleteView):
 
 class TransitionPreviewCSSView(DetailView):
     model = Transition
-    template_name = 'slides/transition.css'
+    template_name = 'editor/transition/transition.css'
+
+    def get(self, request, *args, **kwargs):
+        object = self.get_object()
+        print(object.get_safe_name())
+        context = {
+            'transition': self.get_object(),
+            'transition_duration': 1,
+        }
+        return TemplateResponse(request, self.template_name, context, content_type='text/css')
+
+
+class TransitionDemoView(DetailView):
+    model = Transition
+    template_name = 'editor/transition/transition_demo.html'
 
 
 class TransitionKeyframeCreateView(CreateView):

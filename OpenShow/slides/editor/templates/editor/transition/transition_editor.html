@@ -39,7 +39,9 @@
         </div>
         <div class="box">
             <strong class="titlebar block">Preview</strong>
-            Not yet implemented.
+            <div class="slide-thumbnail" style="--display-size-divisor: 4">
+                <iframe scrolling="no" style="pointer-events: all;" class="slide" src="{% url 'transition-demo' pk=transition.pk %}"></iframe>
+            </div>
         </div>
         <div class="box">
             <strong class="titlebar block">Keyframes (Incoming Slide)</strong>
