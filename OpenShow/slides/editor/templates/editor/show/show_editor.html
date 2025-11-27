@@ -30,11 +30,12 @@
             {% for segment in show.segments.all %}
                 <li class="box show-segment">
                     <strong class="titlebar block">{{ segment.name }}</strong>
-                    <a href="htmx"
+                    <a href="{% url 'edit-segment' segment.pk %}"
                             hx-get="{% url 'edit-segment' segment.pk %}"
-                            hx-select="#editor-right"
-                            hx-target="#editor-right"
-                            hx-swap="outerHTML swap:0.1s"
+                            hx-select="#view-container"
+                            hx-target="#view-container"
+                            hx-swap="morph:outerHTML swap:0.1s"
+                            hx-push-url="true"
                     >Edit Segment Details</a>
                     {% if segment.details %}
                         <p class="segment-details">{{ segment.details }}</p>

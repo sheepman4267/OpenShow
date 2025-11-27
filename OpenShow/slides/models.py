@@ -355,7 +355,7 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
     )
 
     def get_absolute_url(self):
-        return reverse('edit-show', kwargs={'pk': self.show.pk})
+        return reverse('edit-segment', kwargs={'pk': self.pk})
 
     class Meta:
         ordering = ["order"]

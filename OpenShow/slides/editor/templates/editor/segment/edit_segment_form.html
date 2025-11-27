@@ -1,4 +1,21 @@
-<div id="editor-right" class="box show">
+{% extends 'editor/show/show_editor.html' %}
+{% load icon %}
+
+
+{% block header %}
+    <h1>{{ object.show.name }}</h1>
+{% endblock %}
+
+{% block header_right_button %}
+{#    <a href="{% url 'delete-segment' object.pk %}" class="icon-button" aria-label="Delete {{ object.name }}">{% icon 'trash-2' %}</a>#}
+{% endblock %}
+
+{% block header_left_button %}
+    <a href="{% url 'edit-show' object.show.pk %}" class="icon-button" aria-label="Back to editing {{ object.show.name }}">{% icon 'arrow-left' %}</a>
+{% endblock %}
+
+{% block editor-right %}
+    <div id="editor-right" class="box show">
         <strong class="titlebar block">Segment Options for "{{ segment.name }}"</strong>
         <form method="post" action="{% url 'edit-segment' segment.pk %}">
             {% csrf_token %}
@@ -17,5 +34,6 @@
                 Submit Edits
             </button>
         </form>
-</div>
+    </div>
+{% endblock %}
 
