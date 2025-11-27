@@ -341,7 +341,7 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
 class Segment(models.Model):  # A collection of slides which will be part of a Show
     name = models.CharField(max_length=100)
     details = models.TextField(null=True, blank=True)
-    order = models.IntegerField()
+    order = models.FloatField()
     show = models.ForeignKey(
         to=Show,
         on_delete=models.CASCADE,
