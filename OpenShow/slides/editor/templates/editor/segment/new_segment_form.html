@@ -8,3 +8,15 @@
     <label class="block">Name: {{ form.name }}</label>
     {{ form.errors }}
 {% endblock %}
+{% block submit_button %}
+    <button
+            type="submit"
+            hx-post="{% url 'new-segment' %}"
+            hx-swap="morph:outerHTML"
+            hx-select="#view-container"
+            hx-target="#view-container"
+            hx-push-url="true"
+    >
+        Submit
+    </button>
+{% endblock %}
