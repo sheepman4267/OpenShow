@@ -9,6 +9,8 @@
         {{ form }}
         {{ form.errors }}
         {% endblock %}
-        <button type="submit">Submit</button>
+        {% block submit_button %}
+            <button type="submit">Submit</button>
+        {% endblock %}
     </form>
 </div>
