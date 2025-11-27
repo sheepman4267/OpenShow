@@ -1,4 +1,5 @@
-from django.views.generic import CreateView, UpdateView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, UpdateView, DeleteView
 from slides.models import Segment
 from slides.editor.forms import UpdateSegmentForm
 
@@ -24,3 +25,15 @@ class SegmentUpdateView(UpdateView):
 
     def get_success_url(self):
         return self.object.show.get_absolute_url()
+
+
+class SegmentDeleteView(DeleteView):
+    model = Segment
+    template_name = 'editor/generic_confirm_delete.html'
+    extra_context = {
+        'action': 'delete-segment',
+    }
+
+    def get_success_url(self):
+        success_url = reverse_lazy('edit-show', kwargs={"pk": self.object.show.pk})
+        return success_url

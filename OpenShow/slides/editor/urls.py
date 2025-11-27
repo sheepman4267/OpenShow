@@ -4,7 +4,7 @@ from slides.editor.forms import MediaObjectUploadToElementForm
 from slides.editor.views.image import ImageCRUDView, ImageUploadToElementView
 from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView, SetThemeView, \
     check_theme_compatibility, ShowJSONImportView, ShowRemoteImportView
-from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView
+from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView, SegmentDeleteView
 from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView, \
     SlideTextEditView, duplicate_slide
 from slides.editor.views.slide_element import SlideElementCreateView, SlideElementDeleteView, \
@@ -27,6 +27,7 @@ urlpatterns = [
     path('show/new', ShowCreateView.as_view(), name='new-show'),
     path('show/<int:pk>/delete', ShowDeleteView.as_view(), name='delete-show'),
     path('segment/<int:pk>', SegmentUpdateView.as_view(), name='edit-segment'),
+    path('segment/<int:pk>/delete', SegmentDeleteView.as_view(), name='delete-segment'),
     path('segment/new', SegmentCreateView.as_view(), name='new-segment'),
     path('slide/new', SlideCreateView.as_view(), name='new-slide'),
     path('slide/<int:pk>', SlideEditView.as_view(), name='edit-slide'),
