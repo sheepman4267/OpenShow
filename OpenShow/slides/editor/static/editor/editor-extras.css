@@ -306,10 +306,6 @@ input:not(#specificity-hack)::placeholder {
     padding-left: 0;
 }
 
-.slides-sidebar.show.segmentdrag .show-segment > *:not(strong.titlebar) {
-    transform: scaleX(0%);
-}
-
 .slides-sidebar.show.segmentdrag .show-segment {
     height: 4rem;
 }
