@@ -317,3 +317,7 @@ ul.slides {
 .box.show-segment .segment-details {
     margin-bottom: 0;
 }
+
+.slides-sidebar.show:not(.segmentdrag) .dragbox:first-child {
+    height: 0;
+}
