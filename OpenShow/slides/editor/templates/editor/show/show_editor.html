@@ -74,6 +74,22 @@
                     {% endif %}
                     <ul class="slides">
                         {% for slide in segment.slides.all %}
+                            <form
+                                class="dragbox"
+                                hx-post="{% url 'reorder-slide' %}"
+                                hx-swap="outerHTML"
+                                hx-trigger="drop"
+                                hx-select=".slides-sidebar"
+                                hx-target=".slides-sidebar"
+                                _="
+                                on dragover or dragenter call event.preventDefault() then add .dragover to me
+                                on dragleave remove .dragover from me
+                            ">
+                                {% csrf_token %}
+                                <input type="hidden" name="deck_or_segment_pk" value="{{ segment.pk }}">
+                                <input type="hidden" name="next_slide_pk" value="{{ slide.pk }}">
+                                <input type="hidden" name="moved_slide_pk" class="movedslide">
+                            </form>
                             <li
                                     class="slide-thumbnail"
                                     data-slide-pk="{{ slide.pk }}"
@@ -97,6 +113,22 @@
                                 </a>
                             </li>
                         {% endfor %}
+                        <form
+                            class="dragbox"
+                            hx-post="{% url 'reorder-slide' %}"
+                            hx-swap="outerHTML"
+                            hx-trigger="drop"
+                            hx-select=".slides-sidebar"
+                            hx-target=".slides-sidebar"
+                            _="
+                            on dragover or dragenter call event.preventDefault() then add .dragover to me
+                            on dragleave remove .dragover from me
+                        ">
+                            {% csrf_token %}
+                            <input type="hidden" name="deck_or_segment_pk" value="{{ segment.pk }}">
+                            {# Don't send next_slide as this is the end #}
+                            <input type="hidden" name="moved_slide_pk" class="movedslide">
+                        </form>
                     </ul>
                     <form method="post" action="{% url 'new-slide' %}">
                         {% csrf_token %}

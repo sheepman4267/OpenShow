@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, FormView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
-from slides.models import Slide
+from slides.models import Slide, Segment
 from slides.editor.forms import ChangeSlideOrderForm
 import slides.aoml_parser as aoml
 
@@ -57,6 +57,7 @@ class ChangeSlideOrderView(FormView):
 
     def form_valid(self, form):
         self.moved_slide = Slide.objects.get(pk=form.cleaned_data['moved_slide_pk'])
+        moved_slide_deck_or_segment = self.moved_slide.deck_or_segment()
         if form.cleaned_data['next_slide_pk']:
             next_slide = Slide.objects.get(pk=form.cleaned_data['next_slide_pk'])
             previous_slide = Slide.objects.filter(
@@ -71,7 +72,10 @@ class ChangeSlideOrderView(FormView):
                 self.moved_slide.order = next_slide.order - 1
                 self.moved_slide.save()
         else:
-            self.moved_slide.order = self.moved_slide.deck_or_segment().slides.last().order + 10
+            self.moved_slide.order = moved_slide_deck_or_segment.slides.last().order + 10
+            self.moved_slide.save()
+        if type(moved_slide_deck_or_segment) == Segment:
+            self.moved_slide.segment = Segment.objects.get(pk=form.cleaned_data['deck_or_segment_pk'])
             self.moved_slide.save()
         return super().form_valid(form)
 

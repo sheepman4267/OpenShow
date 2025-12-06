@@ -26,7 +26,7 @@ button {
 ul.slides:not(#specificity-hack) {
     padding-left: 0;
     display: grid;
-    gap: var(--rhythm);
+    gap: 0;
     list-style: none;
 }
 
