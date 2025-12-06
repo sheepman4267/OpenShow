@@ -52,7 +52,7 @@ ul.slides:not(#specificity-hack) {
     height: 1rem;
     background-color: unset;
     margin-block: 0;
-    transition: height, background-color 200ms;
+    transition: height 100ms, background-color 200ms;
     opacity: 0.7;
     border-radius: 0.25rem;
 }
@@ -60,7 +60,7 @@ ul.slides:not(#specificity-hack) {
 .dragover {
     height: 3rem;
     background-color: #3A7734;
-    transition: height, background-color 200ms;
+    transition: height 100ms, background-color 200ms;
 }
 
 #editor-right {
