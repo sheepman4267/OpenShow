@@ -307,7 +307,7 @@ input:not(#specificity-hack)::placeholder {
 }
 
 .slides-sidebar.show.segmentdrag .show-segment {
-    height: 4rem;
+    height: 2rem;
 }
 
 ul.slides {
