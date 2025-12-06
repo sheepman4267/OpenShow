@@ -129,7 +129,6 @@ class UpdateSegmentForm(ModelForm):
         model = Segment
         fields = [
             'name',
-            'order',
             'included_deck',
             'details',
         ]

@@ -21,7 +21,6 @@
             {% csrf_token %}
             <label class="block">Name: {{ form.name }}{{ form.name.errors }}</label>
             <label class="block">Included Deck: {{ form.included_deck }}{{ form.included_deck.errors }}</label>
-            <label class="block">Order: {{ form.order }}{{ form.order.errors }}</label>
             <label class="block">Details: {{ form.details }}</label>
             <button
                     type="submit"
