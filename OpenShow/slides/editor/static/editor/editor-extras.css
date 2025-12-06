@@ -18,7 +18,7 @@ button {
 }
 
 .slides-sidebar.show > .box {
-    margin-bottom: 1rem;
+    margin-bottom: 0;
     --rhythm: 1rem;
     margin-top: 0;
 }
@@ -304,4 +304,12 @@ input:not(#specificity-hack)::placeholder {
 
 .list-no-indent:not(#specificity-hack) {
     padding-left: 0;
+}
+
+.slides-sidebar.show.segmentdrag .show-segment > *:not(strong.titlebar) {
+    transform: scaleX(0%);
+}
+
+.slides-sidebar.show.segmentdrag .show-segment {
+    height: 4rem;
 }

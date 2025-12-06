@@ -135,6 +135,11 @@ class UpdateSegmentForm(ModelForm):
         ]
 
 
+class ChangeSegmentOrderForm(Form):
+    moved_segment_pk = IntegerField()
+    next_segment_pk = IntegerField(required=False)
+
+
 class SlideElementUpdateImageObjectForm(ModelForm):
     class Meta:
         model = SlideElement

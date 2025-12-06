@@ -26,9 +26,38 @@
 
 {% block main %}
     <div id="view-container" class="sidebar-layout single" data-show-pk="{{ show.pk }}" data-next-segment-order="{{ show.next_segment_order }}">
-        <ul class="slides-sidebar show" id="slides-sidebar">
+        <ul
+                class="slides-sidebar show"
+                id="slides-sidebar"
+                _="on dragend remove .slidedrag from <.slidedrag/> then remove .segmentdrag from <.segmentdrag/>"
+        >
             {% for segment in show.segments.all %}
-                <li class="box show-segment">
+                    <form
+                        class="dragbox"
+                        hx-post="{% url 'reorder-segment' %}"
+                        hx-swap="morph:outerHTML"
+                        hx-trigger="drop"
+                        hx-select="#view-container"
+                        hx-target="#view-container"
+                        _="
+                        on dragover or dragenter call event.preventDefault() then add .dragover to me
+                        on dragleave remove .dragover from me
+                    ">
+                        {% csrf_token %}
+                        <input type="hidden" name="next_segment_pk" value="{{ segment.pk }}">
+                        <input type="hidden" name="moved_segment_pk" class="movedsegment">
+                    </form>
+                <li
+                        class="box show-segment"
+                        draggable="true"
+                        data-segment-pk="{{ segment.pk }}"
+                        _="on dragstart
+                        remove .slidedrag from <.slidedrag/>
+                        then add .segmentdrag to <.slides-sidebar.show/>
+                        then call event.dataTransfer.setData('text/plain',target) {# don't know why, drop event never fires unless something is set here #}
+                        then set @value of <input[name='moved_segment_pk']/> to my @data-segment-pk
+                        "
+                >
                     <strong class="titlebar block">{{ segment.name }}</strong>
                     <a href="{% url 'edit-segment' segment.pk %}"
                             hx-get="{% url 'edit-segment' segment.pk %}"
@@ -45,7 +74,16 @@
                     {% endif %}
                     <ul class="slides">
                         {% for slide in segment.slides.all %}
-                            <li class="slide-thumbnail" data-slide-pk="{{ slide.pk }}">
+                            <li
+                                    class="slide-thumbnail"
+                                    data-slide-pk="{{ slide.pk }}"
+                                    _="on dragstart
+                                    call event.stopPropagation()
+                                    then remove .segmentdrag from <.segmentdrag/>
+                                    then add .slidedrag to <.slides-sidebar.show/>
+                                    then call event.dataTransfer.setData('text/plain',target) {# don't know why, drop event never fires unless something is set here #}
+                                    then set @value of <input[name='moved_slide_pk']/> to my @data-slide-pk"
+                            >
                                 <a
                                         href="{% url 'edit-slide' slide.pk %}"
                                         title="Edit this slide"
