@@ -48,8 +48,6 @@ class SlideDeleteView(DeleteView):
         return success_url
 
 
-
-
 class ChangeSlideOrderView(FormView):
     form_class = ChangeSlideOrderForm
 
