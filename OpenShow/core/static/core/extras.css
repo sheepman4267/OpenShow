@@ -43,6 +43,12 @@ body > header {
     padding-inline: 1rem;
 }
 
+.sidebar-layout.single.right {
+    grid-template-columns: 1fr 18rem;
+    height: calc(100dvh - 7rem);
+    padding-inline: 1rem;
+}
+
 h2 {
     margin: 0;
 }
@@ -100,6 +106,12 @@ select {
     }
 
     .sidebar-layout.double {
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100dvh - 7rem);
+    }
+
+    .sidebar-layout.single.right {
         display: flex;
         flex-direction: column;
         max-height: calc(100dvh - 7rem);

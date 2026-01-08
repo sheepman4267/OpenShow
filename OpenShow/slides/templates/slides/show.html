@@ -19,16 +19,7 @@
 {% endblock %}
 
 {% block main %}
-    <div id="view-container" class="sidebar-layout double">
-        <div id="shows-sidebar" class="mobile-hidden box">
-            <ul>
-                {% for show in shows %}
-                    <li>
-                        <a href="{% url 'show' show.pk %}">{{ show.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+    <div id="view-container" class="sidebar-layout single right">
         <div id="show-container">
         <script id="slide-select-indicator" type="text/hyperscript">
             on load
@@ -128,7 +119,6 @@
             </div>
         </div>
         <div class="box mobile-tab-controls">
-            <button class="icon-button mobile-hidden" id="shows-sidebar-button" _="on click add .mobile-hidden to <#view-container > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#shows-sidebar, #shows-sidebar-button/>">{% icon 'menu' %}</button>
             <button class="icon-button" id="show-button" _="on click add .mobile-hidden to <#view-container > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#show-container, #show-button/>">{% icon 'monitor' %}</button>
             <button class="icon-button mobile-hidden" id="show-controls-button" _="on click add .mobile-hidden to <#view-container > :not(.mobile-tab-controls):not(navbar), .mobile-tab-controls > */> then remove .mobile-hidden from <#show-controls, #show-controls-button/>">{% icon 'play' %}</button>
         </div>
