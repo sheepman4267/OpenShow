@@ -49,6 +49,10 @@ body > header {
     padding-inline: 1rem;
 }
 
+.header-main h1 {
+    font-size: 1.7rem;
+}
+
 h2 {
     margin: 0;
 }
