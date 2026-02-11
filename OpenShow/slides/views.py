@@ -183,6 +183,11 @@ class AdvanceModeView(UpdateView):
     fields = ['advance_between_segments']
 
 
+class DisplayRemoteView(DetailView):
+    model = Display
+    template_name = 'slides/display_remote.html'
+
+
 class AdvanceLoopView(UpdateView):  # TODO: Combine this and the above view, make this all one proper Django form
     model = Show
     fields = ['advance_loop']

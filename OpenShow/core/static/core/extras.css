@@ -87,6 +87,15 @@ select {
     max-width: 100%;
 }
 
+#presenter-remote {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 3fr;
+    min-height: 70dvh;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
 @media screen and (max-width: 50rem) {
     body > header {
         grid-template-columns: 1fr 1fr;

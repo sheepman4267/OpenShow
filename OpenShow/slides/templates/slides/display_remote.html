@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% load icon %}
+
+{% block header %}
+    <h1>Remote: {{ display }}</h1>
+{% endblock %}
+
+{% block title %}Remote: {{ display }} - OpenShow{% endblock %}
+
+{% block header_left_button %}{% endblock %}
+
+{% block main %}
+{#    <button#}
+{#            _="#}
+{#            on load set wakelock to null end#}
+{#            on click if not wakelock#}
+{#            then js(me, wakelock)#}
+{#                wakelock = navigator.wakeLock.request('screen')#}
+{#            end#}
+{#            then set my#}
+{#"#}
+{#            value="thing"#}
+{#    >#}
+{#    </button>#}
+{#    TODO: Figure out how to wake lock#}
+    <div id="presenter-remote">
+        <button class="icon-button" _="
+        on click
+        set req_body to `{\&quot;display_pk&quot;: {{display.pk}}, &quot;direction&quot;: &quot;reverse&quot;}`
+        log req_body
+        then fetch {% url "api-1.0.0:next_slide" %} with method:'POST', body: req_body
+        then halt
+">{% icon 'chevron-left' %}</button>
+        <button class="icon-button" _="
+        on click
+        set req_body to `{\&quot;display_pk&quot;: {{ display.pk }}, &quot;direction&quot;: &quot;forward&quot;}`
+        log req_body
+        then fetch {% url "api-1.0.0:next_slide" %} with method:'POST', body: req_body
+        then halt
+">{% icon 'chevron-right' %}</button>
+    </div>
+    <script type="text/hyperscript">
+        on load
+    </script>
+{% endblock %}

@@ -15,6 +15,7 @@ urlpatterns = [
     path('displays/<int:pk>/style', views.DisplayView.as_view(template_name='slides/display_style.css'), name='display-style'),
     path('displays/<int:pk>/transition', views.DisplayView.as_view(template_name='slides/transition.css'), name='display-transition'),
     path('displays/<int:pk>/clear', views.clear_slide, name='clear-slide'),
+    path('displays/<int:pk>/remote', views.DisplayRemoteView.as_view(), name='display-remote'),
     path('show/<int:pk>', views.ShowView.as_view(), name='show'),
     path('show/<int:pk>/advance_mode', views.AdvanceModeView.as_view(), name='advance-mode'),
     path('show/<int:pk>/advance_loop', views.AdvanceLoopView.as_view(), name='advance-loop'),
