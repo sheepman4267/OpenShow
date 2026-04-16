@@ -57,7 +57,7 @@ class ImageCRUDView(CRUDView):
 class ImageUploadToElementView(CreateView):
     model = Image
     form_class = ImageUploadToElementForm
-    template_name = "editor/element_image_object_upload.html"
+    template_name = "editor/slide/wysiwyg/element_image_object_upload.html"
 
     def form_valid(self, form):
         element = SlideElement.objects.get(pk=form.cleaned_data['element_pk'])

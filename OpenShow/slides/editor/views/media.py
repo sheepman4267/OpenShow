@@ -70,7 +70,7 @@ class MediaObjectCRUDView(CRUDView):
 class MediaObjectUploadToElementView(CreateView):
     model = MediaObject
     form_class = MediaObjectUploadToElementForm
-    template_name = "editor/element_media_object_upload.html"
+    template_name = "editor/slide/wysiwyg/element_media_object_upload.html"
 
     def form_valid(self, form):
         element = SlideElement.objects.get(pk=form.cleaned_data['element_pk'])
