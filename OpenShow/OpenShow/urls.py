@@ -25,7 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', api.urls),
     path('slides/', include('slides.urls')),
-    path('uubloomington/', include('uubloomington_api_connector.urls')),
     path('pjlink/', include('pjlink_integration.urls')),
     path("events/", include(django_eventstream.urls), {"channels": ["test"]}),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

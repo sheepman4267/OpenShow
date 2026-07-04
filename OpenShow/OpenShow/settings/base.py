@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     'slides',
     'slides.editor',
     'django_eventstream',
-    'uubloomington_api_connector',
     'django_feather',
     'pjlink_integration',
     'core',
