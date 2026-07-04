@@ -12,22 +12,9 @@ from natsort import natsorted
 
 from .forms import SlideDisplayForm, ShowDisplaySelectorForm
 
-# import htmlmin # Was for the old send slide to display stuff
-
 # Create your views here.
 from django_eventstream import send_event
 from django.shortcuts import HttpResponse
-
-
-# This approach doesn't work well due to many extra characters being inserted into the HTML/CSS.
-# def send_slide_to_display(request, slide, display):
-#     slide_template = loader.get_template('slides/slide.html')
-#     context = {
-#         'slide': Slide.objects.get(pk=slide),
-#     }
-#     rendered_slide = htmlmin.minify(slide_template.render(context, request),remove_empty_space=True,remove_all_empty_space=True).replace('\n','')
-#     print(rendered_slide)
-#     send_event('test', f'display-{display}', rendered_slide)
 
 
 class IndexView(TemplateView):

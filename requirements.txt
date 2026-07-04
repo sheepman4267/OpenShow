@@ -2,7 +2,6 @@ django==5.1
 django-eventstream==5.3.1
 daphne==4.1.2
 django-colorfield==0.8.0
-htmlmin
 tinycss2
 python-lorem
 django-feather
