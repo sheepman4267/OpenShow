@@ -77,7 +77,7 @@
                             <form
                                 class="dragbox"
                                 hx-post="{% url 'reorder-slide' %}"
-                                hx-swap="outerHTML"
+                                hx-swap="morph:outerHTML"
                                 hx-trigger="drop"
                                 hx-select=".slides-sidebar"
                                 hx-target=".slides-sidebar"
@@ -116,7 +116,7 @@
                         <form
                             class="dragbox"
                             hx-post="{% url 'reorder-slide' %}"
-                            hx-swap="outerHTML"
+                            hx-swap="morph:outerHTML"
                             hx-trigger="drop"
                             hx-select=".slides-sidebar"
                             hx-target=".slides-sidebar"
