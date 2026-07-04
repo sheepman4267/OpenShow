@@ -318,6 +318,6 @@ ul.slides {
     margin-bottom: 0;
 }
 
-.slides-sidebar.show:not(.segmentdrag) .dragbox:first-child {
+.slides-sidebar.show:not(.segmentdrag) > .dragbox:first-child {
     height: 0;
 }
