@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'neapolitan',
     'django_extensions',
     'django_tasks_db',
-    # 'django_q',
 ]
 
 MIDDLEWARE = [

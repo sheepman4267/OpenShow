@@ -8,7 +8,6 @@ from collections.abc import Iterable
 from django.shortcuts import reverse
 from django.utils import timezone
 from datetime import timedelta, datetime, UTC
-from django_q.models import Schedule
 from numpy.__config__ import DisplayModes
 import yaml
 import os
@@ -20,7 +19,7 @@ from tinycss2.ast import IdentToken, QualifiedRule
 
 from bs4 import BeautifulSoup
 
-from slides.editor.tasks import transcode_video, transcode_audio
+# from slides.editor.tasks import transcode_video, transcode_audio
 
 
 class InvalidArgumentException(Exception):
@@ -861,29 +860,15 @@ class MediaObject(models.Model):
         if self.embed_url:
             self.file_hash = hashlib.sha256(self.embed_url.encode("utf-8")).hexdigest()
         if self.media_type == VIDEO and self.needs_transcode:
+            from slides.editor.tasks import transcode_video, thumbnail_video
             super().save(*args, **kwargs)
-
-            # Schedule.objects.create(
-            #     func='slides.editor.tasks.transcode_video',
-            #     args=self.pk,
-            #     schedule_type=Schedule.ONCE,
-            #     next_run=datetime.utcnow(),
-            # )
-            Schedule.objects.create(
-                func='slides.editor.tasks.thumbnail_video',
-                args=self.pk,
-                schedule_type=Schedule.ONCE,
-                next_run=datetime.utcnow(),
-            )
+            transcode_video.enqueue(self.pk)
+            thumbnail_video.enqueue(self.ok)
             self.needs_transcode = False
         elif self.media_type == AUDIO and self.needs_transcode:
+            from slides.editor.tasks import transcode_audio
             super().save(*args, **kwargs)
-            Schedule.objects.create(
-                func='slides.editor.tasks.transcode_audio',
-                args=self.pk,
-                schedule_type=Schedule.ONCE,
-                next_run=datetime.utcnow(),
-            )
+            transcode_audio.enqueue(self.pk)
             self.needs_transcode = False
         super().save(*args, **kwargs)
 
