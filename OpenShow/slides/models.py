@@ -19,8 +19,13 @@ from tinycss2.ast import IdentToken, QualifiedRule
 
 from bs4 import BeautifulSoup
 
-# from slides.editor.tasks import transcode_video, transcode_audio
+from django.tasks import task
 
+@task()
+def show_slide_by_pk(slide_pk, display_pk):
+    slide = Slide.objects.get(pk=slide_pk)
+    display = Display.objects.get(pk=display_pk)
+    slide.send_to_display([display])
 
 class InvalidArgumentException(Exception):
     pass
@@ -560,7 +565,10 @@ class Slide(models.Model):
             else:
                 display.save()
                 send_event('test', f'display-{display.pk}-slide', f'sending slide {self.pk} to display {display.pk}')
-            # if self.auto_advance:
+            if self.auto_advance:
+                next_slide = self.next(direction='forward')
+                advance_time = timezone.now() + timedelta(seconds=self.auto_advance_duration)
+                show_slide_by_pk.using(run_after=advance_time).enqueue(next_slide.pk, display.pk)
 
 
     def get_theme(self):
