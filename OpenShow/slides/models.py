@@ -9,6 +9,7 @@ from django.shortcuts import reverse
 from django.utils import timezone
 from datetime import timedelta, datetime, UTC
 from django_q.models import Schedule
+from numpy.__config__ import DisplayModes
 import yaml
 import os
 import requests
@@ -18,6 +19,8 @@ import tinycss2
 from tinycss2.ast import IdentToken, QualifiedRule
 
 from bs4 import BeautifulSoup
+
+from slides.editor.tasks import transcode_video, transcode_audio
 
 
 class InvalidArgumentException(Exception):
@@ -531,7 +534,7 @@ class Slide(models.Model):
         #     raise RuntimeError('A slide must be part of something... something has gone very wrong.')
         return reverse('edit-slide', kwargs={'pk': self.pk})
 
-    def send_to_display(self, displays:Iterable, show:None or Show = None) -> None:
+    def send_to_display(self, displays:Iterable[Display], show:None or Show = None) -> None:
         """
         :param displays:
         An iterable (probably a QuerySet) of Display objects to display the slide on
@@ -558,6 +561,8 @@ class Slide(models.Model):
             else:
                 display.save()
                 send_event('test', f'display-{display.pk}-slide', f'sending slide {self.pk} to display {display.pk}')
+            # if self.auto_advance:
+
 
     def get_theme(self):
         """
@@ -857,12 +862,13 @@ class MediaObject(models.Model):
             self.file_hash = hashlib.sha256(self.embed_url.encode("utf-8")).hexdigest()
         if self.media_type == VIDEO and self.needs_transcode:
             super().save(*args, **kwargs)
-            Schedule.objects.create(
-                func='slides.editor.tasks.transcode_video',
-                args=self.pk,
-                schedule_type=Schedule.ONCE,
-                next_run=datetime.utcnow(),
-            )
+
+            # Schedule.objects.create(
+            #     func='slides.editor.tasks.transcode_video',
+            #     args=self.pk,
+            #     schedule_type=Schedule.ONCE,
+            #     next_run=datetime.utcnow(),
+            # )
             Schedule.objects.create(
                 func='slides.editor.tasks.thumbnail_video',
                 args=self.pk,

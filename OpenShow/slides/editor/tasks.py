@@ -8,6 +8,8 @@ from ffmpeg import FFmpeg, Progress
 import hashlib
 import cv2
 
+from django.tasks import task
+
 def get_file_hash(file):
     hash_func = hashlib.new('sha256')
     with open(file, 'rb') as file:

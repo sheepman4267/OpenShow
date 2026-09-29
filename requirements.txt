@@ -13,7 +13,6 @@ django-ninja==1.7.1
 django-srcdoc==1.0.2
 neapolitan==26.1
 django-extensions==4.1
-django-q2==1.11.1
 honcho==2.0.0
 python-ffmpeg==2.0.12
 pyyaml==6.0.3
@@ -21,3 +20,4 @@ natsort==8.4.0
 opencv-python>4.14.0,<4.15.0
 beautifulsoup4>=4.15.0,<4.16.0
 requests>=2.34.2,<2.35.0
+django-tasks-db==0.13.0
