@@ -22,10 +22,10 @@ from bs4 import BeautifulSoup
 from django.tasks import task
 
 @task()
-def show_slide_by_pk(slide_pk, display_pk):
-    slide = Slide.objects.get(pk=slide_pk)
+def _auto_advance_display_by_pk(display_pk, current_slide_pk):
     display = Display.objects.get(pk=display_pk)
-    slide.send_to_display([display])
+    if display.current_slide.auto_advance and display.current_slide.pk == current_slide_pk:
+        display.advance_slide("forward")
 
 class InvalidArgumentException(Exception):
     pass
@@ -566,9 +566,8 @@ class Slide(models.Model):
                 display.save()
                 send_event('test', f'display-{display.pk}-slide', f'sending slide {self.pk} to display {display.pk}')
             if self.auto_advance:
-                next_slide = self.next(direction='forward')
                 advance_time = timezone.now() + timedelta(seconds=self.auto_advance_duration)
-                show_slide_by_pk.using(run_after=advance_time).enqueue(next_slide.pk, display.pk)
+                _auto_advance_display_by_pk.using(run_after=advance_time).enqueue(display.pk, self.pk)
 
 
     def get_theme(self):
