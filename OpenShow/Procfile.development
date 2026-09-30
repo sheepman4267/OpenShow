@@ -1,2 +1,3 @@
 web: PYTHONUNBUFFERED=1 python manage.py runserver 8030
 worker: PYTHONUNBUFFERED=1 python manage.py db_worker
+valkey: podman run -p 6379:6379 --replace --name valkey valkey/valkey
