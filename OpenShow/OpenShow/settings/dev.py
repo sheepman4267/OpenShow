@@ -34,3 +34,16 @@ EVENTSTREAM_REDIS = {
     "port": 6379,
     "db": 0,
 }
+
+TASKS = {
+    "default": {
+        "BACKEND": "django_tasks_redis.RedisTaskBackend",
+        "QUEUES": [],
+        "OPTIONS": {
+            "REDIS_HOST": "localhost",
+            "REDIS_PORT": 6379,
+            "REDIS_DB": 1,
+            "REDIS_BLOCK_TIMEOUT": 100,
+        }
+    }
+}

@@ -1,3 +1,3 @@
 web: PYTHONUNBUFFERED=1 python manage.py runserver 8030
-worker: PYTHONUNBUFFERED=1 python manage.py db_worker
+worker: PYTHONUNBUFFERED=1 python manage.py run_redis_tasks --continuous
 valkey: podman run -p 6379:6379 --replace --name valkey valkey/valkey

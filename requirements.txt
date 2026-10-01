@@ -20,5 +20,5 @@ natsort==8.4.0
 opencv-python>4.14.0,<4.15.0
 beautifulsoup4>=4.15.0,<4.16.0
 requests>=2.34.2,<2.35.0
-django-tasks-db==0.13.0
+django-tasks-redis==0.4.0
 redis==8.1.0
