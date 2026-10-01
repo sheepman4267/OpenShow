@@ -1,6 +1,5 @@
 # Functions for parsing (and generally tolerating) AOML - "Awful OpenShow Markup Language"
 from dataclasses import dataclass
-from typing import list
 
 import yaml
 from slides.models import Image, MediaObject, SlideElement
