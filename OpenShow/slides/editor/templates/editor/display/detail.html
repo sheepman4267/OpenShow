@@ -34,5 +34,6 @@
             None
         {% endif %}
     </div>
-    <a href="{% url 'display' object.pk %}" target="_blank">Open this display (in a new tab)</a>
+    <a href="{% url 'display' object.pk %}" target="_blank">Open this display (in a new tab)</a><br>
+    <a href={% url 'display-remote' object.pk %}>Open a presenter remote for this display</a>
 {% endblock %}
