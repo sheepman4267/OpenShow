@@ -8,6 +8,8 @@ from ffmpeg import FFmpeg, Progress
 import hashlib
 import cv2
 
+from django.tasks import task
+
 def get_file_hash(file):
     hash_func = hashlib.new('sha256')
     with open(file, 'rb') as file:
@@ -25,6 +27,8 @@ def get_mediafile_seconds(media_path):
     # fps = eval(fields['r_frame_rate'])
     return duration
 
+
+@task()
 def transcode_video(media_object_pk: int) -> None:
     media_object = MediaObject.objects.get(pk=media_object_pk)
     final_file_name = slugify(media_object.title) + '.mp4'
@@ -55,6 +59,7 @@ def transcode_video(media_object_pk: int) -> None:
     media_object.save()
 
 
+@task()
 def thumbnail_video(media_object_pk: int) -> None:
     media_object = MediaObject.objects.get(pk=media_object_pk)
     final_file_name = slugify(media_object.title) + '.jpg'
@@ -91,6 +96,7 @@ def thumbnail_video(media_object_pk: int) -> None:
     media_object.save()
 
 
+@task()
 def transcode_audio(media_object_pk: int) -> None:
     media_object = MediaObject.objects.get(pk=media_object_pk)
     final_file_name = slugify(media_object.title) + '.mp3'

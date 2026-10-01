@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from slides.models import MediaObject
-from django_q.models import Schedule
 from datetime import datetime, UTC
+from slides.editor.tasks import thumbnail_video
 
 
 class Command(BaseCommand):
@@ -28,11 +28,6 @@ class Command(BaseCommand):
         if len(media_needing_thumbnail) == 0:
             print(f'All thumbnailable media objects already have thumbnails. Pass --all to re-thumbnail all media.')
         for media_object in media_needing_thumbnail:
-            Schedule.objects.create(
-                func='slides.editor.tasks.thumbnail_video',
-                args=media_object.pk,
-                schedule_type=Schedule.ONCE,
-                next_run=datetime.now(UTC),
-            )
+            thumbnail_video.enqueue(media_object.pk)
             if options["verbose"]:
                 print(f'Scheduled thumbnail processing for media {media_object}.')
