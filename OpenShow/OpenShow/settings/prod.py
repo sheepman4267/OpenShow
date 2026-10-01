@@ -4,6 +4,9 @@ import environ
 env = environ.Env(
     OPENSHOW_DEBUG=(bool, False),
     OPENSHOW_ALLOWED_HOSTS=(list, []),
+    OPENSHOW_REDIS_HOST=(str, None),
+    OPENSHOW_REDIS_PORT=(int, 6379),
+    OPENSHOW_REDIS_DB=(int, 0),
 )
 
 
@@ -31,5 +34,8 @@ STATIC_ROOT = env('OPENSHOW_STATIC_ROOT')
 MEDIA_ROOT = env('OPENSHOW_MEDIA_ROOT')
 MEDIA_URL = '/media/'
 
-print(env('OPENSHOW_ALLOWED_HOSTS'))
-print('^^ENV')
+EVENTSTREAM_REDIS = {
+    "host": env('OPENSHOW_REDIS_HOST'),
+    "port": env('OPENSHOW_REDIS_PORT'),
+    "db": env('OPENSHOW_REDIS_DB'),
+}
