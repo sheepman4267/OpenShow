@@ -1,26 +1,26 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DeleteView, FormView
+from django.views.generic import CreateView, DeleteView, FormView, UpdateView
+from slides.editor.forms import ChangeSegmentOrderForm, UpdateSegmentForm
 from slides.models import Segment
-from slides.editor.forms import UpdateSegmentForm, ChangeSegmentOrderForm
 
 
 class SegmentCreateView(CreateView):
     model = Segment
-    fields = ['show', 'name', 'order']
-    template_name = 'editor/segment/new_segment_form.html'
+    fields = ["show", "name", "order"]
+    template_name = "editor/segment/new_segment_form.html"
     extra_context = {
-        'object_type': 'Segment',
+        "object_type": "Segment",
     }
 
 
 class SegmentUpdateView(UpdateView):
     model = Segment
-    template_name = 'editor/segment/edit_segment_form.html'
+    template_name = "editor/segment/edit_segment_form.html"
     form_class = UpdateSegmentForm
 
     def get_context_data(self, **kwargs):
         context = super(SegmentUpdateView, self).get_context_data(**kwargs)
-        context['show'] = self.object.show
+        context["show"] = self.object.show
         return context
 
     def get_success_url(self):
@@ -29,13 +29,13 @@ class SegmentUpdateView(UpdateView):
 
 class SegmentDeleteView(DeleteView):
     model = Segment
-    template_name = 'editor/generic_confirm_delete.html'
+    template_name = "editor/generic_confirm_delete.html"
     extra_context = {
-        'action': 'delete-segment',
+        "action": "delete-segment",
     }
 
     def get_success_url(self):
-        success_url = reverse_lazy('edit-show', kwargs={"pk": self.object.show.pk})
+        success_url = reverse_lazy("edit-show", kwargs={"pk": self.object.show.pk})
         return success_url
 
 
@@ -47,9 +47,11 @@ class ChangeSegmentOrderView(FormView):
         super().__init__()
 
     def form_valid(self, form):
-        self.moved_segment = Segment.objects.get(pk=form.cleaned_data['moved_segment_pk'])
-        if form.cleaned_data['next_segment_pk']:
-            next_segment = Segment.objects.get(pk=form.cleaned_data['next_segment_pk'])
+        self.moved_segment = Segment.objects.get(
+            pk=form.cleaned_data["moved_segment_pk"]
+        )
+        if form.cleaned_data["next_segment_pk"]:
+            next_segment = Segment.objects.get(pk=form.cleaned_data["next_segment_pk"])
             previous_segment = Segment.objects.filter(
                 show=self.moved_segment.show,
                 order__lt=next_segment.order,
@@ -62,7 +64,9 @@ class ChangeSegmentOrderView(FormView):
                 self.moved_segment.order = next_segment.order - 1
                 self.moved_segment.save()
         else:
-            self.moved_segment.order = self.moved_segment.show.segments.last().order + 10
+            self.moved_segment.order = (
+                self.moved_segment.show.segments.last().order + 10
+            )
             self.moved_segment.save()
         return super().form_valid(form)
 

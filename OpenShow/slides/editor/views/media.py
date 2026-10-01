@@ -1,35 +1,32 @@
 from django.core.exceptions import ImproperlyConfigured
-from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import CreateView
 from neapolitan.views import CRUDView, Role
-
 from slides.editor.forms import MediaObjectUploadToElementForm
-from slides.models import MediaObject, Image, SlideElement
+from slides.models import MediaObject, SlideElement
 
 
 class MediaObjectCRUDView(CRUDView):
     model = MediaObject
     fields = [
-        'title',
-        'media_type',
-        'raw_file',
-        'embed_url',
-        'needs_transcode',
+        "title",
+        "media_type",
+        "raw_file",
+        "embed_url",
+        "needs_transcode",
         #'autoplay',  # Uncomment this once it will be useful for something
     ]
 
     def form_valid(self, form):
         success_url = super(MediaObjectCRUDView, self).form_valid(form)
-        if 'raw_file' in form.changed_data:
+        if "raw_file" in form.changed_data:
             self.object.needs_transcode = True
             self.object.save()
         return success_url
 
-
     def get_success_url(self):
         if self.role is Role.DELETE:
-            success_url = reverse('slides-index')
+            success_url = reverse("slides-index")
         else:
             success_url = super(self.__class__, self).get_success_url()
         return success_url
@@ -38,7 +35,7 @@ class MediaObjectCRUDView(CRUDView):
         """GET handler for the detail view."""
         self.object = self.get_object()
         context = self.get_context_data()
-        context['previous_page'] = 'slides-index'
+        context["previous_page"] = "slides-index"
         return self.render_to_response(context)
 
     def get_template_names(self):
@@ -73,6 +70,6 @@ class MediaObjectUploadToElementView(CreateView):
     template_name = "editor/slide/wysiwyg/element_media_object_upload.html"
 
     def form_valid(self, form):
-        element = SlideElement.objects.get(pk=form.cleaned_data['element_pk'])
+        element = SlideElement.objects.get(pk=form.cleaned_data["element_pk"])
         self.success_url = element.get_absolute_url()
         return super(self.__class__, self).form_valid(form)

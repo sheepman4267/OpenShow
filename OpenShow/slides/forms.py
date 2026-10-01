@@ -1,5 +1,6 @@
 from django.forms import Form, ModelForm
-from django.forms.fields import IntegerField, CharField
+from django.forms.fields import CharField, IntegerField
+
 from .models import Show
 
 
@@ -11,14 +12,16 @@ class SlideDisplayForm(Form):
 
     class Meta:
         fields = [
-            'show_pk',
-            'slide_pk',
-            'direction',
-            'display_pk_multiple',
+            "show_pk",
+            "slide_pk",
+            "direction",
+            "display_pk_multiple",
         ]
 
 
 class ShowDisplaySelectorForm(ModelForm):
     class Meta:
         model = Show
-        fields = ['displays',]
+        fields = [
+            "displays",
+        ]

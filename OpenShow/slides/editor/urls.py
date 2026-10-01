@@ -1,26 +1,72 @@
 from django.urls import path
-
 from slides.editor.forms import MediaObjectUploadToElementForm
+from slides.editor.views.deck import (
+    DeckCreateView,
+    DeckDeleteView,
+    DeckEditorView,
+    DeckFromImagesView,
+    ImportImagesToExistingDeckView,
+    pull_aoml_text,
+    push_deck_slide_text,
+)
+from slides.editor.views.display import (
+    DisplayCreateView,
+    DisplayDeleteView,
+    DisplayDetailView,
+    DisplayUpdateView,
+)
 from slides.editor.views.image import ImageCRUDView, ImageUploadToElementView
-from slides.editor.views.show import ShowEditorView, ShowCreateView, ShowDeleteView, SetThemeView, \
-    check_theme_compatibility, ShowJSONImportView, ShowRemoteImportView
-from slides.editor.views.segment import SegmentCreateView, SegmentUpdateView, SegmentDeleteView, ChangeSegmentOrderView
-from slides.editor.views.slide import SlideCreateView, SlideEditView, SlideDeleteView, ChangeSlideOrderView, \
-    SlideTextEditView, duplicate_slide
-from slides.editor.views.slide_element import SlideElementCreateView, SlideElementDeleteView, \
-    SlideElementUpdateTextView, SlideElementUpdateCSSClassView, SlideElementUpdateImageView, \
-    SlideElementUpdateVideoView, ChangeSlideElementOrderView, SlideElementUpdateMediaObjectView, \
-    SlideElementUpdateImageObjectView
-from slides.editor.views.deck import DeckCreateView, DeckEditorView, DeckDeleteView, \
-    push_deck_slide_text, pull_aoml_text, DeckFromImagesView, ImportImagesToExistingDeckView
-from slides.editor.views.theme import ThemeUpdateView, ThemeCreateView, ThemeDeleteView
-from slides.editor.views.utils import generate_lorem, lazy_load_image
-from slides.editor.views.transition import TransitionEditorView, TransitionCreateView, TransitionKeyframeCreateView, \
-    TransitionKeyframeUpdateView, TransitionDeleteView, TransitionKeyframeDeleteView, TransitionPreviewCSSView, \
-    TransitionDemoView
-from slides.editor.views.display import DisplayCreateView, DisplayDeleteView, DisplayUpdateView, DisplayDetailView
-from slides.editor.views.media import MediaObjectCRUDView, MediaObjectUploadToElementView
+from slides.editor.views.media import (
+    MediaObjectCRUDView,
+    MediaObjectUploadToElementView,
+)
 from slides.editor.views.remote_source import RemoteSourceCRUDView, refresh_source
+from slides.editor.views.segment import (
+    ChangeSegmentOrderView,
+    SegmentCreateView,
+    SegmentDeleteView,
+    SegmentUpdateView,
+)
+from slides.editor.views.show import (
+    SetThemeView,
+    ShowCreateView,
+    ShowDeleteView,
+    ShowEditorView,
+    ShowJSONImportView,
+    ShowRemoteImportView,
+    check_theme_compatibility,
+)
+from slides.editor.views.slide import (
+    ChangeSlideOrderView,
+    SlideCreateView,
+    SlideDeleteView,
+    SlideEditView,
+    SlideTextEditView,
+    duplicate_slide,
+)
+from slides.editor.views.slide_element import (
+    ChangeSlideElementOrderView,
+    SlideElementCreateView,
+    SlideElementDeleteView,
+    SlideElementUpdateCSSClassView,
+    SlideElementUpdateImageObjectView,
+    SlideElementUpdateImageView,
+    SlideElementUpdateMediaObjectView,
+    SlideElementUpdateTextView,
+    SlideElementUpdateVideoView,
+)
+from slides.editor.views.theme import ThemeCreateView, ThemeDeleteView, ThemeUpdateView
+from slides.editor.views.transition import (
+    TransitionCreateView,
+    TransitionDeleteView,
+    TransitionDemoView,
+    TransitionEditorView,
+    TransitionKeyframeCreateView,
+    TransitionKeyframeDeleteView,
+    TransitionKeyframeUpdateView,
+    TransitionPreviewCSSView,
+)
+from slides.editor.views.utils import generate_lorem, lazy_load_image
 
 urlpatterns = [
     path('show/<int:pk>', ShowEditorView.as_view(), name='edit-show'),

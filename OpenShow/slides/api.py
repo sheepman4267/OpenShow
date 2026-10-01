@@ -1,6 +1,7 @@
-from ninja import Router, Schema
-from .models import Slide, Show, Display, Deck
 from django.shortcuts import get_object_or_404
+from ninja import Router, Schema
+
+from .models import Deck, Display, Show, Slide
 
 router = Router()
 
@@ -33,7 +34,11 @@ def show_deck(request, data: ShowDeckSchema):
     display = get_object_or_404(Display, pk=data.display_pk)
     deck = get_object_or_404(Deck, pk=data.deck_pk)
     initial_slide = deck.slides.first()
-    initial_slide.send_to_display([display, ])
+    initial_slide.send_to_display(
+        [
+            display,
+        ]
+    )
     return {"message": "OK"}
 
 

@@ -1,31 +1,32 @@
 import hashlib
 import json
-
-from django.db import models
-from django_eventstream import send_event
-from django.templatetags.static import static
-from collections.abc import Iterable
-from django.shortcuts import reverse
-from django.utils import timezone
-from datetime import timedelta, datetime, UTC
-from numpy.__config__ import DisplayModes
-import yaml
 import os
+from collections.abc import Iterable
+from datetime import UTC, datetime, timedelta
+
 import requests
-
 import tinycss2
-
+import yaml
+from bs4 import BeautifulSoup
+from django.db import models
+from django.shortcuts import reverse
+from django.tasks import task
+from django.templatetags.static import static
+from django.utils import timezone
+from django_eventstream import send_event
+from numpy.__config__ import DisplayModes
 from tinycss2.ast import IdentToken, QualifiedRule
 
-from bs4 import BeautifulSoup
-
-from django.tasks import task
 
 @task()
 def _auto_advance_display_by_pk(display_pk, current_slide_pk):
     display = Display.objects.get(pk=display_pk)
-    if display.current_slide.auto_advance and display.current_slide.pk == current_slide_pk:
+    if (
+        display.current_slide.auto_advance
+        and display.current_slide.pk == current_slide_pk
+    ):
         display.advance_slide("forward")
+
 
 class InvalidArgumentException(Exception):
     pass
@@ -34,53 +35,55 @@ class InvalidArgumentException(Exception):
 class NotSupportedException(Exception):
     pass
 
+
 class ShowAlreadyExistsException(NotSupportedException):
-    def __init__(self, message, show,):
+    def __init__(
+        self,
+        message,
+        show,
+    ):
         self.show = show
         super().__init__(message)
 
 
-class Display(models.Model):  # A set of characteristics used to modify slide appearance for different displays
+class Display(
+    models.Model
+):  # A set of characteristics used to modify slide appearance for different displays
     name = models.CharField(max_length=100)
     pixel_width = models.IntegerField(default=1920)
     pixel_height = models.IntegerField(default=1080)
     custom_css = models.TextField(null=True, blank=True)
     slide_changed_at = models.DateTimeField(auto_now=True)
-    default = models.BooleanField(default=False, help_text='Activate this display for any newly created shows')
+    default = models.BooleanField(
+        default=False, help_text="Activate this display for any newly created shows"
+    )
     current_show = models.ForeignKey(
-        to='Show',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL
+        to="Show", null=True, blank=True, on_delete=models.SET_NULL
     )
     current_slide = models.ForeignKey(
-        to='Slide',
+        to="Slide",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
     )
     previous_slide = models.ForeignKey(
-        to='Slide',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
+        to="Slide", null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
     )
     current_theme = models.ForeignKey(
-        to='Theme',
+        to="Theme",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
     )
     current_deck = models.ForeignKey(
-        to='Deck',
+        to="Deck",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='current_displays'
+        related_name="current_displays",
     )
     segments = models.ManyToManyField(
-        to='Segment',
+        to="Segment",
         blank=True,
     )  # TODO: What the heck is this for?
 
@@ -91,69 +94,71 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
             self._advance_slide_in_show(direction)
 
     def _advance_slide_in_deck(self, direction):
-        if self.previous_slide and self.current_slide.auto_advance:
-            if timezone.now() - \
-                    self.slide_changed_at < \
-                    timedelta(seconds=self.current_slide.auto_advance_duration):
-                # Abort and continue silently if we're getting a "next slide" directive and
-                # the previous slide's auto_advance_duration has not passed
-                # Manually selecting a different slide will override this.
-                return 1
         slide = self.current_slide.next(direction)
         if not slide:
             if self.current_slide.deck.advance_in_loop:
                 slide = self.current_slide.deck.slides.first()
             else:
                 slide = self.current_slide
-        slide.send_to_display([self, ])
+        slide.send_to_display(
+            [
+                self,
+            ]
+        )
 
     def _advance_slide_in_show(self, direction):
-        if self.previous_slide and self.current_slide.auto_advance:
-            if timezone.now() - \
-                    self.slide_changed_at < \
-                    timedelta(seconds=self.current_slide.auto_advance_duration):
-                # Abort and continue silently if we're getting a "next slide" directive and
-                # the previous slide's auto_advance_duration has not passed
-                # Manually selecting a different slide will override this.
-                return 1
         slide = self.current_slide.next(direction)
-        next_segment = None
         if not slide:
             if self.current_show.advance_between_segments:
                 try:  # TODO: review this horrible try/except block
                     if self.current_slide.deck:
                         # If we're out of room to iterate through a deck...
-                        current_segment = self.current_show.segments.filter(included_deck=self.current_slide.deck).first()
-                        if current_segment.slides.first() and direction == 'forward':
+                        current_segment = self.current_show.segments.filter(
+                            included_deck=self.current_slide.deck
+                        ).first()
+                        if current_segment.slides.first() and direction == "forward":
                             slide = current_segment.slides.first()
-                        elif direction == 'reverse':
-                            slide = current_segment.next_with_slides(direction).get_last_slide()
-                        elif direction == 'forward':
-                            slide = current_segment.next_with_slides(direction).get_first_slide()
+                        elif direction == "reverse":
+                            slide = current_segment.next_with_slides(
+                                direction
+                            ).get_last_slide()
+                        elif direction == "forward":
+                            slide = current_segment.next_with_slides(
+                                direction
+                            ).get_first_slide()
                     else:  # ..if current_slide.segment
                         current_segment = self.current_slide.segment
-                        if direction == 'reverse' and current_segment.included_deck:
+                        if direction == "reverse" and current_segment.included_deck:
                             slide = current_segment.included_deck.slides.last()
-                        elif direction == 'reverse':
-                            slide = current_segment.next_with_slides(direction).get_last_slide()
-                        elif direction == 'forward':
-                            slide = current_segment.next_with_slides(direction).get_first_slide()
+                        elif direction == "reverse":
+                            slide = current_segment.next_with_slides(
+                                direction
+                            ).get_last_slide()
+                        elif direction == "forward":
+                            slide = current_segment.next_with_slides(
+                                direction
+                            ).get_first_slide()
                 except AttributeError:
                     slide = self.current_slide
             elif self.current_show.advance_loop:
-                if direction == 'reverse':
+                if direction == "reverse":
                     if self.current_slide.deck:
                         slide = self.current_slide.deck.slides.last()
                     else:
                         slide = self.current_slide.segment.slides.last()
-                elif direction == 'forward':
+                elif direction == "forward":
                     if self.current_slide.deck:
                         slide = self.current_slide.deck.slides.first()
                     else:
                         slide = self.current_slide.segment.slides.first()
             else:
                 slide = self.current_slide
-        slide.send_to_display([self, ], self.current_show)
+        slide.send_to_display(
+            [
+                self,
+            ],
+            self.current_show,
+        )
         return 0
 
     def __str__(self):
@@ -161,31 +166,34 @@ class Display(models.Model):  # A set of characteristics used to modify slide ap
             return self.name
         else:
             return "Untitled Display"
+
     # TODO: Make it possible to pause auto-advance on displays, configurable in the show view.
     # TODO: Make auto-advance pausing triggerable per segment
     # TODO: The Display should probably know the current segment, as well as the current show.
     # auto_advance_paused = models.BooleanField(default=False, null=False)
 
     def get_absolute_url(self):
-        return reverse('display-detail', kwargs={'pk': self.pk})
+        return reverse("display-detail", kwargs={"pk": self.pk})
 
 
-class Deck(models.Model):  # A Reusable set of slides, which can be included in a Show Segment
+class Deck(
+    models.Model
+):  # A Reusable set of slides, which can be included in a Show Segment
     name = models.CharField(max_length=100)
     default_transition_duration = models.FloatField(
         default=1,
     )
     default_transition = models.ForeignKey(
-        to='Transition',
+        to="Transition",
         unique=False,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
     )
     theme = models.ForeignKey(
-        to='Theme',
+        to="Theme",
         unique=False,
-        related_name='decks',
+        related_name="decks",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -196,7 +204,7 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
     slide_text_markup = models.TextField(null=True, blank=True)
 
     def get_absolute_url(self):
-        return reverse('edit-deck', kwargs={'pk': self.pk})
+        return reverse("edit-deck", kwargs={"pk": self.pk})
 
     def __str__(self):
         if self.name:
@@ -209,11 +217,11 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
         pass
 
     def pull_aoml(self):
-        aoml_str = ''
+        aoml_str = ""
         for slide in self.slides.all():
             aoml_str += slide.pull_aoml()
             if slide != self.slides.last():
-                aoml_str += '~~\r'
+                aoml_str += "~~\r"
         return aoml_str
 
     def save(self, *args, **kwargs):
@@ -221,22 +229,24 @@ class Deck(models.Model):  # A Reusable set of slides, which can be included in 
             self.theme = Theme.get_default()
         if not self.default_transition:
             self.default_transition = Transition.get_default()
-        super(Deck, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
-        ordering = ('name',)
+        ordering = ("name",)
 
 
-class Show(models.Model):  # The main driver of the "presentation interface". A collection of segments, which could either have their own slides or include them from a Deck
+class Show(
+    models.Model
+):  # The main driver of the "presentation interface". A collection of segments, which could either have their own slides or include them from a Deck
     name = models.CharField(max_length=200)
     displays = models.ManyToManyField(
         to=Display,
         blank=True,
     )
     theme = models.ForeignKey(
-        to='Theme',
+        to="Theme",
         unique=False,
-        related_name='shows',
+        related_name="shows",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -246,10 +256,18 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
     import_id = models.CharField(max_length=100, null=True, blank=True)
 
     def get_absolute_url(self):
-        return reverse('edit-show', kwargs={'pk': self.pk})
+        return reverse("edit-show", kwargs={"pk": self.pk})
 
     def next_segment_order(self):
-        return max([0, ] + [segment.order for segment in self.segments.all()]) + 1
+        return (
+            max(
+                [
+                    0,
+                ]
+                + [segment.order for segment in self.segments.all()]
+            )
+            + 1
+        )
 
     def get_css_classes(self):
         css_classes = []
@@ -292,7 +310,7 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
                 self.displays.add(display.pk)
             self.save()
 
-    def import_json(self, json_string:str, title_prefix:str or None = None):
+    def import_json(self, json_string: str, title_prefix: str or None = None):
         """
         :param json_string:
         JSON string representing a show
@@ -302,18 +320,23 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
         Show object as described by the provided JSON
         """
         from_json = json.loads(json_string)
-        if import_id := from_json.get('import_id'):
+        if import_id := from_json.get("import_id"):
             if self.import_id != import_id:
                 if conflicting_show := Show.objects.filter(import_id=import_id).first():
-                    raise ShowAlreadyExistsException(message=f'Cannot import duplicate of show "{conflicting_show}"', show=conflicting_show)
+                    raise ShowAlreadyExistsException(
+                        message=f'Cannot import duplicate of show "{conflicting_show}"',
+                        show=conflicting_show,
+                    )
             else:  # as in, if self.import_id == import_id:
-                raise NotImplementedError("Updating an existing show from JSON is not yet supported.")
-        self.name=f"{title_prefix}{from_json.get('name')}"
-        self.advance_between_segments=from_json.get('advance_between_segments', False)
-        self.advance_loop=from_json.get('advance_loop', False)
-        self.theme=from_json.get('theme')
+                raise NotImplementedError(
+                    "Updating an existing show from JSON is not yet supported."
+                )
+        self.name = f"{title_prefix}{from_json.get('name')}"
+        self.advance_between_segments = from_json.get("advance_between_segments", False)
+        self.advance_loop = from_json.get("advance_loop", False)
+        self.theme = from_json.get("theme")
         # displays=from_json.get('displays')  # Implement this later; not sure exactly how to represent displays in JSON
-        self.import_id=from_json.get('import_id')
+        self.import_id = from_json.get("import_id")
         self.save()
         # and now, we add the segments
         # def resolve_deck(search_string):
@@ -325,13 +348,15 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
         #         # TODO: Better search system, please
         #         deck = Deck.objects.filter(name__contains=search_string).first()
         #     return deck
-        for segment in from_json.get('segments', []):
-            if details_html := segment.get('details'):
-                details_text = BeautifulSoup(details_html, 'html.parser').get_text(separator=' ')
+        for segment in from_json.get("segments", []):
+            if details_html := segment.get("details"):
+                details_text = BeautifulSoup(details_html, "html.parser").get_text(
+                    separator=" "
+                )
             else:
                 details_text = None
             new_segment = Segment(
-                name=segment.get('name'),
+                name=segment.get("name"),
                 show=self,
                 order=self.next_segment_order(),
                 details=details_text,
@@ -340,20 +365,15 @@ class Show(models.Model):  # The main driver of the "presentation interface". A 
             new_segment.save()
         return self
 
-
     class Meta:
-        ordering = ('name',)
+        ordering = ("name",)
 
 
 class Segment(models.Model):  # A collection of slides which will be part of a Show
     name = models.CharField(max_length=100)
     details = models.TextField(null=True, blank=True)
     order = models.FloatField()
-    show = models.ForeignKey(
-        to=Show,
-        on_delete=models.CASCADE,
-        related_name='segments'
-    )
+    show = models.ForeignKey(to=Show, on_delete=models.CASCADE, related_name="segments")
     included_deck = models.ForeignKey(
         to=Deck,
         blank=True,
@@ -362,7 +382,7 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
     )
 
     def get_absolute_url(self):
-        return reverse('edit-segment', kwargs={'pk': self.pk})
+        return reverse("edit-segment", kwargs={"pk": self.pk})
 
     class Meta:
         ordering = ["order"]
@@ -372,14 +392,15 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
             return self.name
         else:
             return "Untitled Segment"
+
     def next_with_slides(self, direction):
         siblings = self.show.segments.all()
         future_segments = []
-        if direction == 'reverse':
+        if direction == "reverse":
             siblings = siblings.reverse()
         for idx, segment in enumerate(siblings):
             if segment == self:
-                future_segments = siblings[idx + 1:]
+                future_segments = siblings[idx + 1 :]
         for segment in future_segments:
             if segment.slides.first() or segment.included_deck:
                 return segment
@@ -407,42 +428,40 @@ class Segment(models.Model):  # A collection of slides which will be part of a S
     #         return self.local_slides_pre.all() | self.local_slides_post.all()
 
 
-class SlideElement(models.Model):  # An individual piece of a slide (a block of text, a video, etc.). It's just HTML :)
+class SlideElement(
+    models.Model
+):  # An individual piece of a slide (a block of text, a video, etc.). It's just HTML :)
     css_class = models.CharField(max_length=100, verbose_name="CSS Class")
     body = models.TextField(null=True, blank=True, default="")
     order = models.FloatField()
     slide = models.ForeignKey(
-        to='Slide',
+        to="Slide",
         unique=False,
         null=False,
         blank=False,
-        related_name='elements',
+        related_name="elements",
         on_delete=models.CASCADE,
     )
     image_object = models.ForeignKey(
-        to='Image',
+        to="Image",
         blank=True,
         null=True,
-        related_name='elements',
+        related_name="elements",
         on_delete=models.SET_NULL,
     )
     missing_image_object = models.BooleanField(default=False)
-    video = models.FileField(
-        blank=True,
-        null=True,
-        upload_to='element_videos/'
-    )
+    video = models.FileField(blank=True, null=True, upload_to="element_videos/")
     missing_media_object = models.BooleanField(default=False)
     media_object = models.ForeignKey(
-        to='MediaObject',
+        to="MediaObject",
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        related_name='elements',
+        related_name="elements",
     )
 
     def get_absolute_url(self):
-        return reverse('slide-wysiwyg', kwargs={'pk': self.slide.pk})
+        return reverse("slide-wysiwyg", kwargs={"pk": self.slide.pk})
 
     def __str__(self):
         if self.slide.segment:
@@ -450,7 +469,9 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
         elif self.slide.deck:
             return f'Deck "{self.slide.deck.name}"/Slide ID {self.slide.pk}/Segment ID {self.pk}'
         else:
-            raise RuntimeError('A slide must be part of something... something has gone very wrong.')
+            raise RuntimeError(
+                "A slide must be part of something... something has gone very wrong."
+            )
 
     class Meta:
         ordering = ["-order"]
@@ -465,20 +486,20 @@ class SlideElement(models.Model):  # An individual piece of a slide (a block of 
                 self.order = self.slide.elements.last().order + 10
             else:
                 self.order = 1
-        super(SlideElement, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def get_editable_text(self):
         if self.body:
-            self.body = self.body.replace('<br>', '\n')
+            self.body = self.body.replace("<br>", "\n")
         return self.body
 
     def pull_aoml(self):
-        aoml_str = f'>>{self.css_class}||\r'
+        aoml_str = f">>{self.css_class}||\r"
         if self.image_object:
-            aoml_str += f'image:{self.image_object.file_hash}||\r'
+            aoml_str += f"image:{self.image_object.file_hash}||\r"
         if self.media_object:
-            aoml_str += f'media:{self.media_object.file_hash}||\r'
-        aoml_str += f'{self.body}\r'.replace('<br>', '\\')
+            aoml_str += f"media:{self.media_object.file_hash}||\r"
+        aoml_str += f"{self.body}\r".replace("<br>", "\\")
 
         return aoml_str
 
@@ -496,7 +517,7 @@ class Slide(models.Model):
     segment = models.ForeignKey(
         to=Segment,
         unique=False,
-        related_name='slides',
+        related_name="slides",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -504,30 +525,30 @@ class Slide(models.Model):
     deck = models.ForeignKey(
         to=Deck,
         unique=False,
-        related_name='slides',
+        related_name="slides",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
     )
     theme = models.ForeignKey(
-        to='Theme',
+        to="Theme",
         unique=False,
-        related_name='slides',
+        related_name="slides",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
     )
     transition = models.ForeignKey(
-        to='Transition',
+        to="Transition",
         unique=False,
-        related_name='slides',
+        related_name="slides",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
     )
 
     class Meta:
-        ordering=['order', 'pk']
+        ordering = ["order", "pk"]
 
     def get_absolute_url(self):
         # if self.segment:
@@ -536,9 +557,11 @@ class Slide(models.Model):
         #     return reverse('edit-deck', kwargs={'pk': self.deck.pk})
         # else:
         #     raise RuntimeError('A slide must be part of something... something has gone very wrong.')
-        return reverse('edit-slide', kwargs={'pk': self.pk})
+        return reverse("edit-slide", kwargs={"pk": self.pk})
 
-    def send_to_display(self, displays:Iterable[Display], show:None or Show = None) -> None:
+    def send_to_display(
+        self, displays: Iterable[Display], show: None or Show = None
+    ) -> None:
         """
         :param displays:
         An iterable (probably a QuerySet) of Display objects to display the slide on
@@ -561,14 +584,25 @@ class Slide(models.Model):
                 # TODO: Add a UI warning to make it more obvious when a show has no theme set
                 display.current_theme = slide_theme
                 display.save()
-                send_event('test', f'display-{display.pk}-theme', f'sending theme {slide_theme.pk} to display {display.pk}')
+                send_event(
+                    "test",
+                    f"display-{display.pk}-theme",
+                    f"sending theme {slide_theme.pk} to display {display.pk}",
+                )
             else:
                 display.save()
-                send_event('test', f'display-{display.pk}-slide', f'sending slide {self.pk} to display {display.pk}')
+                send_event(
+                    "test",
+                    f"display-{display.pk}-slide",
+                    f"sending slide {self.pk} to display {display.pk}",
+                )
             if self.auto_advance:
-                advance_time = timezone.now() + timedelta(seconds=self.auto_advance_duration)
-                _auto_advance_display_by_pk.using(run_after=advance_time).enqueue(display.pk, self.pk)
-
+                advance_time = timezone.now() + timedelta(
+                    seconds=self.auto_advance_duration
+                )
+                _auto_advance_display_by_pk.using(run_after=advance_time).enqueue(
+                    display.pk, self.pk
+                )
 
     def get_theme(self):
         """
@@ -589,7 +623,7 @@ class Slide(models.Model):
         return theme
 
     def get_elements(self):
-        return self.elements.all().order_by('order')
+        return self.elements.all().order_by("order")
 
     def deck_or_segment(self):
         if self.deck:
@@ -603,7 +637,9 @@ class Slide(models.Model):
         elif self.deck:
             return f'Deck "{self.deck.name}"/Slide ID {self.pk}'
         else:
-            raise RuntimeError('A slide must be part of something... something has gone very wrong.')
+            raise RuntimeError(
+                "A slide must be part of something... something has gone very wrong."
+            )
 
     def next(self, direction):
         if self.deck:
@@ -611,8 +647,10 @@ class Slide(models.Model):
         elif self.segment:
             siblings = list(self.segment.slides.all())
         else:
-            raise RuntimeError('A slide must be part of something... something has gone very wrong.')
-        if direction == 'reverse':
+            raise RuntimeError(
+                "A slide must be part of something... something has gone very wrong."
+            )
+        if direction == "reverse":
             siblings.reverse()
         for idx, slide in enumerate(siblings):
             if slide == self:
@@ -647,7 +685,7 @@ class Slide(models.Model):
                     self.order = self.segment.slides.last().order + 10
                 else:
                     self.order = 1
-        super(Slide, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def has_video(self):
         result = False
@@ -666,18 +704,20 @@ class Slide(models.Model):
     def pull_aoml(self):
         metadata = yaml.safe_dump(
             {
-                'cue': self.cue,
+                "cue": self.cue,
             }
         )
-        aoml_str = f'{metadata}##\n'
-        for element in self.elements.all().order_by('order'):
+        aoml_str = f"{metadata}##\n"
+        for element in self.elements.all().order_by("order"):
             aoml_str += element.pull_aoml()
         return aoml_str
 
 
 class Transition(models.Model):
     name = models.CharField(max_length=30)
-    default_time = models.FloatField(help_text="Default total time for transition, in seconds", default=1)
+    default_time = models.FloatField(
+        help_text="Default total time for transition, in seconds", default=1
+    )
     default = models.BooleanField(default=False)
 
     def get_keyframes_in(self):
@@ -694,7 +734,7 @@ class Transition(models.Model):
         return "".join(self.name.split())
 
     def get_absolute_url(self):
-        return reverse('edit-transition', kwargs={'pk': self.pk})
+        return reverse("edit-transition", kwargs={"pk": self.pk})
 
     def __str__(self):
         if self.name:
@@ -707,7 +747,7 @@ class Transition(models.Model):
             for transition in Transition.objects.filter(default=True):
                 transition.default = False
                 transition.save()
-        super(Transition, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     @staticmethod
     def get_default():
@@ -720,7 +760,7 @@ class TransitionKeyframe(models.Model):
         unique=False,
         null=True,
         blank=False,
-        related_name='keyframes',
+        related_name="keyframes",
         on_delete=models.CASCADE,
     )
     marker = models.CharField(max_length=30, help_text="from, 2%, 50%, to, etc.")
@@ -728,13 +768,13 @@ class TransitionKeyframe(models.Model):
     out = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ('marker',)
+        ordering = ("marker",)
 
     def get_absolute_url(self):
-        return reverse('edit-transition', kwargs={'pk': self.transition.pk})
+        return reverse("edit-transition", kwargs={"pk": self.transition.pk})
 
     def __str__(self):
-        return f'Keyframe: {self.transition}/{self.marker}'
+        return f"Keyframe: {self.transition}/{self.marker}"
 
 
 class Theme(models.Model):
@@ -743,7 +783,7 @@ class Theme(models.Model):
     default = models.BooleanField(default=False)
 
     def get_absolute_url(self):
-        return reverse('edit-theme', kwargs={'pk': self.pk})
+        return reverse("edit-theme", kwargs={"pk": self.pk})
 
     def parse(self):
         return tinycss2.parse_stylesheet(self.css)
@@ -756,7 +796,7 @@ class Theme(models.Model):
                 for token in css_class.prelude:
                     if type(token) == IdentToken:
                         class_list.append(token.value)
-                class_string = ' '.join(class_list)
+                class_string = " ".join(class_list)
                 classes.append(class_string)
         return classes
 
@@ -771,7 +811,7 @@ class Theme(models.Model):
             for theme in Theme.objects.filter(default=True):
                 theme.default = False
                 theme.save()
-        super(Theme, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     @staticmethod
     def get_default():
@@ -785,7 +825,7 @@ class ThemeRule(models.Model):
     theme = models.ForeignKey(
         to=Theme,
         on_delete=models.CASCADE,
-        related_name='rules',
+        related_name="rules",
     )
 
 
@@ -794,7 +834,7 @@ class ThemeVariant(models.Model):
     theme = models.ForeignKey(
         to=Theme,
         on_delete=models.CASCADE,
-        related_name='variants',
+        related_name="variants",
     )
 
 
@@ -802,19 +842,19 @@ class ThemeVariantRule(models.Model):
     rule = models.ForeignKey(
         to=ThemeRule,
         on_delete=models.CASCADE,
-        related_name='variants',
+        related_name="variants",
     )
     properties = models.TextField()
     variant = models.ForeignKey(
         to=ThemeVariant,
         on_delete=models.CASCADE,
-        related_name='rules',
+        related_name="rules",
     )
 
 
-VIMEO_LIVE_EMBED = 'VIMEO_LIVE_EMBED'
-VIDEO = 'VIDEO'
-AUDIO = 'AUDIO'
+VIMEO_LIVE_EMBED = "VIMEO_LIVE_EMBED"
+VIDEO = "VIDEO"
+AUDIO = "AUDIO"
 
 
 class MediaObject(models.Model):
@@ -822,30 +862,20 @@ class MediaObject(models.Model):
     media_type = models.CharField(
         max_length=100,
         choices=[
-            (VIMEO_LIVE_EMBED, 'Vimeo Live Embed'),
-            (VIDEO, 'Video'),
-            (AUDIO, 'Audio'),
+            (VIMEO_LIVE_EMBED, "Vimeo Live Embed"),
+            (VIDEO, "Video"),
+            (AUDIO, "Audio"),
         ],
         default=VIDEO,
     )
     # We'll use the same field regardless of what file type is uploaded - the FileField does no validation, so there's
     # no particular benefit to adding more fields here.
-    raw_file = models.FileField(
-        blank=True,
-        null=True,
-        upload_to='media_intake/'
-    )
+    raw_file = models.FileField(blank=True, null=True, upload_to="media_intake/")
     # We'll use the same field regardless of what file type is uploaded - the FileField does no validation, so there's
     # no particular benefit to adding more fields here.
-    final_file = models.FileField(
-        blank=True,
-        null=True,
-        upload_to='media_final/'
-    )
+    final_file = models.FileField(blank=True, null=True, upload_to="media_final/")
     thumbnail_image = models.FileField(
-        blank=True,
-        null=True,
-        upload_to='media_final/thumbnail/'
+        blank=True, null=True, upload_to="media_final/thumbnail/"
     )
     embed_url = models.URLField(
         blank=True,
@@ -859,7 +889,7 @@ class MediaObject(models.Model):
     needs_transcode = models.BooleanField(
         default=True,
         blank=True,
-        verbose_name='Transcode this Media Object',
+        verbose_name="Transcode this Media Object",
     )
     file_hash = models.CharField(max_length=256, null=True, blank=True)
 
@@ -867,13 +897,15 @@ class MediaObject(models.Model):
         if self.embed_url:
             self.file_hash = hashlib.sha256(self.embed_url.encode("utf-8")).hexdigest()
         if self.media_type == VIDEO and self.needs_transcode:
-            from slides.editor.tasks import transcode_video, thumbnail_video
+            from slides.editor.tasks import thumbnail_video, transcode_video
+
             super().save(*args, **kwargs)
             transcode_video.enqueue(self.pk)
             thumbnail_video.enqueue(self.ok)
             self.needs_transcode = False
         elif self.media_type == AUDIO and self.needs_transcode:
             from slides.editor.tasks import transcode_audio
+
             super().save(*args, **kwargs)
             transcode_audio.enqueue(self.pk)
             self.needs_transcode = False
@@ -882,12 +914,12 @@ class MediaObject(models.Model):
     def get_slide_element_template(self):
         template_name = None
         match self.media_type:
-            case 'VIDEO':
-                template_name = 'slides/media/video.html'
-            case 'AUDIO':
-                template_name = 'slides/media/audio.html'
-            case 'VIMEO_LIVE_EMBED':
-                template_name = 'slides/media/vimeo_live_embed.html'
+            case "VIDEO":
+                template_name = "slides/media/video.html"
+            case "AUDIO":
+                template_name = "slides/media/audio.html"
+            case "VIMEO_LIVE_EMBED":
+                template_name = "slides/media/vimeo_live_embed.html"
         return template_name
 
     def __str__(self):
@@ -899,34 +931,40 @@ class MediaObject(models.Model):
     def thumbnail(self):
         thumbnail = None
         match self.media_type:
-            case 'VIDEO':
+            case "VIDEO":
                 if self.thumbnail_image:
                     thumbnail = self.thumbnail_image.url
                 else:
-                    thumbnail = static('media_object_thumbnails/video-thumbnail-error.png')
-            case 'AUDIO':
-                thumbnail = static('media_object_thumbnails/audio-mediaobject-thumbnail.png')
-            case 'VIMEO_LIVE_EMBED':
-                thumbnail = static('media_object_thumbnails/vimeo-live-embed-thumbnail.png')
+                    thumbnail = static(
+                        "media_object_thumbnails/video-thumbnail-error.png"
+                    )
+            case "AUDIO":
+                thumbnail = static(
+                    "media_object_thumbnails/audio-mediaobject-thumbnail.png"
+                )
+            case "VIMEO_LIVE_EMBED":
+                thumbnail = static(
+                    "media_object_thumbnails/vimeo-live-embed-thumbnail.png"
+                )
         return thumbnail
 
     class Meta:
-        ordering = ('-pk', )
+        ordering = ("-pk",)
 
 
 class Image(models.Model):
     file = models.ImageField(
         blank=False,
         null=False,
-        upload_to='images/',
+        upload_to="images/",
     )
     file_hash = models.CharField(max_length=256, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.pk:
             super(self.__class__, self).save(*args, **kwargs)
-        hash_func = hashlib.new('sha256')
-        with open(self.file.path, 'rb') as file:
+        hash_func = hashlib.new("sha256")
+        with open(self.file.path, "rb") as file:
             while chunk := file.read(65536):
                 hash_func.update(chunk)
         self.file_hash = hash_func.hexdigest()
@@ -939,16 +977,23 @@ class Image(models.Model):
         return self.file.url
 
     class Meta:
-        ordering = ('-pk', )
+        ordering = ("-pk",)
 
 
 class RemoteSource(models.Model):
     """
     Implements connection to a remote data source which can publish useful pre-made objects such as shows, decks, themes, etc.
     """
-    source_url = models.URLField(help_text="URL of the remote source. This should be a JSON endpoint which returns an index of available content.")
-    name = models.CharField(help_text="Local name of the remote source.", max_length=200)
-    refresh_every = models.IntegerField(help_text="How often to refresh this remote source, in minutes")
+
+    source_url = models.URLField(
+        help_text="URL of the remote source. This should be a JSON endpoint which returns an index of available content."
+    )
+    name = models.CharField(
+        help_text="Local name of the remote source.", max_length=200
+    )
+    refresh_every = models.IntegerField(
+        help_text="How often to refresh this remote source, in minutes"
+    )
     metadata_last_fetched = models.DateTimeField(default=datetime.now)
     shows_url = models.URLField(blank=True, null=True)
     themes_url = models.URLField(blank=True, null=True)
@@ -967,19 +1012,21 @@ class RemoteSource(models.Model):
         Refreshes source metadata from the server.
         """
         index_data = requests.get(self.source_url).json()
-        self.shows_url = index_data.get('shows_url', None)
-        self.themes_url = index_data.get('themes_url', None)
-        self.decks_url = index_data.get('decks_url', None)
-        self.images_url = index_data.get('images_url', None)
-        self.media_url = index_data.get('media_url', None)
-        self.transitions_url = index_data.get('transitions_url', None)
-        self.displays_url = index_data.get('displays_url', None)
+        self.shows_url = index_data.get("shows_url", None)
+        self.themes_url = index_data.get("themes_url", None)
+        self.decks_url = index_data.get("decks_url", None)
+        self.images_url = index_data.get("images_url", None)
+        self.media_url = index_data.get("media_url", None)
+        self.transitions_url = index_data.get("transitions_url", None)
+        self.displays_url = index_data.get("displays_url", None)
         self.index_data = index_data
         self.metadata_last_fetched = datetime.now(UTC)
         self.save()
 
     def get_metadata_if_needed(self) -> None:
-        if datetime.now(UTC) - self.metadata_last_fetched > timedelta(minutes=self.refresh_every):
+        if datetime.now(UTC) - self.metadata_last_fetched > timedelta(
+            minutes=self.refresh_every
+        ):
             self.get_metadata()
             self.refresh_from_db()
 

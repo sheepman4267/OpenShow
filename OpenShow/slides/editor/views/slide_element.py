@@ -1,24 +1,30 @@
-from django.views.generic import CreateView, DeleteView, UpdateView, FormView
 from django.urls import reverse
-from slides.models import SlideElement, Slide
-from slides.editor.forms import DeleteSlideElementForm, EditSlideElementTextForm, SlideElementUpdateImageObjectForm, \
-    SlideElementUpdateMediaObjectForm
-from slides.editor.forms import ChangeSlideElementOrderForm
+from django.views.generic import CreateView, DeleteView, FormView, UpdateView
+from slides.editor.forms import (
+    ChangeSlideElementOrderForm,
+    DeleteSlideElementForm,
+    EditSlideElementTextForm,
+    SlideElementUpdateImageObjectForm,
+    SlideElementUpdateMediaObjectForm,
+)
+from slides.models import Slide, SlideElement
 
 
 class SlideElementCreateView(CreateView):
     model = SlideElement
-    fields = ['css_class', 'slide']
-    template_name = 'editor/slide/wysiwyg/element_create.html'
+    fields = ["css_class", "slide"]
+    template_name = "editor/slide/wysiwyg/element_create.html"
 
 
 class SlideElementDeleteView(DeleteView):
     model = SlideElement
-    template_name = 'editor/slide/wysiwyg/delete_element.html'
+    template_name = "editor/slide/wysiwyg/delete_element.html"
     form_class = DeleteSlideElementForm
 
     def form_valid(self, form):
-        self.success_url = reverse('slide-wysiwyg', kwargs={"pk": form.cleaned_data["slide_pk"]})
+        self.success_url = reverse(
+            "slide-wysiwyg", kwargs={"pk": form.cleaned_data["slide_pk"]}
+        )
         return super().form_valid(form)
 
 
@@ -26,7 +32,7 @@ class SlideElementUpdateTextView(UpdateView):
     form_class = EditSlideElementTextForm
     model = SlideElement
     # fields = ['body',]
-    template_name = 'editor/slide/wysiwyg/element_text_edit.html'
+    template_name = "editor/slide/wysiwyg/element_text_edit.html"
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -34,8 +40,8 @@ class SlideElementUpdateTextView(UpdateView):
 
 class SlideElementUpdateCSSClassView(UpdateView):
     model = SlideElement
-    fields = ['css_class']
-    template_name = 'editor/slide/wysiwyg/element_css_class_edit.html'
+    fields = ["css_class"]
+    template_name = "editor/slide/wysiwyg/element_css_class_edit.html"
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -43,8 +49,8 @@ class SlideElementUpdateCSSClassView(UpdateView):
 
 class SlideElementUpdateImageView(UpdateView):
     model = SlideElement
-    fields = ['image']
-    template_name = 'editor/slide/wysiwyg/element_image_edit.html'
+    fields = ["image"]
+    template_name = "editor/slide/wysiwyg/element_image_edit.html"
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -52,33 +58,35 @@ class SlideElementUpdateImageView(UpdateView):
 
 class SlideElementUpdateVideoView(UpdateView):
     model = SlideElement
-    fields = ['video']
-    template_name = 'editor/slide/wysiwyg/element_video_edit.html'
+    fields = ["video"]
+    template_name = "editor/slide/wysiwyg/element_video_edit.html"
 
     def form_invalid(self, form):
         print(form.errors)
-        return(super().form_invalid(form))
+        return super().form_invalid(form)
 
     def get_success_url(self):
-        print('SUCCESS')
+        print("SUCCESS")
         return self.object.get_absolute_url()
 
 
 class SlideElementUpdateMediaObjectView(UpdateView):
     model = SlideElement
     form_class = SlideElementUpdateMediaObjectForm
-    template_name = 'editor/slide/wysiwyg/element_media_object_edit.html'
+    template_name = "editor/slide/wysiwyg/element_media_object_edit.html"
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
 
 class SlideElementUpdateImageObjectView(UpdateView):
     model = SlideElement
     form_class = SlideElementUpdateImageObjectForm
-    template_name = 'editor/slide/wysiwyg/element_image_object_edit.html'
+    template_name = "editor/slide/wysiwyg/element_image_object_edit.html"
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
 
 class ChangeSlideElementOrderView(FormView):
     form_class = ChangeSlideElementOrderForm
@@ -88,9 +96,13 @@ class ChangeSlideElementOrderView(FormView):
         super().__init__()
 
     def form_valid(self, form):
-        self.moved_element = SlideElement.objects.get(pk=form.cleaned_data['moved_element_pk'])
-        if form.cleaned_data['next_element_pk']:
-            next_element = SlideElement.objects.get(pk=form.cleaned_data['next_element_pk'])
+        self.moved_element = SlideElement.objects.get(
+            pk=form.cleaned_data["moved_element_pk"]
+        )
+        if form.cleaned_data["next_element_pk"]:
+            next_element = SlideElement.objects.get(
+                pk=form.cleaned_data["next_element_pk"]
+            )
             previous_element = SlideElement.objects.filter(
                 slide=self.moved_element.slide,
                 order__lt=next_element.order,
@@ -103,7 +115,9 @@ class ChangeSlideElementOrderView(FormView):
                 self.moved_element.order = next_element.order - 1
                 self.moved_element.save()
         else:
-            self.moved_element.order = self.moved_element.slide.elements.last().order + 10
+            self.moved_element.order = (
+                self.moved_element.slide.elements.last().order + 10
+            )
             self.moved_element.save()
         return super().form_valid(form)
 

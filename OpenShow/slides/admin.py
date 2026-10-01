@@ -1,5 +1,16 @@
 from django.contrib import admin
-from .models import Slide, SlideElement, Deck, Display, Segment, Show, Theme, Transition, TransitionKeyframe
+
+from .models import (
+    Deck,
+    Display,
+    Segment,
+    Show,
+    Slide,
+    SlideElement,
+    Theme,
+    Transition,
+    TransitionKeyframe,
+)
 
 # Register your models here.
 admin.site.register(Slide)

@@ -1,9 +1,9 @@
 # Functions for parsing (and generally tolerating) AOML - "Awful OpenShow Markup Language"
 from dataclasses import dataclass
-from typing import List
-import yaml
+from typing import list
 
-from slides.models import Slide, SlideElement, Image, MediaObject
+import yaml
+from slides.models import Image, MediaObject, SlideElement
 
 
 class InvalidArgumentException(Exception):
@@ -13,11 +13,12 @@ class InvalidArgumentException(Exception):
 @dataclass
 class AOMLSlideIntermediate:
     """An intermediate data type for use in parsing AOML to slides and back again"""
-    elements: List[SlideElement]
+
+    elements: list[SlideElement]
     cue: str or None = None
 
 
-def parse_element_body(markup:str) -> str:
+def parse_element_body(markup: str) -> str:
     """
     Parse AOML inline markup and return the final element body string
     :param markup:
@@ -35,17 +36,21 @@ def parse_element(markup: str) -> SlideElement:
     :param markup:
     :return: SlideElement
     """
-    markup = markup.split('||')
+    markup = markup.split("||")
     if len(markup) > 4:
-        raise InvalidArgumentException(f'Invalid markup: too many || tokens in element {markup}')
+        raise InvalidArgumentException(
+            f"Invalid markup: too many || tokens in element {markup}"
+        )
     css_class = markup[0]
     body = parse_element_body(markup[-1])
     element = SlideElement(css_class=css_class, body=body)
     for media in markup[1:-1]:
         # Note: This for loop only runs if len(markup) > 3.
-        media = media.strip('\r').strip('\n').split(':')
+        media = media.strip("\r").strip("\n").split(":")
         if len(media) > 2:
-            raise InvalidArgumentException(f'Invalid markup: malformed media token in element {markup}')
+            raise InvalidArgumentException(
+                f"Invalid markup: malformed media token in element {markup}"
+            )
         media_type = media[0]
         match media_type:
             case "image":
@@ -53,7 +58,9 @@ def parse_element(markup: str) -> SlideElement:
                 if element.image_object is None:
                     element.missing_image_object = True
             case "media":
-                element.media_object = MediaObject.objects.filter(file_hash=media[1]).first()
+                element.media_object = MediaObject.objects.filter(
+                    file_hash=media[1]
+                ).first()
                 if element.media_object is None:
                     element.missing_media_object = True
     return element
@@ -65,18 +72,17 @@ def parse_slide(markup: str) -> AOMLSlideIntermediate:
     :param markup:
     :return: list
     """
-    split_markup = markup.split('##')
+    split_markup = markup.split("##")
     if len(split_markup) > 1:
         element_markup = split_markup[-1]
         slide_metadata = yaml.safe_load(split_markup[0])
-        cue = slide_metadata.get('cue')
+        cue = slide_metadata.get("cue")
     else:
         element_markup = split_markup[-1]
         cue = None
     elements = [
         parse_element(element)
-        for element
-        in element_markup.split('>>')
+        for element in element_markup.split(">>")
         if len(element.strip()) > 0
     ]
     return AOMLSlideIntermediate(
@@ -91,6 +97,4 @@ def parse_markup(markup: str) -> list:
     :param markup:
     :return:
     """
-    return [
-        slide for slide in markup.split('~~')
-    ]
+    return [slide for slide in markup.split("~~")]

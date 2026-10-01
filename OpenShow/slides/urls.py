@@ -1,10 +1,7 @@
-from django.urls import path, include
-from django.views.generic import TemplateView, ListView
-from django.conf.urls.static import static
-from django.conf import settings
-from . import views
-from .models import Show
 import django_eventstream
+from django.urls import include, path
+
+from . import views
 
 urlpatterns = [
     # path('send_message', views.send_message),
@@ -22,6 +19,5 @@ urlpatterns = [
     path('show/<int:pk>/select_displays', views.ShowDisplaySelectorView.as_view(), name='select-displays'),
     path('deck/<int:pk>', views.DeckView.as_view(), name='deck'),
     path('show_slide', views.ShowSlideView.as_view(), name='show-slide'),
-    # path('send_slide/<int:slide_pk>/<int:display_pk>', views.send_slide_to_display),
     path('editor/', include('slides.editor.urls')),
 ]

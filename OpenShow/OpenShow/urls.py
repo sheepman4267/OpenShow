@@ -13,19 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
+
+import django_eventstream
 from django.conf import settings
 from django.conf.urls.static import static
-import django_eventstream
+from django.contrib import admin
+from django.urls import include, path
+
 from .api import api
 
 urlpatterns = [
-    path('', include('core.urls')),
-    path('admin/', admin.site.urls),
-    path('api/', api.urls),
-    path('slides/', include('slides.urls')),
-    path('pjlink/', include('pjlink_integration.urls')),
+    path("", include("core.urls")),
+    path("admin/", admin.site.urls),
+    path("api/", api.urls),
+    path("slides/", include("slides.urls")),
+    path("pjlink/", include("pjlink_integration.urls")),
     path("events/", include(django_eventstream.urls), {"channels": ["test"]}),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

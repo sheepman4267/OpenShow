@@ -1,10 +1,20 @@
-from django.forms import Form, ModelForm, IntegerField, ChoiceField, Select, ClearableFileInput, FileField, CharField, ModelChoiceField
+from django.forms import (
+    CharField,
+    ChoiceField,
+    ClearableFileInput,
+    FileField,
+    Form,
+    IntegerField,
+    ModelChoiceField,
+    ModelForm,
+    Select,
+)
 from django.forms.models import ModelChoiceIterator
 from django.urls import reverse_lazy
-from ..models import Show, Theme, SlideElement, Deck, Segment, Image, MediaObject
-from .widgets import SelectByThumbnailWidget
 from natsort import natsorted
 
+from ..models import Deck, Image, MediaObject, Segment, Show, SlideElement, Theme
+from .widgets import SelectByThumbnailWidget
 
 # class SimpleShowForm(ModelForm):
 #     class Meta:
@@ -37,20 +47,21 @@ class DeleteSlideElementForm(Form):
 
 class SetThemeForm(ModelForm):
     show_pk = IntegerField()
+
     class Meta:
         model = Show
         fields = (
-            'theme',
-            'show_pk',
+            "theme",
+            "show_pk",
         )
         widgets = {
-            'theme': Select(
-                    attrs={
-                        'hx-post': reverse_lazy('check-theme-compatibility'),
-                        'hx-swap': 'afterend',
-                        'hx-trigger': 'change',
-                    }
-                ),
+            "theme": Select(
+                attrs={
+                    "hx-post": reverse_lazy("check-theme-compatibility"),
+                    "hx-swap": "afterend",
+                    "hx-trigger": "change",
+                }
+            ),
         }
 
 
@@ -68,10 +79,12 @@ class ChangeSlideElementOrderForm(Form):
 class EditSlideElementTextForm(ModelForm):
     class Meta:
         model = SlideElement
-        fields = ['body',]
+        fields = [
+            "body",
+        ]
 
     def save(self, commit=True):
-        self.instance.body = self.cleaned_data['body'].replace('\n', '<br>')
+        self.instance.body = self.cleaned_data["body"].replace("\n", "<br>")
         return super(EditSlideElementTextForm, self).save()
 
 
@@ -97,24 +110,28 @@ class DeckFromImagesForm(ModelForm):
     class Meta:
         model = Deck
         fields = [
-            'name',
-            'default_transition',
-            'default_transition_duration',
-            'default_auto_advance',
-            'default_auto_advance_duration',
-            'advance_in_loop',
-            'theme',
+            "name",
+            "default_transition",
+            "default_transition_duration",
+            "default_auto_advance",
+            "default_auto_advance_duration",
+            "advance_in_loop",
+            "theme",
         ]
+
     files = MultipleFileField()
     image_css_class = CharField()
 
 
 class ImportImagesForm(Form):
-    OVERWRITE = 'OVERWRITE'
-    APPEND = 'APPEND'
+    OVERWRITE = "OVERWRITE"
+    APPEND = "APPEND"
     IMPORT_MODE_CHOICES = [
-        (APPEND, 'Append'),
-        (OVERWRITE, 'Overwrite (DANGER!! Will permanently erase all slides in this deck!)'),
+        (APPEND, "Append"),
+        (
+            OVERWRITE,
+            "Overwrite (DANGER!! Will permanently erase all slides in this deck!)",
+        ),
     ]
     files = MultipleFileField()
     image_css_class = CharField()
@@ -124,13 +141,16 @@ class ImportImagesForm(Form):
 
 
 class UpdateSegmentForm(ModelForm):
-    included_deck = NatsortedModelChoiceField(queryset=Deck.objects.all(), required=False)
+    included_deck = NatsortedModelChoiceField(
+        queryset=Deck.objects.all(), required=False
+    )
+
     class Meta:
         model = Segment
         fields = [
-            'name',
-            'included_deck',
-            'details',
+            "name",
+            "included_deck",
+            "details",
         ]
 
 
@@ -143,10 +163,10 @@ class SlideElementUpdateImageObjectForm(ModelForm):
     class Meta:
         model = SlideElement
         fields = [
-            'image_object',
+            "image_object",
         ]
         widgets = {
-            'image_object': SelectByThumbnailWidget(),
+            "image_object": SelectByThumbnailWidget(),
         }
 
 
@@ -154,19 +174,20 @@ class SlideElementUpdateMediaObjectForm(ModelForm):
     class Meta:
         model = SlideElement
         fields = [
-            'media_object',
+            "media_object",
         ]
         widgets = {
-            'media_object': SelectByThumbnailWidget(),
+            "media_object": SelectByThumbnailWidget(),
         }
 
 
 class ImageUploadToElementForm(ModelForm):
     element_pk = IntegerField()
+
     class Meta:
         model = Image
         fields = [
-            'file',
+            "file",
         ]
 
     def save(self, commit=True):
@@ -176,16 +197,17 @@ class ImageUploadToElementForm(ModelForm):
         element.save()
         return image
 
+
 class MediaObjectUploadToElementForm(ModelForm):
     element_pk = IntegerField()
 
     class Meta:
         model = MediaObject
         fields = [
-            'title',
-            'media_type',
-            'raw_file',
-            'embed_url',
+            "title",
+            "media_type",
+            "raw_file",
+            "embed_url",
         ]
 
     def save(self, commit=True):

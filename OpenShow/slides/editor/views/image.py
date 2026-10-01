@@ -2,21 +2,17 @@ from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse
 from django.views.generic import CreateView
 from neapolitan.views import CRUDView, Role
-
 from slides.editor.forms import ImageUploadToElementForm
 from slides.models import Image, SlideElement
 
 
 class ImageCRUDView(CRUDView):
     model = Image
-    fields = [
-        'file',
-        'file_hash'
-    ]
+    fields = ["file", "file_hash"]
 
     def get_success_url(self):
         if self.role is Role.DELETE:
-            success_url = reverse('slides-index')
+            success_url = reverse("slides-index")
         else:
             success_url = super(self.__class__, self).get_success_url()
         return success_url
@@ -25,7 +21,7 @@ class ImageCRUDView(CRUDView):
         """GET handler for the detail view."""
         self.object = self.get_object()
         context = self.get_context_data()
-        context['previous_page'] = 'slides-index'
+        context["previous_page"] = "slides-index"
         return self.render_to_response(context)
 
     def get_template_names(self):
@@ -60,6 +56,6 @@ class ImageUploadToElementView(CreateView):
     template_name = "editor/slide/wysiwyg/element_image_object_upload.html"
 
     def form_valid(self, form):
-        element = SlideElement.objects.get(pk=form.cleaned_data['element_pk'])
+        element = SlideElement.objects.get(pk=form.cleaned_data["element_pk"])
         self.success_url = element.get_absolute_url()
         return super(self.__class__, self).form_valid(form)

@@ -1,19 +1,19 @@
-from django.views.generic import CreateView, UpdateView, DeleteView, FormView
-from django.urls import reverse_lazy
-from slides.models import Deck, Slide, SlideElement, Image
-from django.db import transaction
-from django.shortcuts import get_object_or_404, HttpResponseRedirect
 import slides.aoml_parser as aoml
+from django.db import transaction
+from django.shortcuts import HttpResponseRedirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, FormView, UpdateView
 from slides.editor.forms import DeckFromImagesForm, ImportImagesForm
+from slides.models import Deck, Image, Slide, SlideElement
 
 
 class DeckCreateView(CreateView):
     model = Deck
-    template_name = 'editor/snippets/hx-simple_create_form.html'
-    fields = ['name']
+    template_name = "editor/snippets/hx-simple_create_form.html"
+    fields = ["name"]
     extra_context = {
-        'action': 'new-deck',
-        'object_type': 'Deck',
+        "action": "new-deck",
+        "object_type": "Deck",
     }
 
 
@@ -27,25 +27,25 @@ class DeckEditorView(UpdateView):
     queryset = Deck.objects.all()
     model = Deck
     fields = [
-        'name',
-        'theme',
-        'default_transition',
-        'default_transition_duration',
-        'default_auto_advance',
-        'default_auto_advance_duration',
-        'advance_in_loop',
-        'slide_text_markup',
+        "name",
+        "theme",
+        "default_transition",
+        "default_transition_duration",
+        "default_auto_advance",
+        "default_auto_advance_duration",
+        "advance_in_loop",
+        "slide_text_markup",
     ]
-    template_name = 'editor/deck/deck_editor.html'
+    template_name = "editor/deck/deck_editor.html"
     # extra_context = {'display': Display.objects.all().first()}
 
 
 class DeckDeleteView(DeleteView):
     model = Deck
-    success_url = reverse_lazy('slides-index')
-    template_name = 'editor/generic_confirm_delete.html'
+    success_url = reverse_lazy("slides-index")
+    template_name = "editor/generic_confirm_delete.html"
     extra_context = {
-        'action': 'delete-deck',
+        "action": "delete-deck",
     }
 
 
@@ -75,17 +75,17 @@ def pull_aoml_text(request, pk):
 
 class DeckFromImagesView(FormView):
     form_class = DeckFromImagesForm
-    template_name = 'editor/snippets/hx-simple_create_form.html'
+    template_name = "editor/snippets/hx-simple_create_form.html"
     extra_context = {
-        'previous_page': 'slides-index',
-        'action': 'import-deck-from-images',
-        'object_type': 'Deck From Many Images',
+        "previous_page": "slides-index",
+        "action": "import-deck-from-images",
+        "object_type": "Deck From Many Images",
     }
 
     def form_valid(self, form):
-        files = form.cleaned_data['files']
+        files = form.cleaned_data["files"]
         print(files)
-        print('^^FILES')
+        print("^^FILES")
         form.save()
         for image in files:
             new_slide = Slide(deck=form.instance)
@@ -100,33 +100,35 @@ class DeckFromImagesView(FormView):
                 body="",
             )
             new_slide_element.save()
-        return HttpResponseRedirect(reverse_lazy('edit-deck', kwargs={'pk': form.instance.pk}))
+        return HttpResponseRedirect(
+            reverse_lazy("edit-deck", kwargs={"pk": form.instance.pk})
+        )
 
 
 class ImportImagesToExistingDeckView(FormView):
     model = Deck
     form_class = ImportImagesForm
-    template_name = 'editor/deck/import_images_to_deck.html'
+    template_name = "editor/deck/import_images_to_deck.html"
 
     def get_object(self):
-        db_object = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        db_object = get_object_or_404(self.model, pk=self.kwargs["pk"])
         return db_object
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        context['deck'] = self.get_object()
+        context["deck"] = self.get_object()
         return context
 
     def form_valid(self, form):
         deck = self.get_object()
         # If we're in overwrite mode, delete all the deck's slides first
-        if form.cleaned_data['mode'] == ImportImagesForm.OVERWRITE:
+        if form.cleaned_data["mode"] == ImportImagesForm.OVERWRITE:
             existing_slides = list(deck.slides.all())
             if len(existing_slides) > 0:
                 for slide in existing_slides:
                     slide.delete()
         # Actually import the images
-        files = form.cleaned_data['files']
+        files = form.cleaned_data["files"]
         for image in files:
             new_slide = Slide(deck=deck)
             new_slide.save()
@@ -140,4 +142,4 @@ class ImportImagesToExistingDeckView(FormView):
                 body="",
             )
             new_slide_element.save()
-        return HttpResponseRedirect(reverse_lazy('edit-deck', kwargs={'pk': deck.pk}))
+        return HttpResponseRedirect(reverse_lazy("edit-deck", kwargs={"pk": deck.pk}))

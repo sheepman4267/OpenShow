@@ -1,7 +1,5 @@
-from django.db import models
 import pypjlink
-
-# Create your models here.
+from django.db import models
 
 
 class Projector(models.Model):
@@ -11,9 +9,9 @@ class Projector(models.Model):
     def power_on(self):
         proj = pypjlink.Projector.from_address(self.address)
         proj.authenticate()
-        proj.set_power('on')
+        proj.set_power("on")
 
     def power_off(self):
         proj = pypjlink.Projector.from_address(self.address)
         proj.authenticate()
-        proj.set_power('off')
+        proj.set_power("off")
