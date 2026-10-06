@@ -813,7 +813,7 @@ class Theme(models.Model):
 class ThemeRule(models.Model):
     css_selector = models.CharField(max_length=100, help_text="CSS Selector")
     properties = models.TextField()
-    base_rule = models.BooleanField(default=False)
+    base_rule = models.BooleanField(default=False, help_text="If true, this rule will be selectable as a type when creating slide elements.")
     description = models.TextField(null=True, blank=True)
     theme = models.ForeignKey(
         to=Theme,
