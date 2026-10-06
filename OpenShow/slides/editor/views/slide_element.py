@@ -56,20 +56,6 @@ class SlideElementUpdateImageView(UpdateView):
         return self.object.get_absolute_url()
 
 
-class SlideElementUpdateVideoView(UpdateView):
-    model = SlideElement
-    fields = ["video"]
-    template_name = "editor/slide/wysiwyg/element_video_edit.html"
-
-    def form_invalid(self, form):
-        print(form.errors)
-        return super().form_invalid(form)
-
-    def get_success_url(self):
-        print("SUCCESS")
-        return self.object.get_absolute_url()
-
-
 class SlideElementUpdateMediaObjectView(UpdateView):
     model = SlideElement
     form_class = SlideElementUpdateMediaObjectForm

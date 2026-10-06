@@ -53,7 +53,6 @@ from slides.editor.views.slide_element import (
     SlideElementUpdateImageView,
     SlideElementUpdateMediaObjectView,
     SlideElementUpdateTextView,
-    SlideElementUpdateVideoView,
 )
 from slides.editor.views.theme import ThemeCreateView, ThemeDeleteView, ThemeUpdateView
 from slides.editor.views.transition import (
@@ -87,7 +86,6 @@ urlpatterns = [
     path('slide/element/<int:pk>/css-class', SlideElementUpdateCSSClassView.as_view(), name='edit-element-css-class'),
     path('slide/element/<int:pk>/image', SlideElementUpdateImageView.as_view(), name='edit-element-image'),
     path('slide/element/<int:pk>/image_object', SlideElementUpdateImageObjectView.as_view(), name='edit-element-image_object'),
-    path('slide/element/<int:pk>/video', SlideElementUpdateVideoView.as_view(), name='edit-element-video'),
     path('slide/element/<int:pk>/media_object', SlideElementUpdateMediaObjectView.as_view(), name='edit-element-media_object'),
     path('slide/element/reorder', ChangeSlideElementOrderView.as_view(), name='reorder-element'),
     path('slide/element/image_upload', ImageUploadToElementView.as_view(), name='element-upload-image'),
