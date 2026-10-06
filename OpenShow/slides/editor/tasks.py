@@ -1,13 +1,16 @@
 import hashlib
 import json
+import os
 import pathlib
 import subprocess
 
 import cv2
+import numpy as np
 from django.conf import settings
 from django.tasks import task
 from django.utils.text import slugify
 from ffmpeg import FFmpeg, Progress
+from peasy_video import ThumbnailResult, thumbnails
 from slides.models import MediaObject
 
 
@@ -69,49 +72,25 @@ def thumbnail_video(media_object_pk: int) -> None:
     if not os.path.isdir(settings.MEDIA_ROOT + "media_final/thumbnail"):
         os.mkdir(settings.MEDIA_ROOT + "media_final/thumbnail")  # Because cv2.imwrite won't do this automatically.
     media_object = MediaObject.objects.get(pk=media_object_pk)
-    final_file_name = slugify(media_object.title) + ".jpg"
+    final_file_name = slugify(media_object.title) + ".png"
     full_output_path = settings.MEDIA_ROOT + "media_final/thumbnail/" + final_file_name
-    video = cv2.VideoCapture()
-    video.open(media_object.raw_file.path)
-    thumbnail_image = None
-    if not video.isOpened():
-        raise RuntimeError(
-            f"Failed to open original video file to make thumbnail for {media_object}"
-        )
+
+    def convert_thumbnail(thumbnail: ThumbnailResult) -> np.Array:
+        thumb_array = np.frombuffer(thumbnail.data, np.uint8)
+        img_out = cv2.imdecode(thumb_array, cv2.IMREAD_UNCHANGED)
+        return img_out
+
+    candidates = [
+        convert_thumbnail(thumbnail)
+        for thumbnail
+        in thumbnails(media_object.raw_file.path, count=5)
+    ]
+    if cv2.imwrite(full_output_path, max(candidates, key=np.ndarray.mean)):
+        print(f'Successfully saved thumbnail: {full_output_path}.')
     else:
-        (retval, image) = video.read()
-        previous_image = image
-        while True:
-            (retval, image) = video.read()
-            if not retval:  # If we've made it to the end, save the last frame regardless of threshold.
-                if cv2.imwrite(full_output_path, previous_image):
-                    print(
-                        f"Successfully saved thumbnail for {media_object} (end of file, no above-threshold frames detected)."
-                    )
-                else:
-                    print(
-                        f"Failed to save thumbnail for {media_object} (end of file, no above-threshold frames detected)."
-                    )
-                thumbnail_image = "media_final/thumbnail/" + final_file_name
-                break
-            if (
-                image.mean() >= 80
-            ):  # If the current frame is brighter than our threshold, save it as the thumbnail.
-                if cv2.imwrite(full_output_path, image):
-                    print(
-                        f"Successfully saved thumbnail for {media_object} (detected above-threshold frame)."
-                    )
-                else:
-                    print(
-                        f"Failed to save thumbnail for {media_object} (detected above frame)."
-                    )
-                thumbnail_image = "media_final/thumbnail/" + final_file_name
-                break
-            previous_image = image
-    video.release()
-    # Before saving, ensure that we incorporate any changes made to other fields during the thumbnail operation
+        print(f'Failed to save {full_output_path}.')
     media_object.refresh_from_db()
-    media_object.thumbnail_image = thumbnail_image
+    media_object.thumbnail_image = "media_final/thumbnail/" + final_file_name
     media_object.save()
 
 

@@ -900,8 +900,8 @@ class MediaObject(models.Model):
             from slides.editor.tasks import thumbnail_video, transcode_video
 
             super().save(*args, **kwargs)
-            transcode_video.enqueue(self.pk)
-            thumbnail_video.enqueue(self.ok)
+            # transcode_video.enqueue(self.pk)
+            thumbnail_video.enqueue(self.pk)
             self.needs_transcode = False
         elif self.media_type == AUDIO and self.needs_transcode:
             from slides.editor.tasks import transcode_audio
