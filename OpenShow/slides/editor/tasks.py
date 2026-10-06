@@ -72,7 +72,7 @@ def thumbnail_video(media_object_pk: int) -> None:
     if not os.path.isdir(settings.MEDIA_ROOT + "media_final/thumbnail"):
         os.mkdir(settings.MEDIA_ROOT + "media_final/thumbnail")  # Because cv2.imwrite won't do this automatically.
     media_object = MediaObject.objects.get(pk=media_object_pk)
-    final_file_name = slugify(media_object.title) + ".png"
+    final_file_name = slugify(media_object.title) + ".jpg"
     full_output_path = settings.MEDIA_ROOT + "media_final/thumbnail/" + final_file_name
 
     def convert_thumbnail(thumbnail: ThumbnailResult) -> np.Array:
