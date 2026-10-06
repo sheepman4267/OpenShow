@@ -450,7 +450,6 @@ class SlideElement(
         on_delete=models.SET_NULL,
     )
     missing_image_object = models.BooleanField(default=False)
-    video = models.FileField(blank=True, null=True, upload_to="element_videos/")
     missing_media_object = models.BooleanField(default=False)
     media_object = models.ForeignKey(
         to="MediaObject",
@@ -686,13 +685,6 @@ class Slide(models.Model):
                 else:
                     self.order = 1
         super().save(*args, **kwargs)
-
-    def has_video(self):
-        result = False
-        for element in self.elements.all():
-            if element.video:
-                result = True
-        return result
 
     def has_mediaobject(self):
         result = False
