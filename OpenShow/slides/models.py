@@ -805,6 +805,14 @@ class Theme(models.Model):
                 theme.save()
         super().save(*args, **kwargs)
 
+    def compile_css(self):
+        # Compile CSS from theme rule/variant objects
+        pass
+
+    def compile_type_choices(self):
+        # Compile JSON type choices from rule objects
+        pass
+
     @staticmethod
     def get_default():
         return Theme.objects.filter(default=True).first()
@@ -845,6 +853,17 @@ class ThemeVariantRule(models.Model):
         on_delete=models.CASCADE,
         related_name="rules",
     )
+
+
+class ThemeFont(models.Model):
+    theme = models.ForeignKey(
+        to=Theme,
+        on_delete=models.CASCADE,
+        related_name="fonts",
+    )
+    name = models.CharField(max_length=100)
+    font_file = models.FileField(blank=False, null=False, upload_to="fonts/")
+    font_face_name = models.CharField(max_length=100, help_text="The font face name by which to access this font in rule properties")
 
 
 VIMEO_LIVE_EMBED = "VIMEO_LIVE_EMBED"
