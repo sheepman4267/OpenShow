@@ -775,7 +775,7 @@ class Theme(models.Model):
     default = models.BooleanField(default=False)
 
     def get_absolute_url(self):
-        return reverse("edit-theme", kwargs={"pk": self.pk})
+        return reverse("theme-edit", kwargs={"pk": self.pk})
 
     def parse(self):
         return tinycss2.parse_stylesheet(self.css)
