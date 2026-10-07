@@ -95,14 +95,14 @@
             Themes are styles which can be applied for shows, decks, or individual slides.
         </p>
         <div class="action-button-container">
-            <button hx-get="{% url 'new-theme' %}" hx-swap="outerHTML">
+            <button hx-get="{% url 'theme-create' %}" hx-swap="outerHTML">
                 New Theme
             </button>
         </div>
         <ul>
             {% for theme in theme_list %}
                 <li>
-                    <a href="{% url 'edit-theme' theme.pk %}">{{ theme }}</a>
+                    <a href="{% url 'theme-edit' theme.pk %}">{{ theme }}</a>
                 </li>
             {% endfor %}
         </ul>

@@ -771,7 +771,7 @@ class TransitionKeyframe(models.Model):
 
 class Theme(models.Model):
     name = models.CharField(max_length=50)
-    css = models.TextField()
+    css = models.TextField(help_text="CSS Entries here cannot be selected as element types or modifiers.")
     default = models.BooleanField(default=False)
 
     def get_absolute_url(self):
@@ -828,6 +828,11 @@ class ThemeRule(models.Model):
         on_delete=models.CASCADE,
         related_name="rules",
     )
+    class Meta:
+        ordering = ['base_rule', '-css_selector']
+
+    # Select rules to be shown as modifiers when editing a base rule by seeing if any of their selectors start with the selector of the base rule in question
+    # Only show base rules on main theme page, with option to show all rules for debug purposes
 
 
 class ThemeVariant(models.Model):
@@ -863,8 +868,7 @@ class ThemeFont(models.Model):
     )
     name = models.CharField(max_length=100)
     font_file = models.FileField(blank=False, null=False, upload_to="fonts/")
-    font_face_name = models.CharField(max_length=100, help_text="The font face name by which to access this font in rule properties")
-
+    properties = models.TextField(help_text="CSS @font-face properties for this font family.", null=True, blank=False)
 
 VIMEO_LIVE_EMBED = "VIMEO_LIVE_EMBED"
 VIDEO = "VIDEO"

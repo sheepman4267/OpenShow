@@ -1,0 +1,89 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load icon %}
+
+{% block title %}
+    Editing {{ theme.name }} - OpenShow
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'slides/slide-thumbnail.css' %}">
+    <link rel="stylesheet" href="{% static 'editor/editor-extras.css' %}">
+{% endblock %}
+
+{% block header %}
+    <h1>{{ theme.name }}</h1>
+{% endblock %}
+
+{% block header_right_button %}
+    <a href="{% url 'theme-delete' theme.pk %}" class="icon-button" aria-label="Delete {{ theme.name }}">{% icon 'trash-2' %}</a>
+{% endblock %}
+
+{% block main %}
+    <main id="view-container">
+        <div class="box">
+            <strong class="titlebar block">Theme Settings</strong>
+            <form
+                    hx-post="{% url 'theme-edit' theme.pk %}"
+                    hx-trigger="change throttle:2s"
+                    hx-swap="outerHTML"
+                    hx-select="#view-container"
+                    hx-target="#view-container"
+            >
+                {% csrf_token %}
+                Current default theme: {{ theme.get_default }}
+                <label class="block">Theme Name: {{ form.name }}{{ form.name.errors }}</label>
+                <label class="block">Default: {{ form.default }}{{ form.default.errors }}</label>
+                <label class="block">Global CSS: {{ form.css }}{{ form.css.errors }}<p class="help">{{ form.css.help_text }}</p></label>
+            </form>
+        </div>
+
+        <div class="box">
+            <strong class="titlebar block">Element Types</strong>
+            Element types made available by this theme.
+            <ul class="list-no-indent" data-theme-pk="{{ theme.pk }}">
+                {% for rule in theme.rules.all %}
+                    <li class="box {% if not rule.base_rule %}modifier_rule{% endif %}">
+                        <strong class="titlebar block">{{ rule.css_selector }}</strong>
+                        <pre>{{ rule.properties }}</pre>
+                        <button hx-swap="outerHTML" hx-get="{% url 'theme-rule-edit' rule.pk %}" hx-target="closest li">Edit</button>
+                        <a href="{% url 'theme-rule-delete' rule.pk %}"><button>Delete</button></a>
+                    </li>
+                {% endfor %}
+                <button hx-get="{% url 'theme-rule-create' %}" hx-swap="outerHTML">New Element Type</button>
+            </ul>
+        </div>
+        <div class="box">
+            <strong class="titlebar block">Variants</strong>
+            Display Variants made available by this theme.
+            <ul class="list-no-indent" data-theme-pk="{{ theme.pk }}">
+                {% for variant in theme.variants.all %}
+                    <li class="box">
+                        <strong class="titlebar block">{{ variant.name }}</strong>
+                        <p>{{ variant.description }}</p>
+                        <button hx-swap="outerHTML" hx-get="{% url 'theme-variant-edit' font.pk %}" hx-target="closest li">Edit</button>
+                        <a href="{% url 'theme-variant-delete' font.pk %}"><button>Delete</button></a>
+                    </li>
+                {% endfor %}
+                <button hx-get="{% url 'theme-variant-create' %}" hx-swap="outerHTML">New Variant</button>
+            </ul>
+        </div>
+        <div class="box">
+            <strong class="titlebar block">Fonts</strong>
+            Fonts made available by this theme.
+            <ul class="list-no-indent" data-theme-pk="{{ theme.pk }}">
+                {% for font in theme.fonts.all %}
+                    <li class="box">
+                        <strong class="titlebar block">{{ font.name }}</strong>
+                        <pre>{{ font.properties }}</pre>
+                        <button hx-swap="outerHTML" hx-get="{% url 'theme-font-edit' font.pk %}" hx-target="closest li">Edit</button>
+                        <a href="{% url 'theme-font-delete' font.pk %}"><button>Delete</button></a>
+                    </li>
+                {% endfor %}
+                <button hx-get="{% url 'theme-font-create' %}" hx-swap="outerHTML">New Font</button>
+            </ul>
+        </div>
+    </main>
+{% include 'editor/spinner.html' %}
+{% endblock %}

@@ -320,4 +320,16 @@ ul.slides {
 
 .slides-sidebar.show:not(.segmentdrag) > .dragbox:first-child {
     height: 0;
+
+}
+
+textarea[name='css'],
+textarea[name='properties']{
+    font-family: monospace;
+    width: 100%;
+    height: 15rem;
+}
+
+.help {
+    font-style: italic;
 }
