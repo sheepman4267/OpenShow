@@ -42,12 +42,12 @@
         <div class="box">
             <strong class="titlebar block">Element Types</strong>
             Element types made available by this theme.
-            <ul class="list-no-indent" data-theme-pk="{{ theme.pk }}">
+            <ul class="list-no-indent" data-theme-pk="{{ theme.pk }}" data-base-rule="True">
                 {% for rule in theme.rules.all %}
                     <li class="box {% if not rule.base_rule %}modifier_rule{% endif %}">
-                        <strong class="titlebar block">{{ rule.css_selector }}</strong>
+                        <strong class="titlebar block">{{ rule.css_selector }}{% if not rule.base_rule %} - <span class=help>modifier rule</span>{% endif %}</strong>
                         <pre>{{ rule.properties }}</pre>
-                        <button hx-swap="outerHTML" hx-get="{% url 'theme-rule-edit' rule.pk %}" hx-target="closest li">Edit</button>
+                        <a href="{% url 'theme-rule-edit' rule.pk %}"><button>Edit</button></a>
                         <a href="{% url 'theme-rule-delete' rule.pk %}"><button>Delete</button></a>
                     </li>
                 {% endfor %}

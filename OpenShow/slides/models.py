@@ -829,7 +829,16 @@ class ThemeRule(models.Model):
         related_name="rules",
     )
     class Meta:
-        ordering = ['base_rule', '-css_selector']
+        ordering = ['-base_rule', 'css_selector']
+
+    def __str__(self):
+        return f"{self.theme}/{self.css_selector}"
+
+    def get_absolute_url(self):
+        return reverse("theme-rule-edit", kwargs={"pk": self.pk})
+
+    def get_modifiers(self):
+        return self.theme.rules.filter(base_rule=False, css_selector__contains=self.css_selector)
 
     # Select rules to be shown as modifiers when editing a base rule by seeing if any of their selectors start with the selector of the base rule in question
     # Only show base rules on main theme page, with option to show all rules for debug purposes

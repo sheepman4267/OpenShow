@@ -1,0 +1,14 @@
+<li class="box">
+    <strong class="titlebar block">New Theme Rule</strong>
+    <form class="rule-form" method="post" action="{% url "theme-rule-create" %}">
+        {% csrf_token %}
+            <input type="hidden" name="theme" _="on load set my @value to @data-theme-pk of closest <ul/>">
+            <input type="hidden" name="base_rule" _="on load set my @value to @data-base-rule of closest <ul/>">
+            <input type="hidden" name="parent_rule_pk" _="on load set my @value to @data-parent-rule-pk of closest <ul/>"
+            <label for="id_css_selector" class="block">CSS Selector: {{ form.css_selector }}</label>
+            <label for="id_properties">Properties: {{ form.properties }}</label>
+            <label for="id_description">Description: {{ form.description }}</label>
+            {{ form.errors }}
+            <input type="submit">
+    </form>
+</li>

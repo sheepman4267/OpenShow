@@ -324,10 +324,15 @@ ul.slides {
 }
 
 textarea[name='css'],
-textarea[name='properties']{
+textarea[name='properties'] {
     font-family: monospace;
     width: 100%;
     height: 15rem;
+}
+
+textarea[name='description'] {
+    width: 100%;
+    height: 8rem;
 }
 
 .help {

@@ -13,7 +13,7 @@ from django.forms.models import ModelChoiceIterator
 from django.urls import reverse_lazy
 from natsort import natsorted
 
-from ..models import Deck, Image, MediaObject, Segment, Show, SlideElement, Theme
+from ..models import Deck, Image, MediaObject, Segment, Show, SlideElement, Theme, ThemeRule
 from .widgets import SelectByThumbnailWidget
 
 # class SimpleShowForm(ModelForm):
@@ -225,3 +225,10 @@ class ShowRemoteImportForm(Form):
 class ShowJSONImportForm(Form):
     name_prefix = CharField()
     json_string = CharField()
+
+
+class ThemeRuleCreateForm(ModelForm):
+    parent_rule_pk = IntegerField(required=False)
+    class Meta:
+        model = ThemeRule
+        fields = ["css_selector", "properties", "base_rule", "description", "theme"]

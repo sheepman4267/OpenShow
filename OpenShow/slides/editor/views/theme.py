@@ -1,5 +1,7 @@
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, UpdateView
+from slides.editor.forms import ThemeRuleCreateForm
 from slides.models import Theme, ThemeFont, ThemeRule, ThemeVariant, ThemeVariantRule
 
 
@@ -33,9 +35,16 @@ class ThemeUpdateView(UpdateView):
 
 
 class ThemeRuleCreateView(CreateView):
-    model = ThemeRule
+    form_class = ThemeRuleCreateForm
     template_name = "editor/theme/rule_create.html"
-    fields = ["css_selector", "properties", "base_rule", "description", "theme"]
+
+    def form_valid(self, form):
+        form.save()
+        if form.instance.base_rule:
+            success_url = form.instance.get_absolute_url()
+        else:
+            success_url = ThemeRule.objects.get(pk=form.cleaned_data["parent_rule_pk"]).get_absolute_url()
+        return HttpResponseRedirect(success_url)
 
 
 class ThemeRuleUpdateView(UpdateView):
